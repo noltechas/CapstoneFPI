@@ -268,7 +268,7 @@ const populateAllPlayers = async () => {
     try {
         const teamIDs = await fetchTeamIDs(); // Fetch all team IDs
 
-        for (let year = 2022; year <= 2023; year++) {
+        for (let year = 2013; year <= 2023; year++) {
             for (const teamID of teamIDs) {
                 await fetchAndStorePlayerDataForYear(teamID, year);
             }

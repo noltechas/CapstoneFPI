@@ -320,7 +320,7 @@ const buildPlayerStats = (player, teamID, gameID, category) => {
 const processAllGames = async () => {
     try {
         const gameIDs = await fetchGameIDs();
-        const startIndex = gameIDs.indexOf('31ad890a-b45d-42cf-9527-a05d2d806e7c');
+        const startIndex = gameIDs.indexOf('6d4c2db3-86fb-451c-9a85-3796db544a2d');
         //const startIndex = 0;
         if (startIndex === -1) {
             console.error('Starting game ID not found.');
