@@ -80,7 +80,6 @@ const fetchGameIDs = async () => {
 };
 
 const insertPlayerGameStats = async (playerStats, gameID) => {
-    //console.log(`Inserting their stats...`);
 
     const tableName = "PlayerGameStats";
     let columns = Object.keys(playerStats).concat("GameID").filter((value, index, self) => self.indexOf(value) === index); // Ensure no duplicates
@@ -130,23 +129,110 @@ const insertPlayerGameStats = async (playerStats, gameID) => {
     }
 };
 
+const insertTeamGameStats = async (teamStats, gameID, isHomeTeam) => {
+    const tableName = "SCHEDULE";
+    let columns = Object.keys(teamStats);
+    // Map the keys of teamStats to your actual column names
+    let sqlUpdateColumns = columns.map(key => {
+        const prefix = isHomeTeam ? 'Home' : 'Away'; // Determine the prefix based on isHomeTeam
+        // Assuming your actual column names are prefixed correctly in your schema
+        // For example, if teamStats contains a key 'TotalYards', it maps to 'HomeTotalYards' or 'AwayTotalYards'
+        return `${prefix}${key} = @${key}`;
+    });
+
+    let sqlUpdate = `UPDATE ${tableName} SET ${sqlUpdateColumns.join(", ")} WHERE GameID = @GameID`;
+
+
+    const execSqlCommand = async (sqlCommand, parameters) => {
+        await connectionStateManager.waitForReady(); // Ensure the connection is ready before proceeding
+
+        return new Promise((resolve, reject) => {
+            const request = new Request(sqlCommand, (err) => {
+                if (err) {
+                    console.error(`Error executing SQL: ${err}`);
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+
+            parameters.forEach(param => {
+                // Determine the parameter type based on the expected input
+                let type;
+                let value = param.value;
+
+                if (param.name !== 'GameID') {
+
+                    if (typeof value === 'number') {
+                        // Correctly handle NaN values for numerical parameters
+                        if (isNaN(value)) {
+                            value = 0; // Default NaN to 0 for numerical fields
+                        }
+                        type = Number.isInteger(value) ? TYPES.Int : TYPES.Float;
+                    } else if (typeof value === 'string') {
+                        // For strings, check if it's intended for a numeric column but couldn't be parsed
+                        let parsedValue = parseFloat(value);
+                        if (!isNaN(parsedValue)) {
+                            // If the string can be parsed to a number, decide type based on parsed value
+                            value = parsedValue;
+                            type = Number.isInteger(parsedValue) ? TYPES.Int : TYPES.Float;
+                        } else {
+                            // If parsing fails or isn't intended, handle as nvarchar
+                            type = TYPES.NVarChar;
+                        }
+                    } else {
+                        // Fallback for any other types, handling them as strings/nvarchar
+                        value = String(value); // Convert to string to ensure compatibility
+                        type = TYPES.NVarChar;
+                    }
+
+                    // Add parameter with the determined type and value
+                    request.addParameter(param.name, type, value);
+                }
+            });
+
+            // Don't forget to add the GameID parameter for the WHERE clause
+            request.addParameter('GameID', TYPES.NVarChar, gameID);
+
+            connection.execSql(request);
+        });
+    };
+
+    // Prepare parameters, including mapping for 'GameID'
+    let parameters = columns.map(key => ({ name: key, value: teamStats[key] }));
+    parameters.push({ name: 'GameID', value: gameID }); // Ensure GameID is added correctly
+
+    try {
+        await execSqlCommand(sqlUpdate, parameters);
+        console.log(`Update operation successful for GameID: ${gameID}`);
+    } catch (error) {
+        console.error(`Error updating team stats for GameID: ${gameID}`, error);
+    }
+};
+
 const processGameStats = async (gameID) => {
     console.log(`Processing game with ID: ${gameID}`);
     try {
-        const response = await axios.get(`http://api.sportradar.us/ncaafb/trial/v7/en/games/${gameID}/statistics.xml?api_key=gey93z378rkc9rcp94bhjvbq`);
+        const response = await axios.get(`http://api.sportradar.us/ncaafb/trial/v7/en/games/${gameID}/statistics.xml?api_key=82f8rqkbccb625586bg3vwxj`);
         const xml = response.data;
 
-        const result = await parseXml(xml); // Use await here
+        const result = await parseXml(xml);
 
         if (result && result.game && result.game.team) {
             for (const team of result.game.team) {
+                const teamStats = buildTeamStats(team, gameID);
+                try {
+                    await insertTeamGameStats(teamStats, gameID, team.$.id === result.game.summary[0].home[0].$.id);
+                } catch (error) {
+                    console.error(`Failed to insert/update team stats for GameID: ${gameID}`, error);
+                }
+            }
+
+            for (const team of result.game.team) {
                 const teamID = team.$.id;
-                //console.log(`Processing team ${teamID}`);
                 for (const category of ['rushing', 'receiving', 'passing', 'penalties', 'kick_returns', 'punt_returns', 'int_returns', 'fumbles', 'defense', 'misc_returns', 'conversions']) {
-                    //console.log(`Processing category: ${category}`);
 
                     if (team[category] && team[category][0] && team[category][0].player) {
-                        //console.log(`Length of category: ${team[category][0].player.length}`)
                         for (const player of team[category][0].player) {
                             const playerStats = buildPlayerStats(player, teamID, gameID, category);
                             try {
@@ -158,6 +244,7 @@ const processGameStats = async (gameID) => {
                     }
                 }
             }
+
         }
         console.log(`Successfully processed game with ID: ${gameID}`);
     } catch (error) {
@@ -317,37 +404,77 @@ const buildPlayerStats = (player, teamID, gameID, category) => {
     return playerStats;
 };
 
+const buildTeamStats = (teamXml, gameID) => {
+    console.log(`Building team stats for Game ID: ${gameID}`);
+
+    if (!teamXml) {
+        console.error('teamXml is undefined or null');
+        return {};
+    }
+
+    return {
+        AvgGain: parseFloat(teamXml.$.avg_gain) ?? 0.0,
+        Turnovers: parseInt(teamXml.$.turnovers) ?? 0,
+        PlayCount: parseInt(teamXml.$.play_count) ?? 0,
+        RushPlays: parseInt(teamXml.$.rush_plays) ?? 0,
+        TotalYards: parseInt(teamXml.$.total_yards) ?? 0,
+        Fumbles: parseInt(teamXml.$.fumbles) ?? 0,
+        Penalties: parseInt(teamXml.$.penalties) ?? 0,
+        RushingAttempts: parseInt(teamXml.rushing[0].$.attempts) ?? 0,
+        RushingYards: parseInt(teamXml.rushing[0].$.yards) ?? 0,
+        RushingTouchdowns: parseInt(teamXml.rushing[0].$.touchdowns) ?? 0,
+        ReceivingTargets: parseInt(teamXml.receiving[0].$.targets) ?? 0,
+        Receptions: parseInt(teamXml.receiving[0].$.receptions) ?? 0,
+        ReceivingYards: parseInt(teamXml.receiving[0].$.yards) ?? 0,
+        ReceivingTouchdowns: parseInt(teamXml.receiving[0].$.touchdowns) ?? 0,
+        Tackles: parseInt(teamXml.defense[0].$.tackles) ?? 0,
+        Assists: parseInt(teamXml.defense[0].$.assists) ?? 0,
+        Combined: parseInt(teamXml.defense[0].$.combined) ?? 0,
+        Sacks: parseFloat(teamXml.defense[0].$.sacks) ?? 0.0,
+        Interceptions: parseInt(teamXml.defense[0].$.interceptions) ?? 0,
+        PassesDefended: parseInt(teamXml.defense[0].$.passes_defended) ?? 0,
+        ForcedFumbles: parseInt(teamXml.defense[0].$.forced_fumbles) ?? 0,
+        Tloss: parseFloat(teamXml.defense[0].$.tloss) ?? 0.0,
+        GoalToGoAttempts: parseInt(teamXml.efficiency[0].goaltogo[0].$.attempts) ?? 0,
+        GoalToGoSuccesses: parseInt(teamXml.efficiency[0].goaltogo[0].$.successes) ?? 0,
+        RedZoneAttempts: parseInt(teamXml.efficiency[0].redzone[0].$.attempts) ?? 0,
+        RedZoneSuccesses: parseInt(teamXml.efficiency[0].redzone[0].$.successes) ?? 0,
+        ThirdDownAttempts: parseInt(teamXml.efficiency[0].thirddown[0].$.attempts) ?? 0,
+        ThirdDownSuccesses: parseInt(teamXml.efficiency[0].thirddown[0].$.successes) ?? 0,
+        FourthDownAttempts: parseInt(teamXml.efficiency[0].fourthdown[0].$.attempts) ?? 0,
+        FourthDownSuccesses: parseInt(teamXml.efficiency[0].fourthdown[0].$.successes) ?? 0,
+    };
+};
+
 const processAllGames = async () => {
+    let lastRequestTime = Date.now(); // Initialize with the current time
+
     try {
         const gameIDs = await fetchGameIDs();
-        const startIndex = gameIDs.indexOf('6d4c2db3-86fb-451c-9a85-3796db544a2d');
+        //const startIndex = gameIDs.indexOf('b4ef9b69-c711-4d56-a035-0211643d8190'); last game processed of 2014
+        const startIndex = gameIDs.indexOf('a2475d27-5c9b-4c08-8bd1-0c5f9e961fc8');
         //const startIndex = 0;
         if (startIndex === -1) {
             console.error('Starting game ID not found.');
             return;
         }
         const totalGames = gameIDs.length;
-        let processedGames = 0 + startIndex;
-        let lastRequestTime = Date.now();
+        let processedGames = startIndex;
 
         for (let i = startIndex; i < gameIDs.length; i++) {
             const gameID = gameIDs[i];
-            const currentTime = Date.now();
-            const timeSinceLastRequest = (currentTime - lastRequestTime) / 1000; // Time in seconds
 
-            if (timeSinceLastRequest < 1.1) {
-                await new Promise(resolve => setTimeout(resolve, (1.1 - timeSinceLastRequest) * 1000)); // Wait the remaining time
-            }
+            // Wait if necessary before processing the next game
+            await throttleRequests(lastRequestTime, 1.1);
+            lastRequestTime = Date.now(); // Update lastRequestTime to now after waiting
 
             try {
                 await processGameStats(gameID);
                 processedGames++;
-                console.log(`Successfully processed game with ID: ${gameID}. Processed ${processedGames} out of ${totalGames} games (${((processedGames / totalGames) * 100).toFixed(2)}%)`);
+                console.log(`Successfully processed game with ID: ${gameID}. Processed ${processedGames} out of ${totalGames} games.`);
             } catch (e) {
                 console.error(`Error processing game with ID ${gameID}:`, e);
             }
-
-            lastRequestTime = Date.now(); // Update the last request time after processing and potential waiting
         }
         console.log('Finished processing all games.');
     } catch (error) {
@@ -355,12 +482,25 @@ const processAllGames = async () => {
     }
 };
 
+const throttleRequests = async (lastRequestTime, intervalInSeconds) => {
+    const currentTime = Date.now();
+    const timeSinceLastRequest = (currentTime - lastRequestTime) / 1000; // Time in seconds
+
+    if (timeSinceLastRequest < intervalInSeconds) {
+        const waitTime = (intervalInSeconds - timeSinceLastRequest) * 1000;
+        //console.log(`Throttling requests: waiting for ${waitTime} milliseconds.`);
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+    } else {
+        //console.log("No wait needed, proceeding with the request.");
+    }
+};
+
 const processSingleGameForTesting = async () => {
     try {
         // Use a specific game ID here for testing
-        const testGameID = '00ebbef2-5f9f-4e7f-9b20-25f9d571386c';
+        const testGameID = '0095ceaa-2d3c-4ad0-9e69-21ee1ecac246';
         await processGameStats(testGameID);
-        // console.log(`Finished processing game with ID: ${testGameID}.`);
+        console.log(`Finished processing game with ID: ${testGameID}.`);
     } catch (error) {
         console.error('An error occurred:', error);
     }
