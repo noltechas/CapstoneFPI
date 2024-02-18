@@ -58,7 +58,7 @@ connection.on('error', () => {
 
 const fetchGameIDs = async () => {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT GameID FROM Schedule WHERE SEASON = 2014';
+        const sql = 'SELECT GameID FROM Schedule WHERE SEASON = 2020';
         const gameIDs = [];
         const sqlRequest = new Request(sql, (err) => {
             if (err) {
@@ -213,7 +213,10 @@ const insertTeamGameStats = async (teamStats, gameID, isHomeTeam) => {
 const processGameStats = async (gameID) => {
     console.log(`Processing game with ID: ${gameID}`);
     try {
-        const response = await axios.get(`http://api.sportradar.us/ncaafb/trial/v7/en/games/${gameID}/statistics.xml?api_key=82f8rqkbccb625586bg3vwxj`);
+        const response = await axios.get(`http://api.sportradar.us/ncaafb/trial/v7/en/games/${gameID}/statistics.xml?api_key=fcjjxa2ffuxasak7c82gf4f7`);
+        // Next key: fcjjxa2ffuxasak7c82gf4f7
+        // Next key: qyzxb5wcu4k79vqjet8zkesy
+        // More left: am4kj5e64x99kzxjurstysqc
         const xml = response.data;
 
         const result = await parseXml(xml);
@@ -246,7 +249,7 @@ const processGameStats = async (gameID) => {
             }
 
         }
-        console.log(`Successfully processed game with ID: ${gameID}`);
+        //console.log(`Successfully processed game with ID: ${gameID}`);
     } catch (error) {
         console.error(`Error fetching game stats for game ID ${gameID}:`, error);
     }
@@ -447,13 +450,12 @@ const buildTeamStats = (teamXml, gameID) => {
 };
 
 const processAllGames = async () => {
-    let lastRequestTime = Date.now(); // Initialize with the current time
+    let lastRequestTime = Date.now();
 
     try {
         const gameIDs = await fetchGameIDs();
-        //const startIndex = gameIDs.indexOf('b4ef9b69-c711-4d56-a035-0211643d8190'); last game processed of 2014
-        const startIndex = gameIDs.indexOf('a2475d27-5c9b-4c08-8bd1-0c5f9e961fc8');
-        //const startIndex = 0;
+        const startIndex = gameIDs.indexOf('a0e328ae-49ad-4936-b458-b2a47c787ad6');
+        // const startIndex = 0;
         if (startIndex === -1) {
             console.error('Starting game ID not found.');
             return;
@@ -471,7 +473,7 @@ const processAllGames = async () => {
             try {
                 await processGameStats(gameID);
                 processedGames++;
-                console.log(`Successfully processed game with ID: ${gameID}. Processed ${processedGames} out of ${totalGames} games.`);
+                console.log(`Successfully processed game with ID: ${gameID}. Processed ${processedGames} out of ${totalGames} games. (${(processedGames/totalGames)*100}%)`);
             } catch (e) {
                 console.error(`Error processing game with ID ${gameID}:`, e);
             }

@@ -1,6 +1,5 @@
 const { Connection, Request, TYPES } = require('tedious');
 const { connection, connectPromise } = require('./databaseConnection'); // Adjust the path as necessary
-const sql = require('mssql'); // Import the mssql module
 
 const getStatsForPlayer = async (playerId, year, week, period, statNames) => {
     await connectPromise;
@@ -722,36 +721,166 @@ async function getTeamStats(teamId, season, week, period) {
 
         const request = new Request(sql, (err) => {
             if (err) {
+                console.error('Error executing SQL:', err);
                 return reject(err);
             }
         });
 
-        // Parameters binding
+        // Bind parameters to your SQL query to prevent SQL injection
         request.addParameter('TeamID', TYPES.NVarChar, teamId);
         request.addParameter('Season', TYPES.Int, season);
         request.addParameter('Week', TYPES.Int, week);
         request.addParameter('Period', TYPES.NVarChar, period);
 
-        // Handling query result
-        let result = null;
+        let resultData = {};
+
         request.on('row', (columns) => {
-            result = {}; // Assuming single row result, adjust if expecting more
             columns.forEach((column) => {
-                result[column.metadata.colName] = column.value;
+                resultData[column.metadata.colName] = column.value;
             });
         });
 
         request.on('requestCompleted', () => {
-            resolve(result); // Resolve with the processed result
+            // Assuming the result is intended to be a single row/object
+            resolve(resultData);
+        });
+
+        connection.execSql(request);
+    });
+}
+
+async function getPlayerStats(teamId, season, week, period) {
+    await connectPromise; // Ensures the database connection is ready
+
+    return new Promise((resolve, reject) => {
+        let sql = `
+            DECLARE @GamesToConsider TABLE (GameID NVARCHAR(50));
+
+            IF @Period = 'lastGame' BEGIN
+                INSERT INTO @GamesToConsider
+                SELECT TOP 1 s.GameID
+                FROM Schedule s
+                WHERE s.Season = @Year AND (s.HomeTeamID = @TeamID OR s.AwayTeamID = @TeamID) AND s.Week < @Week
+                ORDER BY s.Week DESC;
+            END ELSE IF @Period = 'last3Games' BEGIN
+                INSERT INTO @GamesToConsider
+                SELECT TOP 3 s.GameID
+                FROM Schedule s
+                WHERE s.Season = @Year AND (s.HomeTeamID = @TeamID OR s.AwayTeamID = @TeamID) AND s.Week < @Week
+                ORDER BY s.Week DESC;
+            END ELSE IF @Period = 'last3GamesHome' BEGIN
+                INSERT INTO @GamesToConsider
+                SELECT TOP 3 s.GameID
+                FROM Schedule s
+                WHERE s.Season = @Year AND s.HomeTeamID = @TeamID AND s.Week < @Week
+                ORDER BY s.Week DESC;
+            END ELSE IF @Period = 'last3GamesAway' BEGIN
+                INSERT INTO @GamesToConsider
+                SELECT TOP 3 s.GameID
+                FROM Schedule s
+                WHERE s.Season = @Year AND s.AwayTeamID = @TeamID AND s.Week < @Week
+                ORDER BY s.Week DESC;
+            END ELSE IF @Period = 'season' BEGIN
+                INSERT INTO @GamesToConsider
+                SELECT s.GameID
+                FROM Schedule s
+                WHERE s.Season = @Year AND (s.HomeTeamID = @TeamID OR s.AwayTeamID = @TeamID);
+            END ELSE IF @Period = 'seasonHome' BEGIN
+                INSERT INTO @GamesToConsider
+                SELECT s.GameID
+                FROM Schedule s
+                WHERE s.Season = @Year AND s.HomeTeamID = @TeamID;
+            END ELSE IF @Period = 'seasonAway' BEGIN
+                INSERT INTO @GamesToConsider
+                SELECT s.GameID
+                FROM Schedule s
+                WHERE s.Season = @Year AND s.AwayTeamID = @TeamID;
+            END ELSE IF @Period = 'lastSeason' BEGIN
+                INSERT INTO @GamesToConsider
+                SELECT s.GameID
+                FROM Schedule s
+                WHERE s.Season = @Year - 1 AND (s.HomeTeamID = @TeamID OR s.AwayTeamID = @TeamID);
+            END ELSE IF @Period = 'lastSeasonHome' BEGIN
+                INSERT INTO @GamesToConsider
+                SELECT s.GameID
+                FROM Schedule s
+                WHERE s.Season = @Year - 1 AND s.HomeTeamID = @TeamID;
+            END ELSE IF @Period = 'lastSeasonAway' BEGIN
+                INSERT INTO @GamesToConsider
+                SELECT s.GameID
+                FROM Schedule s
+                WHERE s.Season = @Year - 1 AND s.AwayTeamID = @TeamID;
+            END
+
+-- Player stats aggregation query
+            SELECT
+                p.PlayerID,
+                p.Name,
+                p.Position,
+                -- Passing stats for QBs
+                ISNULL(CAST(SUM(CASE WHEN p.Position = 'QB' THEN pgs.PassingYards ELSE 0 END) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS PassingYardsPerGame,
+                ISNULL(CAST(SUM(CASE WHEN p.Position = 'QB' THEN pgs.PassingTouchdowns ELSE 0 END) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS PassingTouchdownsPerGame,
+                ISNULL(CAST(SUM(CASE WHEN p.Position = 'QB' THEN pgs.PassingAttempts ELSE 0 END) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS PassingAttemptsPerGame,
+                ISNULL(CAST(SUM(CASE WHEN p.Position = 'QB' THEN pgs.PassingCompletions ELSE 0 END) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS PassingCompletionsPerGame,
+                ISNULL(CAST(SUM(CASE WHEN p.Position = 'QB' THEN pgs.PassingInterceptions ELSE 0 END) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS PassingInterceptionsPerGame,
+                -- Rushing stats for QBs, RBs, WRs, TEs
+                ISNULL(CAST(SUM(pgs.RushingYards) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS RushingYardsPerGame,
+                ISNULL(CAST(SUM(pgs.RushingYards) AS FLOAT) / NULLIF(CAST(SUM(pgs.RushingAttempts) AS FLOAT), 0), 0) AS RushingYardsPerCarry,
+                ISNULL(CAST(SUM(pgs.RushingTDs) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS RushingTouchdownsPerGame,
+                -- Receiving stats for RBs, WRs, TEs
+                ISNULL(CAST(SUM(pgs.ReceivingYards) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS ReceivingYardsPerGame,
+                ISNULL(CAST(SUM(pgs.Receptions) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS ReceptionsPerGame,
+                ISNULL(CAST(SUM(pgs.ReceivingTDs) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS ReceivingTouchdownsPerGame,
+                -- Defensive stats
+                ISNULL(CAST(SUM(pgs.Combined) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS TacklesPerGame,
+                ISNULL(CAST(SUM(pgs.Sacks) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS SacksPerGame,
+                ISNULL(CAST(SUM(pgs.Interceptions) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS InterceptionsPerGame,
+                ISNULL(CAST(SUM(pgs.ForcedFumbles) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS ForcedFumblesPerGame,
+                ISNULL(CAST(SUM(pgs.PassesDefended) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS PassesDefendedPerGame,
+                -- Common stats
+                ISNULL(CAST(SUM(pgs.Fumbles) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS FumblesPerGame,
+                p.RecruitingScore
+            FROM PlayerGameStats pgs
+                     JOIN Players p ON pgs.PlayerID = p.PlayerID
+                     JOIN @GamesToConsider gtc ON pgs.GameID = gtc.GameID
+            WHERE pgs.TeamID = @TeamID
+            GROUP BY p.PlayerID, p.Name, p.Position, p.RecruitingScore;
+        `;
+
+        const request = new Request(sql, (err) => {
+            if (err) {
+                console.error('Error executing SQL:', err);
+                return reject(err);
+            }
+        });
+
+        request.addParameter('TeamID', TYPES.NVarChar, teamId);
+        request.addParameter('Year', TYPES.Int, season);
+        request.addParameter('Week', TYPES.Int, week);
+        request.addParameter('Period', TYPES.NVarChar, period);
+
+        let results = []; // Initialize an empty array to collect results
+
+        request.on('row', (columns) => {
+            let playerStats = {}; // Create an object for the current row's data
+            columns.forEach(column => {
+                playerStats[column.metadata.colName] = column.value;
+            });
+            results.push(playerStats); // Add the current row's data to the results array
+        });
+
+        request.on('requestCompleted', () => {
+            resolve(results); // Resolve with the array of all players' stats
         });
 
         request.on('error', (err) => {
-            reject(err); // Handle errors
+            console.error('Error executing SQL:', err);
+            reject(err);
         });
 
-        connection.execSql(request); // Execute the query
+        connection.execSql(request);
     });
 }
 
 
-module.exports = { getStatsForPlayer, getInfoForPlayer, getStatsForTeam, getFBSFCSForTeam, getFCSFBSOpponentRatio, getTeamWL, getTeamSOR, getTeamRecord, getTeamRoster, getTeamStats };
+module.exports = { getStatsForPlayer, getInfoForPlayer, getStatsForTeam, getFBSFCSForTeam, getFCSFBSOpponentRatio, getTeamWL, getTeamSOR, getTeamRecord, getTeamRoster, getTeamStats, getPlayerStats };
