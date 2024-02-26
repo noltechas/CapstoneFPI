@@ -587,39 +587,48 @@ async function getTeamStats(teamId, season, week, period) {
         // Construct the SQL query with parameters
         let sql = `
         DECLARE @MaxWeekForPeriod INT;
-        IF @Period = 'lastGame'
-        BEGIN
-            -- Find the latest game week up to the specified week (excluding it)
-            SELECT @MaxWeekForPeriod = MAX(Week)
-            FROM Schedule
-            WHERE Season = @Season
-            AND Week < @Week
-            AND (HomeTeamID = @TeamID OR AwayTeamID = @TeamID);
-        END
         DECLARE @Last3Weeks TABLE (Week INT);
-        IF @Period = 'last3Games'
-        BEGIN
-            INSERT INTO @Last3Weeks (Week)
-            SELECT TOP 3 Week
-            FROM Schedule
-            WHERE Season = @Season
-            AND Week < @Week
-            AND (HomeTeamID = @TeamID OR AwayTeamID = @TeamID)
-            ORDER BY Week DESC;
-        END
-        
-        IF @Period = 'lastSeason'
-        BEGIN
-            SET @Season = @Season - 1; -- Adjust for last season
-            SELECT @MaxWeekForPeriod = MAX(Week)
-            FROM Schedule
-            WHERE Season = @Season
-            AND (HomeTeamID = @TeamID OR AwayTeamID = @TeamID);
-        END
-        ELSE
-        BEGIN
-            SET @MaxWeekForPeriod = NULL; -- For 'season', consider all games
-        END;
+        DECLARE @IsHome BIT = NULL; -- NULL means both home and away, 1 means home only, 0 means away only
+
+-- Adjust @IsHome based on @Period
+        IF @Period IN ('last3GamesHome', 'lastSeasonHome', 'seasonHome') SET @IsHome = 1;
+        ELSE IF @Period IN ('last3GamesAway', 'lastSeasonAway', 'seasonAway') SET @IsHome = 0;
+
+        IF @Period = 'lastGame'
+            BEGIN
+                -- Find the latest game week up to the specified week (excluding it)
+                SELECT @MaxWeekForPeriod = MAX(Week)
+                FROM Schedule
+                WHERE Season = @Season
+                  AND Week < @Week
+                  AND (HomeTeamID = @TeamID OR AwayTeamID = @TeamID);
+            END
+        ELSE IF @Period LIKE 'last3Games%'
+            BEGIN
+                -- Adjust query to consider home or away games if specified
+                INSERT INTO @Last3Weeks (Week)
+                SELECT TOP 3 Week
+                FROM Schedule
+                WHERE Season = @Season
+                  AND Week < @Week
+                  AND (HomeTeamID = @TeamID OR AwayTeamID = @TeamID)
+                  AND (@IsHome IS NULL OR (@IsHome = 1 AND HomeTeamID = @TeamID) OR (@IsHome = 0 AND AwayTeamID = @TeamID))
+                ORDER BY Week DESC;
+            END
+
+        IF @Period LIKE 'lastSeason%'
+            BEGIN
+                SET @Season = @Season - 1; -- Adjust for last season
+                SELECT @MaxWeekForPeriod = MAX(Week)
+                FROM Schedule
+                WHERE Season = @Season
+                  AND (HomeTeamID = @TeamID OR AwayTeamID = @TeamID)
+                  AND (@IsHome IS NULL OR (@IsHome = 1 AND HomeTeamID = @TeamID) OR (@IsHome = 0 AND AwayTeamID = @TeamID));
+            END
+        ELSE IF @Period LIKE 'season%'
+            BEGIN
+                SET @MaxWeekForPeriod = NULL; -- For 'season', consider all games until the specified week
+            END;
         
         WITH TeamStats AS (
             SELECT 
@@ -669,14 +678,23 @@ async function getTeamStats(teamId, season, week, period) {
                 SUM(OpponentYards) AS OpponentTotalYards,
                 SUM(OpponentPlays) AS OpponentTotalPlays
             FROM TeamStats),
-        
-        OpponentDivisions AS (
-            SELECT 
-                s.Season,
-                CASE WHEN s.HomeTeamID = @TeamID THEN s.AwayTeamID ELSE s.HomeTeamID END AS OpponentTeamID
-            FROM Schedule s
-            WHERE s.Season = @Season AND (s.HomeTeamID = @TeamID OR s.AwayTeamID = @TeamID)
-        ),
+
+             OpponentDivisions AS (
+                 SELECT
+                     s.Season,
+                     CASE WHEN s.HomeTeamID = @TeamID THEN s.AwayTeamID ELSE s.HomeTeamID END AS OpponentTeamID
+                 FROM Schedule s
+                 WHERE s.Season = @Season
+                   AND (s.HomeTeamID = @TeamID OR s.AwayTeamID = @TeamID)
+                   AND (
+                         @MaxWeekForPeriod IS NULL
+                         OR s.Week <= @MaxWeekForPeriod
+                     )
+                   AND (
+                             @Period NOT LIKE 'last3Games%'
+                         OR s.Week IN (SELECT Week FROM @Last3Weeks)
+                     )
+             ),
         OpponentDivisionCounts AS (
             SELECT
                 COUNT(*) AS TotalGames,
@@ -690,12 +708,12 @@ async function getTeamStats(teamId, season, week, period) {
                 CAST(FCSGames AS FLOAT) / NULLIF(FBSGames + FCSGames, 0) AS FCSFBSRatio
             FROM OpponentDivisionCounts
         ),
-        
-        DivisionTitle AS (
-        SELECT DIVISION
-        FROM TEAMS AS Division
-        WHERE TeamID = @TeamID
-        )
+
+         DivisionTitle AS (
+             SELECT DIVISION
+             FROM TEAMS
+             WHERE TeamID = @TeamID
+         )
         
         SELECT
             GamesPlayed,
@@ -882,5 +900,56 @@ async function getPlayerStats(teamId, season, week, period) {
     });
 }
 
+async function getMatchupTeams(gameID) {
+    await connectPromise;
 
-module.exports = { getStatsForPlayer, getInfoForPlayer, getStatsForTeam, getFBSFCSForTeam, getFCSFBSOpponentRatio, getTeamWL, getTeamSOR, getTeamRecord, getTeamRoster, getTeamStats, getPlayerStats };
+    return new Promise((resolve, reject) => {
+        const matchupInfo = {};
+
+        const sql = `
+            SELECT 
+                HomeTeamID, 
+                AwayTeamID, 
+                Season, 
+                Week
+            FROM Schedule
+            WHERE GameID = @GameID
+        `;
+
+        const request = new Request(sql, (err) => {
+            if (err) {
+                console.error('Error executing SQL:', err);
+                reject(err);
+            }
+        });
+
+        // Adding parameter to prevent SQL injection
+        request.addParameter('GameID', TYPES.NVarChar, gameID);
+
+        request.on('row', (columns) => {
+            console.log('Row received', columns); // Add this line for debugging
+            columns.forEach((column) => {
+                matchupInfo[column.metadata.colName] = column.value;
+            });
+        });
+
+        request.on('requestCompleted', () => {
+            console.log('Request completed', matchupInfo); // Add this line for debugging
+            if (Object.keys(matchupInfo).length === 0) {
+                console.log('No data found for GameID:', gameID);
+                reject('No data found'); // Reject if no data found
+            } else {
+                resolve(matchupInfo); // Resolve with the fetched matchup information
+            }
+        });
+
+        request.on('error', (err) => {
+            console.error('Error executing SQL:', err);
+            reject(err);
+        });
+
+        connection.execSql(request);
+    });
+}
+
+module.exports = { getStatsForPlayer, getInfoForPlayer, getStatsForTeam, getFBSFCSForTeam, getFCSFBSOpponentRatio, getTeamWL, getTeamSOR, getTeamRecord, getTeamRoster, getTeamStats, getPlayerStats, getMatchupTeams };

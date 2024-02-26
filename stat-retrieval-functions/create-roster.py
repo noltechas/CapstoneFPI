@@ -20,37 +20,64 @@ def call_js_function(func_name, *args):
 
 
 def create_roster_object(teamID, year, week, period):
-    # Get team stats directly for the period
-    team_stats_for_period = call_js_function('getTeamStatsForPeriod', teamID, year, week, period)
-    player_stats = call_js_function('getPlayerStatsForPeriod', teamID, year, week, period)
-
-    # Process player stats to determine starters
-    qb_stats, rb_stats, wr_stats, def_stats = process_player_stats(player_stats)
-
-    # Populate teamStats with both team and individual stats
+    # Initialize teamStats with default values to avoid KeyError
     teamStats = {
-        'division': team_stats_for_period['Division'],
-        'win_percentage': team_stats_for_period['WinPercentage'],
-        'strength_of_record': call_js_function('getSORForTeam', teamID, year, week, period),
-        'points_per_game': team_stats_for_period['AveragePointsPerGame'],
-        'points_allowed_per_game': team_stats_for_period['AveragePointsAllowedPerGame'],
-        'total_YPG': team_stats_for_period['AverageYardsPerGame'],
-        'turnovers_per_game': team_stats_for_period['AverageTurnoversPerGame'],
-        'penalties_per_game': team_stats_for_period['AveragePenaltiesPerGame'],
-        '3rd_down_eff': team_stats_for_period['ThirdDownEfficiency'],
-        'redzone_eff': team_stats_for_period['RedZoneEfficiency'],
-        'sacks_per_game': team_stats_for_period['AverageSacksPerGame'],
-        'interceptions_per_game': team_stats_for_period['AverageInterceptionsPerGame'],
-        'forced_fumbles_per_game': team_stats_for_period['AverageForcedFumblesPerGame'],
-        'yards_per_play': team_stats_for_period['YardsPerPlay'],
-        'yards_allowed_per_game': team_stats_for_period['OpponentYardsPerGame'],
-        'yards_allowed_per_play': team_stats_for_period['OpponentYardsPerPlay'],
-        'FBS_opponent_ratio': team_stats_for_period['FCSFBSRatio'],
-        'QB': qb_stats,
-        'RBs': rb_stats,
-        'WRs/TEs': wr_stats,
-        'Defenders': def_stats,
+        'division': '',
+        'win_percentage': 0,
+        'strength_of_record': 0,
+        'points_per_game': 0,
+        'points_allowed_per_game': 0,
+        'total_YPG': 0,
+        'turnovers_per_game': 0,
+        'penalties_per_game': 0,
+        '3rd_down_eff': 0,
+        'redzone_eff': 0,
+        'sacks_per_game': 0,
+        'interceptions_per_game': 0,
+        'forced_fumbles_per_game': 0,
+        'yards_per_play': 0,
+        'yards_allowed_per_game': 0,
+        'yards_allowed_per_play': 0,
+        'FBS_opponent_ratio': 0,
+        'QB': [],
+        'RBs': [],
+        'WRs/TEs': [],
+        'Defenders': [],
     }
+
+    # Attempt to get team stats for the period
+    team_stats_for_period = call_js_function('getTeamStatsForPeriod', teamID, year, week, period)
+    if team_stats_for_period:
+        # Update teamStats with actual values if available
+        teamStats.update({
+            'division': team_stats_for_period.get('Division', ''),
+            'win_percentage': team_stats_for_period.get('WinPercentage', 0),
+            'strength_of_record': call_js_function('getSORForTeam', teamID, year, week, period),
+            'points_per_game': team_stats_for_period.get('AveragePointsPerGame', 0),
+            'points_allowed_per_game': team_stats_for_period.get('AveragePointsAllowedPerGame', 0),
+            'total_YPG': team_stats_for_period.get('AverageYardsPerGame', 0),
+            'turnovers_per_game': team_stats_for_period.get('AverageTurnoversPerGame', 0),
+            'penalties_per_game': team_stats_for_period.get('AveragePenaltiesPerGame', 0),
+            '3rd_down_eff': team_stats_for_period.get('ThirdDownEfficiency', 0),
+            'redzone_eff': team_stats_for_period.get('RedZoneEfficiency', 0),
+            'sacks_per_game': team_stats_for_period.get('AverageSacksPerGame', 0),
+            'interceptions_per_game': team_stats_for_period.get('AverageInterceptionsPerGame', 0),
+            'forced_fumbles_per_game': team_stats_for_period.get('AverageForcedFumblesPerGame', 0),
+            'yards_per_play': team_stats_for_period.get('YardsPerPlay', 0),
+            'yards_allowed_per_game': team_stats_for_period.get('OpponentYardsPerGame', 0),
+            'yards_allowed_per_play': team_stats_for_period.get('OpponentYardsPerPlay', 0),
+            'FBS_opponent_ratio': team_stats_for_period.get('FCSFBSRatio', 0),
+        })
+
+    # Attempt to get player stats for the period
+    player_stats = call_js_function('getPlayerStatsForPeriod', teamID, year, week, period)
+    if player_stats:
+        # Process player stats to determine starters
+        qb_stats, rb_stats, wr_stats, def_stats = process_player_stats(player_stats)
+        teamStats['QB'] = qb_stats
+        teamStats['RBs'] = rb_stats
+        teamStats['WRs/TEs'] = wr_stats
+        teamStats['Defenders'] = def_stats
 
     return teamStats
 
@@ -196,13 +223,125 @@ def print_stats_for_position(player_stats_list, position_label):
         print()  # Print a newline for better readability between players
 
 
+def create_full_team_objects(gameID):
+    try:
+        json_output = call_js_function('getMatchupInfo', gameID)
+        if json_output:
+            matchup_info = json.loads(json_output)
+            home_team_ID = matchup_info['HomeTeamID']
+            away_team_ID = matchup_info['AwayTeamID']
+            week = str(matchup_info['Week'])
+            season = str(matchup_info['Season'])
+
+            # Initialize lists for stats
+            home_stats = []
+            away_stats = []
+
+            # Define periods to iterate over
+            periods = ['season', 'last3Games', 'last3GamesHome', 'lastSeason', 'lastSeasonHome', 'lastGame']
+
+            # Process Home Team
+            for period in periods:
+                result = create_roster_object(home_team_ID, season, week, period)
+                if result is not None:
+                    result['period'] = period
+                    home_stats.append(result)
+                else:
+                    print(f"No data for home team in period: {period}")
+
+            # Process Away Team
+            for period in periods:
+                result = create_roster_object(away_team_ID, season, week, period)
+                if result is not None:
+                    result['period'] = period
+                    away_stats.append(result)
+                else:
+                    print(f"No data for away team in period: {period}")
+
+            return home_stats, away_stats
+
+        else:
+            print("No data returned from getMatchupInfo function.")
+    except json.decoder.JSONDecodeError as e:
+        print(f"Failed to decode JSON from getMatchupInfo function: {e}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+def print_full_team_objects(gameID):
+    # First, create the full team objects using the provided game ID
+    home_stats, away_stats = create_full_team_objects(gameID)
+
+    def print_team_stats(team_stats, team_type):
+        print(f"\n{team_type} Team Stats:")
+        for period_stats in team_stats:
+            print(f"\nStats for {period_stats['period']} period:")
+            # General team stats
+            print_general_team_stats(period_stats)
+
+            # QB Stats
+            print_position_stats(period_stats['QB'], "QB")
+
+            # RB Stats
+            print_position_stats(period_stats['RBs'], "RB")
+
+            # WR/TE Stats
+            print_position_stats(period_stats['WRs/TEs'], "WR/TE")
+
+            # Defender Stats
+            print_position_stats(period_stats['Defenders'], "Defender")
+
+            # Helper function to print stats for a position
+    def print_position_stats(position_stats, position_label):
+        print(f"\n  {position_label} Stats:")
+        for stat in position_stats:
+            print(f"    Player ID: {stat['player_id']}")
+            for key, value in stat.items():
+                if key != 'player_id':  # Skip printing the player ID again
+                    formatted_value = format_value(value)
+                    print(f"    {key.replace('_', ' ').capitalize()}: {formatted_value}")
+
+    # Function to format value, handling NoneType gracefully
+    def format_value(value):
+        if value is None:
+            return 'N/A'  # Or return '0.00' if you prefer to show 0 for None values
+        elif isinstance(value, float):
+            return f"{value:.2f}"
+        else:
+            return value
+
+    def print_general_team_stats(stats):
+        print(f"  Division: {stats['division']}")
+        print(f"  Win Percentage: {stats['win_percentage']:.2f}")
+        print(f"  Strength of Record: {stats['strength_of_record']:.2f}")
+        print(f"  Points Per Game: {stats['points_per_game']}")
+        print(f"  Points Allowed Per Game: {stats['points_allowed_per_game']}")
+        print(f"  Total Yards Per Game: {stats['total_YPG']}")
+        print(f"  Turnovers Per Game: {stats['turnovers_per_game']}")
+        print(f"  Penalties Per Game: {stats['penalties_per_game']}")
+        print(f"  3rd Down Efficiency: {stats['3rd_down_eff']}")
+        print(f"  Redzone Efficiency: {stats['redzone_eff']}")
+        print(f"  Sacks Per Game: {stats['sacks_per_game']}")
+        print(f"  Interceptions Per Game: {stats['interceptions_per_game']}")
+        print(f"  Forced Fumbles Per Game: {stats['forced_fumbles_per_game']}")
+        print(f"  Yards Per Play: {stats['yards_per_play']}")
+        print(f"  Yards Allowed Per Game: {stats['yards_allowed_per_game']}")
+        print(f"  Yards Allowed Per Play: {stats['yards_allowed_per_play']}")
+        print(f"  FBS Opponent Ratio: {stats['FBS_opponent_ratio']}")
+
+
+    print_team_stats(home_stats, "Home")
+    print_team_stats(away_stats, "Away")
+
 
 # Example usage:
-team_id = '98833e65-ab72-482d-b3c0-13f8656629c0'
-year = '2018'
-week = '12'
-period = 'last3GamesAway'
+# team_id = '98833e65-ab72-482d-b3c0-13f8656629c0'
+# year = '2018'
+# week = '12'
+# period = 'last3GamesAway'
 
-team_stats = create_roster_object(team_id, year, week, period)
-print_roster_stats(team_stats)
+#team_stats = create_roster_object(team_id, year, week, period)
+#print_roster_stats(team_stats)
+
+print_full_team_objects('00a57237-9bfb-4faf-8c1e-ee766300306d')
 

@@ -1,6 +1,6 @@
 const { connection, connectPromise } = require('./databaseConnection');
 const { getStatsForPlayer, getInfoForPlayer, getStatsForTeam, getFBSFCSForTeam, getFCSFBSOpponentRatio, getTeamWL, getTeamSOR, getTeamRoster, getTeamStats,
-    getPlayerStats
+    getPlayerStats, getMatchupTeams
 } = require("./retrieve-statistics");
 const process = require("process"); // Adjust the path as necessary
 
@@ -537,6 +537,22 @@ async function getPlayerStatsForPeriod(teamId, year, week, period) {
     }
 }
 
+async function getMatchupInfo(gameID) {
+    try {
+        const matchupInfo = await getMatchupTeams(gameID);
+        if (matchupInfo) {
+            // Stringify the JavaScript object to a JSON string
+            return JSON.stringify(matchupInfo);
+        } else {
+            console.log('No matchup information found for the specified GameID.');
+            return null;
+        }
+    } catch (error) {
+        console.error('Error retrieving matchup information:', error);
+        return null;
+    }
+}
+
 async function logStats() {
     // let stat = await getDivisionForTeam('e3b9e7df-4b69-4d27-9948-59491c29be86');
     let stat = await getPlayerStatsForPeriod('98833e65-ab72-482d-b3c0-13f8656629c0', 2016, 7, 'last3Games')
@@ -596,6 +612,7 @@ async function main() {
             case 'getSORForTeam':
             case 'getTeamStatsForPeriod':
             case 'getPlayerStatsForPeriod':
+            case 'getMatchupInfo':
             case 'getTeamRosterForSeason':
                 // Assuming each function returns a promise and takes parameters as needed
                 result = await eval(functionName)(...params);
