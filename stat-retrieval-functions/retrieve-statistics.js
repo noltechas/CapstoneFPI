@@ -586,155 +586,147 @@ async function getTeamStats(teamId, season, week, period) {
     return new Promise((resolve, reject) => {
         // Construct the SQL query with parameters
         let sql = `
-        DECLARE @MaxWeekForPeriod INT;
-        DECLARE @Last3Weeks TABLE (Week INT);
-        DECLARE @IsHome BIT = NULL; -- NULL means both home and away, 1 means home only, 0 means away only
+            DECLARE @RelevantGames TABLE (Week INT, Season INT);
+            DECLARE @IsHome BIT = NULL;
 
--- Adjust @IsHome based on @Period
-        IF @Period IN ('last3GamesHome', 'lastSeasonHome', 'seasonHome') SET @IsHome = 1;
-        ELSE IF @Period IN ('last3GamesAway', 'lastSeasonAway', 'seasonAway') SET @IsHome = 0;
+            IF @Period IN ('last3GamesHome', 'lastSeasonHome', 'seasonHome') SET @IsHome = 1;
+            ELSE IF @Period IN ('last3GamesAway', 'lastSeasonAway', 'seasonAway') SET @IsHome = 0;
 
-        IF @Period = 'lastGame'
-            BEGIN
-                -- Find the latest game week up to the specified week (excluding it)
-                SELECT @MaxWeekForPeriod = MAX(Week)
-                FROM Schedule
-                WHERE Season = @Season
-                  AND Week < @Week
-                  AND (HomeTeamID = @TeamID OR AwayTeamID = @TeamID);
-            END
-        ELSE IF @Period LIKE 'last3Games%'
-            BEGIN
-                -- Adjust query to consider home or away games if specified
-                INSERT INTO @Last3Weeks (Week)
-                SELECT TOP 3 Week
-                FROM Schedule
-                WHERE Season = @Season
-                  AND Week < @Week
-                  AND (HomeTeamID = @TeamID OR AwayTeamID = @TeamID)
-                  AND (@IsHome IS NULL OR (@IsHome = 1 AND HomeTeamID = @TeamID) OR (@IsHome = 0 AND AwayTeamID = @TeamID))
-                ORDER BY Week DESC;
-            END
+-- Adjusted logic for identifying relevant games
+            IF @Period IN ('lastGame', 'last3Games', 'last3GamesHome', 'last3GamesAway')
+                BEGIN
+                    ;WITH RankedGames AS (
+                        SELECT
+                            Week,
+                            Season,
+                            ROW_NUMBER() OVER (PARTITION BY Week ORDER BY Season DESC, Week DESC) AS RowNum
+                        FROM Schedule
+                        WHERE Season <= @Season
+                          AND ((Season = @Season AND Week < @Week) OR Season < @Season)
+                          AND ((@IsHome IS NULL) OR (@IsHome = 1 AND HomeTeamID = @TeamID) OR (@IsHome = 0 AND AwayTeamID = @TeamID))
+                          AND (HomePoints != 0 OR AwayPoints != 0)
+                    )
+                     INSERT INTO @RelevantGames (Week, Season)
+                     SELECT TOP 3 Week, Season
+                     FROM RankedGames
+                     WHERE RowNum = 1
+                     ORDER BY Season DESC, Week DESC;
+                END
+            ELSE IF @Period IN ('season', 'lastSeason', 'seasonHome', 'seasonAway', 'lastSeasonHome', 'lastSeasonAway')
+                BEGIN
+                    DECLARE @TargetSeason INT = CASE
+                                                    WHEN @Period LIKE 'lastSeason%' THEN @Season - 1
+                                                    WHEN @Period IN ('seasonHome', 'seasonAway') THEN @Season
+                                                    ELSE @Season
+                        END;
+                    INSERT INTO @RelevantGames (Week, Season)
+                    SELECT Week, Season
+                    FROM Schedule
+                    WHERE Season = @TargetSeason
+                      AND Week < CASE WHEN @Period IN ('season', 'seasonHome', 'seasonAway') THEN @Week ELSE 100 END
+                      AND ((@Period IN ('season', 'lastSeason') AND (HomeTeamID = @TeamID OR AwayTeamID = @TeamID)) OR
+                           (@Period IN ('lastSeasonHome', 'seasonHome') AND HomeTeamID = @TeamID AND @IsHome = 1) OR
+                           (@Period IN ('lastSeasonAway', 'seasonAway') AND AwayTeamID = @TeamID AND @IsHome = 0))
+                      AND (HomePoints != 0 OR AwayPoints != 0);
+                END;
+            WITH TeamStats AS (
+                SELECT s.Season,
+                       s.Week,
+                       CASE WHEN HomeTeamID = @TeamID THEN 'Home' ELSE 'Away' END                                 AS GameLocation,
+                       CASE WHEN HomeTeamID = @TeamID THEN HomePoints ELSE AwayPoints END                         AS PointsScored,
+                       CASE WHEN HomeTeamID = @TeamID THEN AwayPoints ELSE HomePoints END                         AS PointsAllowed,
+                       CASE WHEN HomeTeamID = @TeamID THEN HomeTotalYards ELSE AwayTotalYards END                 AS TotalYards,
+                       CASE WHEN HomeTeamID = @TeamID THEN HomeTurnovers ELSE AwayTurnovers END                   AS Turnovers,
+                       CASE WHEN HomeTeamID = @TeamID THEN HomePenalties ELSE AwayPenalties END                   AS Penalties,
+                       CASE
+                           WHEN HomeTeamID = @TeamID THEN HomeThirdDownSuccesses
+                           ELSE AwayThirdDownSuccesses END                                                        AS ThirdDownSuccesses,
+                       CASE
+                           WHEN HomeTeamID = @TeamID THEN HomeThirdDownAttempts
+                           ELSE AwayThirdDownAttempts END                                                         AS ThirdDownAttempts,
+                       CASE
+                           WHEN HomeTeamID = @TeamID THEN HomeRedZoneSuccesses
+                           ELSE AwayRedZoneSuccesses END                                                          AS RedZoneSuccesses,
+                       CASE
+                           WHEN HomeTeamID = @TeamID THEN HomeRedZoneAttempts
+                           ELSE AwayRedZoneAttempts END                                                           AS RedZoneAttempts,
+                       CASE WHEN HomeTeamID = @TeamID THEN HomeSacks ELSE AwaySacks END                           AS Sacks,
+                       CASE
+                           WHEN HomeTeamID = @TeamID THEN HomeInterceptions
+                           ELSE AwayInterceptions END                                                             AS Interceptions,
+                       CASE
+                           WHEN HomeTeamID = @TeamID THEN HomeForcedFumbles
+                           ELSE AwayForcedFumbles END                                                             AS ForcedFumbles,
+                       CASE WHEN HomeTeamID = @TeamID THEN HomePlayCount ELSE AwayPlayCount END                   AS Plays,
+                       CASE WHEN HomeTeamID = @TeamID THEN AwayPlayCount ELSE HomePlayCount END                   AS OpponentPlays,
+                       CASE WHEN HomeTeamID = @TeamID THEN AwayTotalYards ELSE HomeTotalYards END                 AS OpponentYards,
+                       s.HomeTeamID,
+                       s.AwayTeamID
+                FROM Schedule s
+                         INNER JOIN @RelevantGames rg ON s.Season = rg.Season AND s.Week = rg.Week
+                WHERE (s.HomeTeamID = @TeamID OR s.AwayTeamID = @TeamID)
+                  AND (s.HomePoints != 0 OR s.AwayPoints != 0)
+            ),
+                 AggregatedStats AS (
+                     SELECT COUNT(*)                                                      AS GamesPlayed,
+                            SUM(CASE WHEN PointsScored > PointsAllowed THEN 1 ELSE 0 END) AS Wins,
+                            SUM(PointsScored)                                             AS TotalPointsScored,
+                            SUM(PointsAllowed)                                            AS TotalPointsAllowed,
+                            SUM(TotalYards)                                               AS TotalYards,
+                            SUM(Turnovers)                                                AS TotalTurnovers,
+                            SUM(Penalties)                                                AS TotalPenalties,
+                            SUM(ThirdDownSuccesses)                                       AS TotalThirdDownSuccesses,
+                            SUM(ThirdDownAttempts)                                        AS TotalThirdDownAttempts,
+                            SUM(RedZoneSuccesses)                                         AS TotalRedZoneSuccesses,
+                            SUM(RedZoneAttempts)                                          AS TotalRedZoneAttempts,
+                            SUM(Sacks)                                                    AS TotalSacks,
+                            SUM(Interceptions)                                            AS TotalInterceptions,
+                            SUM(ForcedFumbles)                                            AS TotalForcedFumbles,
+                            SUM(Plays)                                                    AS TotalPlays,
+                            SUM(OpponentPlays)                                            AS OpponentTotalPlays,
+                            SUM(OpponentYards)                                            AS OpponentTotalYards
+                     FROM TeamStats
+                 ),
+                 DivisionTitle AS (
+                     SELECT Division
+                     FROM Teams
+                     WHERE TeamID = @TeamID
+                 ),
+                 OpponentTeams AS (
+                     SELECT CASE WHEN HomeTeamID = @TeamID THEN AwayTeamID ELSE HomeTeamID END AS OpponentTeamID,
+                            Season,
+                            Week
+                     FROM TeamStats
+                 ),
+                 FBSFCSRatio AS (
+                     SELECT CAST(SUM(CASE WHEN t.Division = 'FCS' THEN 1 ELSE 0 END) AS FLOAT) /
+                            NULLIF(COUNT(*), 0) AS Ratio
+                     FROM OpponentTeams ot
+                              JOIN Teams t ON ot.OpponentTeamID = t.TeamID
+                 )
 
-        IF @Period LIKE 'lastSeason%'
-            BEGIN
-                SET @Season = @Season - 1; -- Adjust for last season
-                SELECT @MaxWeekForPeriod = MAX(Week)
-                FROM Schedule
-                WHERE Season = @Season
-                  AND (HomeTeamID = @TeamID OR AwayTeamID = @TeamID)
-                  AND (@IsHome IS NULL OR (@IsHome = 1 AND HomeTeamID = @TeamID) OR (@IsHome = 0 AND AwayTeamID = @TeamID));
-            END
-        ELSE IF @Period LIKE 'season%'
-            BEGIN
-                SET @MaxWeekForPeriod = NULL; -- For 'season', consider all games until the specified week
-            END;
-        
-        WITH TeamStats AS (
-            SELECT 
-                Season,
-                Week,
-                CASE WHEN HomeTeamID = @TeamID THEN 'Home' ELSE 'Away' END AS GameLocation,
-                CASE WHEN HomeTeamID = @TeamID THEN HomePoints ELSE AwayPoints END AS PointsScored,
-                CASE WHEN HomeTeamID = @TeamID THEN AwayPoints ELSE HomePoints END AS PointsAllowed,
-                CASE WHEN HomeTeamID = @TeamID THEN HomeTotalYards ELSE AwayTotalYards END AS TotalYards,
-                CASE WHEN HomeTeamID = @TeamID THEN HomeTurnovers ELSE AwayTurnovers END AS Turnovers,
-                CASE WHEN HomeTeamID = @TeamID THEN HomePenalties ELSE AwayPenalties END AS Penalties,
-                CASE WHEN HomeTeamID = @TeamID THEN HomeThirdDownSuccesses ELSE AwayThirdDownSuccesses END AS ThirdDownSuccesses,
-                CASE WHEN HomeTeamID = @TeamID THEN HomeThirdDownAttempts ELSE AwayThirdDownAttempts END AS ThirdDownAttempts,
-                CASE WHEN HomeTeamID = @TeamID THEN HomeRedZoneSuccesses ELSE AwayRedZoneSuccesses END AS RedZoneSuccesses,
-                CASE WHEN HomeTeamID = @TeamID THEN HomeRedZoneAttempts ELSE AwayRedZoneAttempts END AS RedZoneAttempts,
-                CASE WHEN HomeTeamID = @TeamID THEN HomeSacks ELSE AwaySacks END AS Sacks,
-                CASE WHEN HomeTeamID = @TeamID THEN HomeInterceptions ELSE AwayInterceptions END AS Interceptions,
-                CASE WHEN HomeTeamID = @TeamID THEN HomeForcedFumbles ELSE AwayForcedFumbles END AS ForcedFumbles,
-                CASE WHEN HomeTeamID = @TeamID THEN HomePlayCount ELSE AwayPlayCount END AS Plays,
-                CASE WHEN HomeTeamID = @TeamID THEN AwayPlayCount ELSE HomePlayCount END AS OpponentPlays,
-                CASE WHEN HomeTeamID = @TeamID THEN AwayTotalYards ELSE HomeTotalYards END AS OpponentYards
-            FROM Schedule
-            WHERE Season = @Season
-            AND (HomeTeamID = @TeamID OR AwayTeamID = @TeamID)
-            AND (
-                @Period != 'last3Games' OR
-                Week IN (SELECT Week FROM @Last3Weeks)
-            )
-        ),
-         AggregatedStats AS (
-            SELECT
-                COUNT(*) AS GamesPlayed,
-                SUM(CASE WHEN PointsScored > PointsAllowed THEN 1 ELSE 0 END) AS Wins,
-                SUM(PointsScored) AS TotalPointsScored,
-                SUM(PointsAllowed) AS TotalPointsAllowed,
-                SUM(TotalYards) AS TotalYards,
-                SUM(Turnovers) AS TotalTurnovers,
-                SUM(Penalties) AS TotalPenalties,
-                SUM(ThirdDownSuccesses) AS TotalThirdDownSuccesses,
-                SUM(ThirdDownAttempts) AS TotalThirdDownAttempts,
-                SUM(RedZoneSuccesses) AS TotalRedZoneSuccesses,
-                SUM(RedZoneAttempts) AS TotalRedZoneAttempts,
-                SUM(Sacks) AS TotalSacks,
-                SUM(Interceptions) AS TotalInterceptions,
-                SUM(ForcedFumbles) AS TotalForcedFumbles,
-                SUM(Plays) AS TotalPlays,
-                SUM(OpponentYards) AS OpponentTotalYards,
-                SUM(OpponentPlays) AS OpponentTotalPlays
-            FROM TeamStats),
-
-             OpponentDivisions AS (
-                 SELECT
-                     s.Season,
-                     CASE WHEN s.HomeTeamID = @TeamID THEN s.AwayTeamID ELSE s.HomeTeamID END AS OpponentTeamID
-                 FROM Schedule s
-                 WHERE s.Season = @Season
-                   AND (s.HomeTeamID = @TeamID OR s.AwayTeamID = @TeamID)
-                   AND (
-                         @MaxWeekForPeriod IS NULL
-                         OR s.Week <= @MaxWeekForPeriod
-                     )
-                   AND (
-                             @Period NOT LIKE 'last3Games%'
-                         OR s.Week IN (SELECT Week FROM @Last3Weeks)
-                     )
-             ),
-        OpponentDivisionCounts AS (
-            SELECT
-                COUNT(*) AS TotalGames,
-                SUM(CASE WHEN t.Division = 'FBS' THEN 1 ELSE 0 END) AS FBSGames,
-                SUM(CASE WHEN t.Division = 'FCS' THEN 1 ELSE 0 END) AS FCSGames
-            FROM OpponentDivisions od
-            JOIN Teams t ON od.OpponentTeamID = t.TeamID
-        ),
-        FBSFCSRatio AS (
-            SELECT
-                CAST(FCSGames AS FLOAT) / NULLIF(FBSGames + FCSGames, 0) AS FCSFBSRatio
-            FROM OpponentDivisionCounts
-        ),
-
-         DivisionTitle AS (
-             SELECT DIVISION
-             FROM TEAMS
-             WHERE TeamID = @TeamID
-         )
-        
-        SELECT
-            GamesPlayed,
-            Division,
-            CAST(Wins AS FLOAT) / GamesPlayed AS WinPercentage,
-            TotalPointsScored / CAST(GamesPlayed AS FLOAT) AS AveragePointsPerGame,
-            TotalPointsAllowed / CAST(GamesPlayed AS FLOAT) AS AveragePointsAllowedPerGame,
-            TotalYards / CAST(GamesPlayed AS FLOAT) AS AverageYardsPerGame,
-            TotalTurnovers / CAST(GamesPlayed AS FLOAT) AS AverageTurnoversPerGame,
-            TotalPenalties / CAST(GamesPlayed AS FLOAT) AS AveragePenaltiesPerGame,
-            CAST(TotalThirdDownSuccesses AS FLOAT) / TotalThirdDownAttempts AS ThirdDownEfficiency,
-            CAST(TotalRedZoneSuccesses AS FLOAT) / TotalRedZoneAttempts AS RedZoneEfficiency,
-            TotalSacks / CAST(GamesPlayed AS FLOAT) AS AverageSacksPerGame,
-            TotalInterceptions / CAST(GamesPlayed AS FLOAT) AS AverageInterceptionsPerGame,
-            TotalForcedFumbles / CAST(GamesPlayed AS FLOAT) AS AverageForcedFumblesPerGame,
-            CAST(TotalYards AS FLOAT) / CAST(TotalPlays AS FLOAT) AS YardsPerPlay,
-            CAST(OpponentTotalYards AS FLOAT) / CAST(GamesPlayed AS FLOAT) AS OpponentYardsPerGame,
-            CAST(OpponentTotalYards AS FLOAT) / CAST(OpponentTotalPlays AS FLOAT) AS OpponentYardsPerPlay,
-            f.FCSFBSRatio
-        
-        FROM AggregatedStats, DivisionTitle CROSS JOIN FBSFCSRatio f;
+            SELECT a.GamesPlayed,
+                   d.Division,
+                   CAST(a.Wins AS FLOAT) / NULLIF(a.GamesPlayed, 0)                               AS WinPercentage,
+                   a.TotalPointsScored / CAST(a.GamesPlayed AS FLOAT)                             AS AveragePointsPerGame,
+                   a.TotalPointsAllowed / CAST(a.GamesPlayed AS FLOAT)                            AS AveragePointsAllowedPerGame,
+                   a.TotalYards / CAST(a.GamesPlayed AS FLOAT)                                    AS AverageYardsPerGame,
+                   a.TotalTurnovers / CAST(a.GamesPlayed AS FLOAT)                                AS AverageTurnoversPerGame,
+                   a.TotalPenalties / CAST(a.GamesPlayed AS FLOAT)                                AS AveragePenaltiesPerGame,
+                   CAST(a.TotalThirdDownSuccesses AS FLOAT) /
+                   NULLIF(a.TotalThirdDownAttempts, 0)                                            AS ThirdDownEfficiency,
+                   CAST(a.TotalRedZoneSuccesses AS FLOAT) / NULLIF(a.TotalRedZoneAttempts, 0)     AS RedZoneEfficiency,
+                   a.TotalSacks / CAST(a.GamesPlayed AS FLOAT)                                    AS AverageSacksPerGame,
+                   a.TotalInterceptions / CAST(a.GamesPlayed AS FLOAT)                            AS AverageInterceptionsPerGame,
+                   a.TotalForcedFumbles / CAST(a.GamesPlayed AS FLOAT)                            AS AverageForcedFumblesPerGame,
+                   CAST(a.TotalYards AS FLOAT) / NULLIF(a.TotalPlays, 0)                          AS YardsPerPlay,
+                   a.OpponentTotalYards / CAST(a.GamesPlayed AS FLOAT)                            AS OpponentYardsPerGame,
+                   CAST(a.OpponentTotalYards AS FLOAT) /
+                   NULLIF(a.OpponentTotalPlays, 0)                                                AS OpponentYardsPerPlay,
+                   f.Ratio                                                                        AS FCSFBSRatio
+            FROM AggregatedStats a
+                     CROSS JOIN DivisionTitle d
+                     CROSS JOIN FBSFCSRatio f;
     `
 
         const request = new Request(sql, (err) => {
