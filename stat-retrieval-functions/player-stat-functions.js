@@ -490,18 +490,15 @@ async function getSORForTeam(teamId, year, week, period) {
         });
 }
 
-async function getTeamRosterForSeason(teamId, year) {
+async function getTeamRosterForSeason(teamId, year, period) {
     try {
-        const roster = await getTeamRoster(teamId, year);
-        ['Quarterbacks', 'RunningBacks', 'Receivers', 'Defenders'].forEach(positionGroup => {
-            console.log(positionGroup + ":");
-            roster[positionGroup].forEach(player => {
-                console.log(`- ${player.Name} (${player.Position})`);
-            });
-        });
-        return roster;
+        const roster = await getTeamRoster(teamId, year, period);
+        // Convert the roster to a JSON string before returning
+        return JSON.stringify(roster);
     } catch (error) {
         console.error('Error retrieving team roster:', error);
+        // Return an empty array or appropriate error message in JSON format
+        return JSON.stringify([]);
     }
 }
 
@@ -509,7 +506,7 @@ async function getTeamStatsForPeriod(teamId, year, week, period) {
     try {
         const stats = await getTeamStats(teamId, year, week, period);
         if (stats) {
-            console.log(stats);
+            //console.log(stats);
             return stats;
         } else {
             console.log('No stats found for the specified parameters.');
@@ -521,11 +518,10 @@ async function getTeamStatsForPeriod(teamId, year, week, period) {
     }
 }
 
-async function getPlayerStatsForPeriod(teamId, year, week, period) {
+async function getPlayerStatsForPeriod(playerIds, year, week, period) {
     try {
-        const stats = await getPlayerStats(teamId, year, week, period);
+        const stats = await getPlayerStats(playerIds, year, week, period);
         if (stats) {
-            console.log(stats);
             return stats;
         } else {
             console.log('No stats found for the specified parameters.');
@@ -554,8 +550,9 @@ async function getMatchupInfo(gameID) {
 }
 
 async function logStats() {
-    // let stat = await getDivisionForTeam('e3b9e7df-4b69-4d27-9948-59491c29be86');
-    let stat = await getPlayerStatsForPeriod('98833e65-ab72-482d-b3c0-13f8656629c0', 2016, 7, 'last3Games')
+    let stat = await getPlayerStatsForPeriod(["8a9f69c8-954d-4f97-acd8-6b1db734b370","","4ccebbe3-60e5-4c12-b1c9-ed9aaed3131c","2dc8bd1b-6d0a-45c7-ae34-1f719ebb4ed1","dcb8b276-c202-401d-a77f-d418a6c9fd91","a0f5f3c8-7ee7-4aa3-882a-f826e7bb08eb","fdb835ad-1ffe-4e21-96eb-8f3a6b8b29aa","3df3b9b4-3ee8-4ad7-bf29-67ef11f81de4","3b1b3235-35b2-4f75-b73a-37c4077d67c9","11e84799-6c1f-4f1f-bb84-236220b11d73","e971beb8-c06d-452f-af09-6afbb5b69666","0460cca3-7a2f-47db-a841-b086d92369ce","33c9690c-9228-4cdb-a5c2-ac0d3b10e750","8013844d-a7d7-4820-888c-792e7c745325","1d0c1d7d-d87a-4b1f-a75a-706a1bdcc381","e750f539-d40d-4571-806a-ba35e12fd9f9","2cc3eeb8-4b8f-4e1c-aef4-f17eff5e2176","cc5e0f4c-b7d2-44e8-951e-bd6d98ffe016","17e84fbf-b67a-4826-ada6-5c6a7fed017f","9450489d-5e4d-4745-bdc6-7cc5d47f7a3f","bc0c5268-a42a-4994-aaf5-49f8938fc6e7","48d367c0-ed2f-40cc-88f1-ddaeecbae1e2","b5c1ba28-cf40-403a-bc54-768b918b5b2b","30fe07ec-7458-4107-b228-aea17902f1be","17936af5-4717-4f1c-a06d-e7f1f969c836","40eeb538-41e3-4fe3-ab4f-ea1e61f1fcb8","320a1942-e2f9-467f-986d-a2f00bae7a47","caa785d2-6e25-4082-96d1-6c4cee067856",""],
+        2018, 9,'season')
+    console.log(stat)
 }
 
 //logStats()

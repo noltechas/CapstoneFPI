@@ -1,11 +1,15 @@
 import subprocess
-import json
+import json, os
 
 
 def call_js_function(func_name, *args):
     cmd = ['node', 'player-stat-functions.js', func_name] + list(args)
     try:
         result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+        # Log the full output for debugging
+        # print("STDOUT:", result.stdout)
+        # print("STDERR:", result.stderr)
 
         # Extract the last line of stdout assuming it's JSON
         json_output = result.stdout.strip().split('\n')[-1]
@@ -43,6 +47,7 @@ def create_roster_object(teamID, year, week, period):
         'RBs': [],
         'WRs/TEs': [],
         'Defenders': [],
+        'OLs': []
     }
 
     # Attempt to get team stats for the period
@@ -69,15 +74,17 @@ def create_roster_object(teamID, year, week, period):
             'FBS_opponent_ratio': team_stats_for_period.get('FCSFBSRatio', 0),
         })
 
+    player_ids = call_js_function('getTeamRosterForSeason', teamID, year, period)
     # Attempt to get player stats for the period
-    player_stats = call_js_function('getPlayerStatsForPeriod', teamID, year, week, period)
+    player_stats = call_js_function('getPlayerStatsForPeriod', player_ids, year, week, period)
     if player_stats:
         # Process player stats to determine starters
-        qb_stats, rb_stats, wr_stats, def_stats = process_player_stats(player_stats)
+        qb_stats, rb_stats, wr_stats, def_stats, ol_stats = process_player_stats(player_stats)
         teamStats['QB'] = qb_stats
         teamStats['RBs'] = rb_stats
         teamStats['WRs/TEs'] = wr_stats
         teamStats['Defenders'] = def_stats
+        teamStats['OLs'] = ol_stats
 
     return teamStats
 
@@ -115,46 +122,60 @@ def calculate_qbr(passing_attempts_per_game, passing_completions_per_game, passi
         return 0  # Return 0 if no passing attempts to avoid division by zero
 
 
+def calculate_ratio(td, interceptions):
+    interceptions = interceptions or 0.05  # Avoid division by zero, use a small epsilon
+    return (td or 0) / interceptions
+
+
+def calculate_receiving_yards_per_catch(player):
+    receiving_yards = player.get('ReceivingYardsPerGame', 0) or 0
+    receptions = player.get('ReceptionsPerGame', 0) or 0
+    return receiving_yards / max(1, receptions)  # Avoid division by zero
+
+
 def process_player_stats(player_stats):
-    qb_stats, rb_stats, wr_stats, def_stats = [], [], [], []
+    qb_stats, rb_stats, wr_stats, def_stats, ol_stats = [], [], [], [], []
 
     for player in player_stats:
+        player_index = player_stats.index(player)
         # Initialize common stats
         player_data = {
             'player_id': player['PlayerID'],
             'fumbles_per_game': player.get('FumblesPerGame', 0),
             'recruiting_score': player.get('RecruitingScore', 0),
+            'period_completed': player.get('PeriodCompleted', False),
         }
 
-        if player['Position'] == 'QB':
+        if player_stats.index(player) == 0:
             player_data.update({
                 'completion_percentage': calculate_completion_percentage(player.get('PassingCompletionsPerGame', 0), player.get('PassingAttemptsPerGame', 0)),
-                'passing_yards_per_game': player.get('PassingYardsPerGame', 0),
-                'TD_INT_ratio': player.get('PassingTouchdownsPerGame', 0) / max(0.05,player.get('PassingInterceptionsPerGame')),  # Avoid division by zero
+                'passing_yards_per_game': player.get('PassingYardsPerGame', 0) or 0,
+                'TD_INT_ratio': calculate_ratio(player.get('PassingTouchdownsPerGame', 0), player.get('PassingInterceptionsPerGame', 0)),
                 'QBR': calculate_qbr(player.get('PassingAttemptsPerGame', 0), player.get('PassingCompletionsPerGame', 0), player.get('PassingYardsPerGame', 0), player.get('PassingTouchdownsPerGame', 0), player.get('PassingInterceptionsPerGame', 0)),
-                'rushing_yards': player.get('RushingYardsPerGame', 0),
-                'rushing_touchdowns': player.get('RushingTouchdownsPerGame', 0),
-                'passing_touchdowns': player.get('PassingTouchdownsPerGame', 0),
+                'rushing_yards': player.get('RushingYardsPerGame', 0) or 0,
+                'rushing_touchdowns': player.get('RushingTouchdownsPerGame', 0) or 0,
+                'passing_touchdowns': player.get('PassingTouchdownsPerGame', 0) or 0,
             })
             qb_stats.append(player_data)
 
-        elif player['Position'] in ['RB', 'FB', 'WR', 'TE']:
+        elif player_stats.index(player) < 12:  # RB and WR stats
+            receptions_per_game = player.get('ReceptionsPerGame', 0) or 0
             player_data.update({
-                'rushing_yards_per_game': player.get('RushingYardsPerGame', 0),
-                'rushing_yards_per_carry': player.get('RushingYardsPerCarry', 0),
-                'rushing_touchdowns_per_game': player.get('RushingTouchdownsPerGame', 0),
-                'receiving_touchdowns_per_game': player.get('ReceivingTouchdownsPerGame', 0),
-                'receptions_per_game': player.get('ReceptionsPerGame', 0),
-                'receiving_yards_per_game': player.get('ReceivingYardsPerGame', 0),
-                'receiving_yards_per_catch': player.get('ReceivingYardsPerGame', 0) / max(1, player.get('ReceptionsPerGame')),  # Avoid division by zero
+                'rushing_yards_per_game': player.get('RushingYardsPerGame', 0) or 0,
+                'rushing_yards_per_carry': player.get('RushingYardsPerCarry', 0) or 0,
+                'rushing_touchdowns_per_game': player.get('RushingTouchdownsPerGame', 0) or 0,
+                'receiving_touchdowns_per_game': player.get('ReceivingTouchdownsPerGame', 0) or 0,
+                'receptions_per_game': receptions_per_game,
+                'receiving_yards_per_game': player.get('ReceivingYardsPerGame', 0) or 0,
+                'receiving_yards_per_catch': calculate_receiving_yards_per_catch(player),
             })
 
-            if player['Position'] in ['RB', 'FB']:
+            if player_stats.index(player) < 5:
                 rb_stats.append(player_data)
             else:
                 wr_stats.append(player_data)
 
-        elif player['Position'] in ['CB', 'DB', 'DE', 'DL', 'DT', 'LB', 'SAF', 'OLB']:
+        elif player_stats.index(player) < 24:
             player_data.update({
                 'tackles_per_game': player.get('TacklesPerGame', 0),
                 'sacks_per_game': player.get('SacksPerGame', 0),
@@ -163,14 +184,16 @@ def process_player_stats(player_stats):
                 'passes_defended_per_game': player.get('PassesDefendedPerGame', 0),
             })
             def_stats.append(player_data)
+        else:
+            ol_stats.append(player_data)
 
     # Sort and select top players for each position group based on your criteria
-    qb_stats = sorted(qb_stats, key=lambda x: x['passing_yards_per_game'], reverse=True)[:1]
-    rb_stats = sorted(rb_stats, key=lambda x: x['rushing_yards_per_game'], reverse=True)[:4]
-    wr_stats = sorted(wr_stats, key=lambda x: x['receiving_yards_per_game'], reverse=True)[:7]
-    def_stats = sorted(def_stats, key=lambda x: x['tackles_per_game'], reverse=True)[:12]
+    # qb_stats = sorted(qb_stats, key=lambda x: x['passing_yards_per_game'], reverse=True)[:1]
+    # rb_stats = sorted(rb_stats, key=lambda x: x['rushing_yards_per_game'], reverse=True)[:4]
+    # wr_stats = sorted(wr_stats, key=lambda x: x['receiving_yards_per_game'], reverse=True)[:7]
+    # def_stats = sorted(def_stats, key=lambda x: x['tackles_per_game'], reverse=True)[:12]
 
-    return qb_stats, rb_stats, wr_stats, def_stats
+    return qb_stats, rb_stats, wr_stats, def_stats, ol_stats
 
 
 def print_roster_stats(team_stats):
@@ -237,26 +260,28 @@ def create_full_team_objects(gameID):
             home_stats = []
             away_stats = []
 
-            # Define periods to iterate over
-            periods = ['season', 'last3Games', 'last3GamesHome', 'lastSeason', 'lastSeasonHome', 'lastGame']
-
-            # Process Home Team
-            for period in periods:
-                result = create_roster_object(home_team_ID, season, week, period)
-                if result is not None:
-                    result['period'] = period
-                    home_stats.append(result)
-                else:
-                    print(f"No data for home team in period: {period}")
+            away_periods = ['season', 'last3Games', 'last3GamesAway', 'lastSeason', 'seasonAway']
 
             # Process Away Team
-            for period in periods:
+            for period in away_periods:
                 result = create_roster_object(away_team_ID, season, week, period)
                 if result is not None:
                     result['period'] = period
                     away_stats.append(result)
                 else:
                     print(f"No data for away team in period: {period}")
+
+            # Define periods to iterate over
+            home_periods = ['season', 'last3Games', 'last3GamesHome', 'lastSeason', 'seasonHome']
+
+            # Process Home Team
+            for period in home_periods:
+                result = create_roster_object(home_team_ID, season, week, period)
+                if result is not None:
+                    result['period'] = period
+                    home_stats.append(result)
+                else:
+                    print(f"No data for home team in period: {period}")
 
             return home_stats, away_stats
 
@@ -291,6 +316,9 @@ def print_full_team_objects(gameID):
             # Defender Stats
             print_position_stats(period_stats['Defenders'], "Defender")
 
+            # OL Stats
+            print_position_stats(period_stats['OLs'], "OL")
+
             # Helper function to print stats for a position
     def print_position_stats(position_stats, position_label):
         print(f"\n  {position_label} Stats:")
@@ -306,7 +334,7 @@ def print_full_team_objects(gameID):
         if value is None:
             return 'N/A'  # Or return '0.00' if you prefer to show 0 for None values
         elif isinstance(value, float):
-            return f"{value:.2f}"
+            return f"{value:.4f}"
         else:
             return value
 
@@ -334,14 +362,81 @@ def print_full_team_objects(gameID):
     print_team_stats(away_stats, "Away")
 
 
-# Example usage:
-# team_id = '98833e65-ab72-482d-b3c0-13f8656629c0'
-# year = '2018'
-# week = '12'
-# period = 'last3GamesAway'
+# print_full_team_objects('0001ce86-7c8a-4412-be88-1a5eaf40b981')
 
-#team_stats = create_roster_object(team_id, year, week, period)
-#print_roster_stats(team_stats)
+def replace_none_with_negative_one(data):
+    if isinstance(data, dict):
+        for k, v in data.items():
+            if v is None:
+                data[k] = 0
+            elif isinstance(v, (dict, list)):
+                replace_none_with_negative_one(v)
+    elif isinstance(data, list):
+        for i in range(len(data)):
+            if data[i] is None:
+                data[i] = 0
+            elif isinstance(data[i], (dict, list)):
+                replace_none_with_negative_one(data[i])
 
-print_full_team_objects('50c06d6e-f2ea-4850-8b06-140aeb82e00c')
 
+def fetch_team_stats(gameID):
+    home_stats, away_stats = create_full_team_objects(gameID)
+    # Recursively replace None values with -1
+    replace_none_with_negative_one(home_stats)
+    replace_none_with_negative_one(away_stats)
+    return home_stats, away_stats
+
+
+def load_existing_data(filename):
+    """Load existing data from the JSON file, if it exists."""
+    if os.path.exists(filename):
+        with open(filename, 'r') as f:
+            try:
+                return json.load(f)
+            except json.JSONDecodeError:
+                return []  # Return an empty list if the file is empty or corrupted
+    return []
+
+def append_to_json(data, filename='game_stats_for_dnn.json'):
+    """Append data to an existing JSON file, creating a new file if it doesn't exist."""
+    existing_data = load_existing_data(filename)
+    existing_game_ids = {game['GameID'] for game in existing_data}
+
+    # Check if the game is already in the existing data
+    if data['GameID'] not in existing_game_ids:
+        existing_data.append(data)
+
+    with open(filename, 'w') as f:
+        json.dump(existing_data, f, indent=4)
+
+def main(schedule_json_path='schedule.json', output_json_path='game_stats_for_dnn.json'):
+    with open(schedule_json_path, 'r') as f:
+        schedule = json.load(f)
+
+    existing_data = load_existing_data(output_json_path)
+    existing_game_ids = {game['GameID'] for game in existing_data}
+
+    for game in schedule:
+        gameID = game['GameID']
+        if gameID not in existing_game_ids:
+            print(f"Processing game {gameID}")
+            home_stats, away_stats = fetch_team_stats(gameID)
+
+            structured_data = structure_data_for_dnn(game, home_stats, away_stats)
+            append_to_json(structured_data, output_json_path)
+            print('Finished game:', gameID)
+
+
+def structure_data_for_dnn(game, home_stats, away_stats):
+    # Structure a single game data for DNN
+    return {
+        'GameID': game['GameID'],
+        'Season': game['Season'],
+        'Week': game['Week'],
+        'HomePoints': game['HomePoints'],
+        'AwayPoints': game['AwayPoints'],
+        'HomeStats': home_stats,
+        'AwayStats': away_stats
+    }
+
+main()

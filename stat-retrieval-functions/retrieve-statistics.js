@@ -495,32 +495,179 @@ const getTeamSOR = async (teamId, year, week, period) => {
     });
 };
 
-async function getTeamRoster(teamID, year) {
+async function getTeamRoster(teamID, year, period) {
     await connectPromise; // Ensure the database connection is established
 
     return new Promise((resolve, reject) => {
-        const teamRoster = {
-            Quarterbacks: [],
-            RunningBacks: [],
-            Receivers: [],
-            Defenders: []
-        };
+        let playerIDs = []; // Use an array to collect player IDs
 
         const sql = `
-            SELECT 
-                p.PlayerID, 
-                p.Name, 
-                p.Position,
-                SUM(CASE WHEN p.Position = 'QB' THEN pgs.PassingYards ELSE 0 END) AS TotalPassingYards,
-                SUM(CASE WHEN p.Position in ('RB', 'FB') THEN pgs.RushingYards ELSE 0 END) AS TotalRushingYards,
-                SUM(CASE WHEN p.Position in ('WR', 'TE') THEN pgs.ReceivingYards ELSE 0 END) AS TotalReceivingYards,
-                SUM(CASE WHEN p.Position IN ('CB', 'DB', 'DE', 'DL', 'DT', 'LB', 'SAF', 'OLB') THEN pgs.Combined ELSE 0 END) AS TotalTackles
-            FROM PlayerGameStats pgs
-            INNER JOIN Schedule s ON pgs.GameID = s.GameID
-            INNER JOIN Players p ON pgs.PlayerID = p.PlayerID
-            WHERE pgs.TeamID = @TeamID
-              AND s.Season = @Year
-            GROUP BY p.PlayerID, p.Name, p.Position
+            DECLARE @GamesToConsider TABLE (GameID NVARCHAR(50));
+
+-- Define @TotalGamesNeeded based on the period
+            DECLARE @TotalGamesNeeded INT;
+-- Set the total games needed based on the period
+            SET @TotalGamesNeeded = CASE
+                                        WHEN @Period = 'lastGame' THEN 1
+                                        WHEN @Period LIKE 'last3Games%' THEN 3
+                                        ELSE 2 -- Default for 'season', 'seasonHome', 'seasonAway', 'lastSeason', 'lastSeasonHome', 'lastSeasonAway'
+                END;
+
+-- Temporary table to store player participation counts
+            DECLARE @PlayerParticipation TABLE (
+                                                   PlayerID NVARCHAR(50),
+                                                   GamesPlayed INT,
+                                                   RequiredGames INT,
+                                                   HasCompletedPeriod BIT
+                                               );
+
+-- Populate @PlayerParticipation with counts and determine if each player has met the required games
+            INSERT INTO @PlayerParticipation (PlayerID, GamesPlayed, RequiredGames, HasCompletedPeriod)
+            SELECT
+                p.PlayerID,
+                COUNT(DISTINCT pgs.GameID) AS GamesPlayed,
+                @TotalGamesNeeded AS RequiredGames,
+                CASE
+                    WHEN COUNT(DISTINCT pgs.GameID) >= @TotalGamesNeeded THEN 1
+                    ELSE 0
+                    END AS HasCompletedPeriod
+            FROM Players p
+                     LEFT JOIN PlayerGameStats pgs ON p.PlayerID = pgs.PlayerID
+            WHERE pgs.GameID IN (SELECT GameID FROM @GamesToConsider) AND pgs.TeamID = @TeamID
+            GROUP BY p.PlayerID;
+
+            DECLARE @FinalPlayers TABLE (
+                                            PlayerID NVARCHAR(50),
+                                            Name NVARCHAR(255),
+                                            Position NVARCHAR(50),
+                                            Stat INT,
+                                            Rank INT
+                                        );
+
+            WITH PlayerStats AS (
+                SELECT
+                    p.PlayerID,
+                    p.Name,
+                    p.Position,
+                    SUM(CASE WHEN p.Position = 'QB' THEN pgs.PassingYards ELSE 0 END) AS TotalPassingYards,
+                    SUM(CASE WHEN p.Position IN ('RB', 'FB') THEN pgs.RushingYards ELSE 0 END) AS TotalRushingYards,
+                    SUM(CASE WHEN p.Position IN ('WR', 'TE') THEN pgs.ReceivingYards ELSE 0 END) AS TotalReceivingYards,
+                    SUM(CASE WHEN p.Position IN ('CB', 'DB', 'DE', 'DL', 'DT', 'LB', 'SAF', 'OLB') THEN pgs.Combined ELSE 0 END) AS TotalTackles,
+                    MAX(p.RecruitingScore) AS RecruitingScore -- Using MAX to ensure a value is available for OL sorting
+                FROM PlayerGameStats pgs
+                         JOIN Schedule s ON pgs.GameID = s.GameID
+                         JOIN Players p ON pgs.PlayerID = p.PlayerID
+                WHERE pgs.TeamID = @TeamID AND s.Season = @Year
+                GROUP BY p.PlayerID, p.Name, p.Position
+            ), RankedPlayers AS (
+                SELECT *,
+                       ROW_NUMBER() OVER(PARTITION BY CASE
+                                                          WHEN Position = 'QB' THEN 'QB'
+                                                          WHEN Position IN ('RB', 'FB') THEN 'RB/FB'
+                                                          WHEN Position IN ('WR', 'TE') THEN 'WR/TE'
+                                                          WHEN Position IN ('CB', 'DB', 'DE', 'DL', 'DT', 'LB', 'SAF', 'OLB') THEN 'Defender'
+                                                          WHEN Position IN ('OL') THEN 'OL'
+                           END
+                           ORDER BY
+                               CASE WHEN Position = 'QB' THEN TotalPassingYards
+                                    WHEN Position IN ('RB', 'FB') THEN TotalRushingYards
+                                    WHEN Position IN ('WR', 'TE') THEN TotalReceivingYards
+                                    WHEN Position IN ('CB', 'DB', 'DE', 'DL', 'DT', 'LB', 'SAF', 'OLB') THEN TotalTackles
+                                    WHEN Position IN ('OL') THEN RecruitingScore
+                                   END DESC) AS Rank
+                FROM PlayerStats
+            ),
+                 RequiredGames AS (
+                     SELECT
+                         @TotalGamesNeeded AS GamesNeeded
+                 ),
+                 PlayerGames AS (
+                     SELECT
+                         pgs.PlayerID,
+                         COUNT(DISTINCT pgs.GameID) AS GamesPlayed
+                     FROM
+                         PlayerGameStats pgs
+                             JOIN @GamesToConsider gtc ON pgs.GameID = gtc.GameID
+                     WHERE
+                         pgs.TeamID = @TeamID
+                     GROUP BY
+                         pgs.PlayerID
+                 ),
+                 CompletionStatus AS (
+                     SELECT
+                         pg.PlayerID,
+                         CASE
+                             WHEN pg.GamesPlayed >= rg.GamesNeeded THEN 1
+                             ELSE 0
+                             END AS HasCompletedPeriod
+                     FROM
+                         PlayerGames pg,
+                         RequiredGames rg
+                 )
+            INSERT INTO @FinalPlayers (PlayerID, Name, Position, Stat, Rank)
+            SELECT PlayerID, Name, Position,
+                   CASE
+                       WHEN Position = 'QB' THEN TotalPassingYards
+                       WHEN Position IN ('RB', 'FB') THEN TotalRushingYards
+                       WHEN Position IN ('WR', 'TE') THEN TotalReceivingYards
+                       WHEN Position IN ('CB', 'DB', 'DE', 'DL', 'DT', 'LB', 'SAF', 'OLB') THEN TotalTackles
+                       WHEN Position = 'OL' THEN RecruitingScore
+                       END AS Stat, Rank
+            FROM RankedPlayers
+            WHERE Rank <= CASE
+                              WHEN Position = 'QB' THEN 1
+                              WHEN Position IN ('RB', 'FB') THEN 4
+                              WHEN Position IN ('WR', 'TE') THEN 7
+                              WHEN Position IN ('CB', 'DB', 'DE', 'DL', 'DT', 'LB', 'SAF', 'OLB') THEN 12
+                              WHEN Position = 'OL' THEN 5
+                END;
+
+-- Variables to hold counts
+            DECLARE @QBCount INT = (SELECT COUNT(*) FROM @FinalPlayers WHERE Position = 'QB'),
+                @RBFBCount INT = (SELECT COUNT(*) FROM @FinalPlayers WHERE Position IN ('RB', 'FB')),
+                @WRTECount INT = (SELECT COUNT(*) FROM @FinalPlayers WHERE Position IN ('WR', 'TE')),
+                @DefenderCount INT = (SELECT COUNT(*) FROM @FinalPlayers WHERE Position IN ('CB', 'DB', 'DE', 'DL', 'DT', 'LB', 'SAF', 'OLB')),
+                @OLCount INT = (SELECT COUNT(*) FROM @FinalPlayers WHERE Position = 'OL');
+
+-- Inserting placeholders if needed
+            WHILE @QBCount < 1 OR @RBFBCount < 4 OR @WRTECount < 7 OR @DefenderCount < 12 OR @OLCount < 5
+                BEGIN
+                    IF @QBCount < 1 BEGIN
+                        INSERT INTO @FinalPlayers VALUES ('', 'Placeholder', 'QB', 0, 999); SET @QBCount = @QBCount + 1;
+                    END
+                    IF @RBFBCount < 4 BEGIN
+                        INSERT INTO @FinalPlayers VALUES ('', 'Placeholder', 'RB', 0, 999); SET @RBFBCount = @RBFBCount + 1;
+                    END
+                    IF @WRTECount < 7 BEGIN
+                        INSERT INTO @FinalPlayers VALUES ('', 'Placeholder', 'WR', 0, 999); SET @WRTECount = @WRTECount + 1;
+                    END
+                    IF @DefenderCount < 12 BEGIN
+                        INSERT INTO @FinalPlayers VALUES ('', 'Placeholder', 'Defender', 0, 999); SET @DefenderCount = @DefenderCount + 1;
+                    END
+                    IF @OLCount < 5 BEGIN
+                        INSERT INTO @FinalPlayers VALUES ('', 'Placeholder', 'OL', 0, 999); SET @OLCount = @OLCount + 1;
+                    END
+                END;
+
+-- Selecting the final list, ensuring exactly 29 players
+            DECLARE @SelectedPlayers TABLE (
+                                               PlayerID NVARCHAR(50),
+                                               Name NVARCHAR(255),
+                                               Position NVARCHAR(50),
+                                               Stat INT,
+                                               Rank INT
+                                           );
+
+            SELECT TOP 29 PlayerID FROM @FinalPlayers
+            ORDER BY
+                CASE
+                    WHEN Position = 'QB' THEN 1
+                    WHEN Position IN ('RB', 'FB') THEN 2
+                    WHEN Position IN ('WR', 'TE') THEN 3
+                    WHEN Position IN ('CB', 'DB', 'DE', 'DL', 'DT', 'LB', 'SAF', 'OLB') THEN 4
+                    WHEN Position = 'OL' THEN 5
+                    ELSE 6
+                    END, Rank;
         `;
 
         const request = new Request(sql, (err) => {
@@ -530,50 +677,19 @@ async function getTeamRoster(teamID, year) {
             }
         });
 
-        // Adding parameters to prevent SQL injection
+        // Adjust parameter bindings as necessary
         request.addParameter('TeamID', TYPES.NVarChar, teamID);
         request.addParameter('Year', TYPES.Int, year);
+        request.addParameter('Period', TYPES.NVarChar, period);
+        // Add more parameters if your logic requires them
 
         request.on('row', (columns) => {
-            const player = columns.reduce((acc, column) => {
-                acc[column.metadata.colName] = column.value;
-                return acc;
-            }, {});
-
-            switch (player.Position) {
-                case 'QB':
-                    teamRoster.Quarterbacks.push(player);
-                    break;
-                case 'RB':
-                case 'FB':
-                    teamRoster.RunningBacks.push(player);
-                    break;
-                case 'WR':
-                case 'TE':
-                    teamRoster.Receivers.push(player);
-                    break;
-                default:
-                    if (['CB', 'DB', 'DE', 'DL', 'DT', 'LB', 'SAF', 'OLB'].includes(player.Position)) {
-                        teamRoster.Defenders.push(player);
-                    }
-                    break;
-            }
+            // Assuming each row contains a single column with the player ID
+            playerIDs.push(columns[0].value); // Adjust index if necessary
         });
 
         request.on('requestCompleted', () => {
-            // Sort and slice the arrays
-            teamRoster.Quarterbacks.sort((a, b) => b.TotalPassingYards - a.TotalPassingYards);
-            teamRoster.RunningBacks.sort((a, b) => b.TotalRushingYards - a.TotalRushingYards);
-            teamRoster.Receivers.sort((a, b) => b.TotalReceivingYards - a.TotalReceivingYards);
-            teamRoster.Defenders.sort((a, b) => b.TotalTackles - a.TotalTackles);
-
-            // Apply slicing to limit the number of players
-            teamRoster.Quarterbacks = teamRoster.Quarterbacks.slice(0, 1);
-            teamRoster.RunningBacks = teamRoster.RunningBacks.slice(0, 4);
-            teamRoster.Receivers = teamRoster.Receivers.slice(0, 7);
-            teamRoster.Defenders = teamRoster.Defenders.slice(0, 12);
-
-            resolve(teamRoster);
+            resolve(playerIDs); // Resolve the promise with the array of player IDs
         });
 
         connection.execSql(request);
@@ -759,102 +875,228 @@ async function getTeamStats(teamId, season, week, period) {
     });
 }
 
-async function getPlayerStats(teamId, season, week, period) {
+async function getPlayerStats(playerIds, season, week, period) {
     await connectPromise; // Ensures the database connection is ready
 
     return new Promise((resolve, reject) => {
-        let sql = `
-            DECLARE @GamesToConsider TABLE (GameID NVARCHAR(50));
+        let playerIdsArray;
+        try {
+            playerIdsArray = JSON.parse(playerIds);
+        } catch (error) {
+            console.error('Error parsing playerIds:', error);
+            return reject('Invalid playerIds format');
+        }
 
-            IF @Period = 'lastGame' BEGIN
-                INSERT INTO @GamesToConsider
-                SELECT TOP 1 s.GameID
-                FROM Schedule s
-                WHERE s.Season = @Year AND (s.HomeTeamID = @TeamID OR s.AwayTeamID = @TeamID) AND s.Week < @Week
-                ORDER BY s.Week DESC;
-            END ELSE IF @Period = 'last3Games' BEGIN
-                INSERT INTO @GamesToConsider
-                SELECT TOP 3 s.GameID
-                FROM Schedule s
-                WHERE s.Season = @Year AND (s.HomeTeamID = @TeamID OR s.AwayTeamID = @TeamID) AND s.Week < @Week
-                ORDER BY s.Week DESC;
-            END ELSE IF @Period = 'last3GamesHome' BEGIN
-                INSERT INTO @GamesToConsider
-                SELECT TOP 3 s.GameID
-                FROM Schedule s
-                WHERE s.Season = @Year AND s.HomeTeamID = @TeamID AND s.Week < @Week
-                ORDER BY s.Week DESC;
-            END ELSE IF @Period = 'last3GamesAway' BEGIN
-                INSERT INTO @GamesToConsider
-                SELECT TOP 3 s.GameID
-                FROM Schedule s
-                WHERE s.Season = @Year AND s.AwayTeamID = @TeamID AND s.Week < @Week
-                ORDER BY s.Week DESC;
-            END ELSE IF @Period = 'season' BEGIN
-                INSERT INTO @GamesToConsider
-                SELECT s.GameID
-                FROM Schedule s
-                WHERE s.Season = @Year AND (s.HomeTeamID = @TeamID OR s.AwayTeamID = @TeamID);
-            END ELSE IF @Period = 'seasonHome' BEGIN
-                INSERT INTO @GamesToConsider
-                SELECT s.GameID
-                FROM Schedule s
-                WHERE s.Season = @Year AND s.HomeTeamID = @TeamID;
-            END ELSE IF @Period = 'seasonAway' BEGIN
-                INSERT INTO @GamesToConsider
-                SELECT s.GameID
-                FROM Schedule s
-                WHERE s.Season = @Year AND s.AwayTeamID = @TeamID;
-            END ELSE IF @Period = 'lastSeason' BEGIN
-                INSERT INTO @GamesToConsider
-                SELECT s.GameID
-                FROM Schedule s
-                WHERE s.Season = @Year - 1 AND (s.HomeTeamID = @TeamID OR s.AwayTeamID = @TeamID);
-            END ELSE IF @Period = 'lastSeasonHome' BEGIN
-                INSERT INTO @GamesToConsider
-                SELECT s.GameID
-                FROM Schedule s
-                WHERE s.Season = @Year - 1 AND s.HomeTeamID = @TeamID;
-            END ELSE IF @Period = 'lastSeasonAway' BEGIN
-                INSERT INTO @GamesToConsider
-                SELECT s.GameID
-                FROM Schedule s
-                WHERE s.Season = @Year - 1 AND s.AwayTeamID = @TeamID;
+        // Now playerIds is an array, and you can safely use .map()
+        let playerIdsValues = playerIdsArray.map(id => `('${id}')`).join(",\n");
+
+        let sql = `
+            CREATE TABLE #PlayerIDs (InsertOrder INT IDENTITY(1,1), PlayerID NVARCHAR(50));
+            INSERT INTO #PlayerIDs (PlayerID) VALUES ${playerIdsValues}
+
+            CREATE TABLE #GamesToConsider (PlayerID NVARCHAR(50), GameID NVARCHAR(50));
+
+-- Populate #GamesToConsider based on different periods
+            IF @Period = 'season'
+            BEGIN
+                    -- Include all games from the current season before the current week for all players
+            INSERT INTO #GamesToConsider (PlayerID, GameID)
+            SELECT PlayerGameStats.PlayerID, Schedule.GameID
+            FROM Schedule
+                     JOIN PlayerGameStats ON Schedule.GameID = PlayerGameStats.GameID
+            WHERE PlayerGameStats.PlayerID IN (SELECT PlayerID FROM #PlayerIDs)
+              AND Schedule.Season = @Year
+              AND Schedule.Week < @Week;
+            END
+-- Correction for 'lastGame' to ensure only one game per player is considered
+            ELSE
+                IF @Period = 'lastGame'
+            BEGIN
+                        ;
+            WITH RankedGames AS (
+                SELECT pgs.PlayerID,
+                       sch.GameID,
+                       ROW_NUMBER() OVER (PARTITION BY pgs.PlayerID ORDER BY sch.Season DESC, sch.Week DESC) AS rn
+                FROM Schedule sch
+                         JOIN PlayerGameStats pgs ON sch.GameID = pgs.GameID
+                WHERE pgs.PlayerID IN (SELECT PlayerID FROM #PlayerIDs)
+                  AND ((sch.Season = @Year AND sch.Week < @Week) OR (sch.Season < @Year))
+            )
+            INSERT
+            INTO #GamesToConsider (PlayerID, GameID)
+            SELECT PlayerID,
+                   GameID
+            FROM RankedGames
+            WHERE rn = 1;
             END
 
--- Player stats aggregation query
-            SELECT
-                p.PlayerID,
-                p.Name,
-                p.Position,
-                -- Passing stats for QBs
-                ISNULL(CAST(SUM(CASE WHEN p.Position = 'QB' THEN pgs.PassingYards ELSE 0 END) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS PassingYardsPerGame,
-                ISNULL(CAST(SUM(CASE WHEN p.Position = 'QB' THEN pgs.PassingTouchdowns ELSE 0 END) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS PassingTouchdownsPerGame,
-                ISNULL(CAST(SUM(CASE WHEN p.Position = 'QB' THEN pgs.PassingAttempts ELSE 0 END) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS PassingAttemptsPerGame,
-                ISNULL(CAST(SUM(CASE WHEN p.Position = 'QB' THEN pgs.PassingCompletions ELSE 0 END) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS PassingCompletionsPerGame,
-                ISNULL(CAST(SUM(CASE WHEN p.Position = 'QB' THEN pgs.PassingInterceptions ELSE 0 END) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS PassingInterceptionsPerGame,
-                -- Rushing stats for QBs, RBs, WRs, TEs
-                ISNULL(CAST(SUM(pgs.RushingYards) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS RushingYardsPerGame,
-                ISNULL(CAST(SUM(pgs.RushingYards) AS FLOAT) / NULLIF(CAST(SUM(pgs.RushingAttempts) AS FLOAT), 0), 0) AS RushingYardsPerCarry,
-                ISNULL(CAST(SUM(pgs.RushingTDs) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS RushingTouchdownsPerGame,
-                -- Receiving stats for RBs, WRs, TEs
-                ISNULL(CAST(SUM(pgs.ReceivingYards) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS ReceivingYardsPerGame,
-                ISNULL(CAST(SUM(pgs.Receptions) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS ReceptionsPerGame,
-                ISNULL(CAST(SUM(pgs.ReceivingTDs) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS ReceivingTouchdownsPerGame,
-                -- Defensive stats
-                ISNULL(CAST(SUM(pgs.Combined) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS TacklesPerGame,
-                ISNULL(CAST(SUM(pgs.Sacks) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS SacksPerGame,
-                ISNULL(CAST(SUM(pgs.Interceptions) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS InterceptionsPerGame,
-                ISNULL(CAST(SUM(pgs.ForcedFumbles) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS ForcedFumblesPerGame,
-                ISNULL(CAST(SUM(pgs.PassesDefended) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS PassesDefendedPerGame,
-                -- Common stats
-                ISNULL(CAST(SUM(pgs.Fumbles) AS FLOAT) / NULLIF(CAST(COUNT(*) AS FLOAT), 0), 0) AS FumblesPerGame,
-                p.RecruitingScore
-            FROM PlayerGameStats pgs
-                     JOIN Players p ON pgs.PlayerID = p.PlayerID
-                     JOIN @GamesToConsider gtc ON pgs.GameID = gtc.GameID
-            WHERE pgs.TeamID = @TeamID
-            GROUP BY p.PlayerID, p.Name, p.Position, p.RecruitingScore;
+            ELSE
+                    IF @Period = 'lastSeason'
+            BEGIN
+                            -- Include all games from the previous season
+            INSERT INTO #GamesToConsider (PlayerID, GameID)
+            SELECT PlayerGameStats.PlayerID, Schedule.GameID
+            FROM Schedule
+                     JOIN PlayerGameStats ON Schedule.GameID = PlayerGameStats.GameID
+            WHERE PlayerGameStats.PlayerID IN (SELECT PlayerID FROM #PlayerIDs)
+              AND Schedule.Season = @Year - 1;
+            END
+-- Example adjustment for 'last3Games'
+            ELSE
+                        IF @Period = 'last3Games'
+            BEGIN
+                                ;
+            WITH RankedGames AS (
+                SELECT pgs.PlayerID,
+                       sch.GameID,
+                       ROW_NUMBER() OVER (PARTITION BY pgs.PlayerID ORDER BY sch.Season DESC, sch.Week DESC) AS rn
+                FROM Schedule sch
+                         JOIN PlayerGameStats pgs ON sch.GameID = pgs.GameID
+                WHERE pgs.PlayerID IN (SELECT PlayerID FROM #PlayerIDs)
+                  AND ((sch.Season = @Year AND sch.Week < @Week) OR (sch.Season < @Year))
+            )
+            INSERT
+            INTO #GamesToConsider (PlayerID, GameID)
+            SELECT PlayerID,
+                   GameID
+            FROM RankedGames
+            WHERE rn <= 3;
+            END
+            ELSE
+                            IF @Period = 'last3GamesHome'
+            BEGIN
+                                    ;
+            WITH RankedGames AS (
+                SELECT pgs.PlayerID,
+                       sch.GameID,
+                       sch.HomeTeamID,
+                       pgs.TeamID,
+                       ROW_NUMBER() OVER (PARTITION BY pgs.PlayerID ORDER BY sch.Season DESC, sch.Week DESC) AS rn
+                FROM Schedule sch
+                         JOIN PlayerGameStats pgs ON sch.GameID = pgs.GameID
+                WHERE pgs.PlayerID IN (SELECT PlayerID FROM #PlayerIDs)
+                  AND pgs.TeamID = sch.HomeTeamID
+                  AND ((sch.Season = @Year AND sch.Week < @Week) OR (sch.Season < @Year))
+            )
+            INSERT
+            INTO #GamesToConsider (PlayerID, GameID)
+            SELECT PlayerID,
+                   GameID
+            FROM RankedGames
+            WHERE rn <= 3;
+            END
+            ELSE
+                                IF @Period = 'last3GamesAway'
+            BEGIN
+                                        ;
+            WITH RankedGames AS (
+                SELECT pgs.PlayerID,
+                       sch.GameID,
+                       sch.AwayTeamID,
+                       pgs.TeamID,
+                       ROW_NUMBER() OVER (PARTITION BY pgs.PlayerID ORDER BY sch.Season DESC, sch.Week DESC) AS rn
+                FROM Schedule sch
+                         JOIN PlayerGameStats pgs ON sch.GameID = pgs.GameID
+                WHERE pgs.PlayerID IN (SELECT PlayerID FROM #PlayerIDs)
+                  AND pgs.TeamID = sch.AwayTeamID
+                  AND ((sch.Season = @Year AND sch.Week < @Week) OR (sch.Season < @Year))
+            )
+            INSERT
+            INTO #GamesToConsider (PlayerID, GameID)
+            SELECT PlayerID,
+                   GameID
+            FROM RankedGames
+            WHERE rn <= 3;
+            END
+            ELSE
+                                    IF @Period = 'seasonHome'
+            BEGIN
+                                            -- Include all home games from the current season before the current week
+            INSERT INTO #GamesToConsider (PlayerID, GameID)
+            SELECT PlayerGameStats.PlayerID, Schedule.GameID
+            FROM Schedule
+                     JOIN PlayerGameStats ON Schedule.GameID = PlayerGameStats.GameID
+            WHERE PlayerGameStats.PlayerID IN (SELECT PlayerID FROM #PlayerIDs)
+              AND Schedule.Season = @Year
+              AND Schedule.Week < @Week
+              AND PlayerGameStats.TeamID = Schedule.HomeTeamID;
+            END
+            ELSE
+                                        IF @Period = 'lastSeasonHome'
+            BEGIN
+                                                -- Include all home games from the previous season
+            INSERT INTO #GamesToConsider (PlayerID, GameID)
+            SELECT PlayerGameStats.PlayerID, Schedule.GameID
+            FROM Schedule
+                     JOIN PlayerGameStats ON Schedule.GameID = PlayerGameStats.GameID
+            WHERE PlayerGameStats.PlayerID IN (SELECT PlayerID FROM #PlayerIDs)
+              AND Schedule.Season = @Year - 1
+              AND PlayerGameStats.TeamID = Schedule.HomeTeamID;
+            END
+            ELSE
+                                            IF @Period = 'lastSeasonAway'
+            BEGIN
+                                                    -- Include all away games from the previous season
+            INSERT INTO #GamesToConsider (PlayerID, GameID)
+            SELECT PlayerGameStats.PlayerID, Schedule.GameID
+            FROM Schedule
+                     JOIN PlayerGameStats ON Schedule.GameID = PlayerGameStats.GameID
+            WHERE PlayerGameStats.PlayerID IN (SELECT PlayerID FROM #PlayerIDs)
+              AND Schedule.Season = @Year - 1
+              AND PlayerGameStats.TeamID = Schedule.AwayTeamID;
+            END
+            ELSE
+                                                IF @Period = 'seasonAway'
+            BEGIN
+                                                        -- Include all away games from the current season before the current week
+            INSERT INTO #GamesToConsider (PlayerID, GameID)
+            SELECT PlayerGameStats.PlayerID, Schedule.GameID
+            FROM Schedule
+                     JOIN PlayerGameStats ON Schedule.GameID = PlayerGameStats.GameID
+            WHERE PlayerGameStats.PlayerID IN (SELECT PlayerID FROM #PlayerIDs)
+              AND Schedule.Season = @Year
+              AND Schedule.Week < @Week
+              AND PlayerGameStats.TeamID = Schedule.AwayTeamID;
+            END
+
+            SELECT pid.PlayerID,
+                   p.Name AS PlayerName,
+                   AVG(CAST(pgs.PassingYards AS FLOAT)) AS PassingYardsPerGame,
+                   AVG(CAST(pgs.PassingTouchdowns AS FLOAT)) AS PassingTouchdownsPerGame,
+                   AVG(CAST(pgs.PassingAttempts AS FLOAT)) AS PassingAttemptsPerGame,
+                   AVG(CAST(pgs.PassingCompletions AS FLOAT)) AS PassingCompletionsPerGame,
+                   AVG(CAST(pgs.PassingInterceptions AS FLOAT)) AS PassingInterceptionsPerGame,
+                   AVG(CAST(pgs.RushingYards AS FLOAT)) AS RushingYardsPerGame,
+                   CASE WHEN SUM(CAST(pgs.RushingAttempts AS FLOAT)) = 0 THEN NULL
+                        ELSE AVG(CAST(pgs.RushingYards AS FLOAT)) / SUM(CAST(pgs.RushingAttempts AS FLOAT))
+                       END AS RushingYardsPerCarry,
+                   AVG(CAST(pgs.RushingTDs AS FLOAT)) AS RushingTouchdownsPerGame,
+                   AVG(CAST(pgs.ReceivingYards AS FLOAT)) AS ReceivingYardsPerGame,
+                   AVG(CAST(pgs.Receptions AS FLOAT)) AS ReceptionsPerGame,
+                   AVG(CAST(pgs.ReceivingTDs AS FLOAT)) AS ReceivingTouchdownsPerGame,
+                   AVG(CAST(pgs.Combined AS FLOAT)) AS TacklesPerGame,
+                   AVG(CAST(pgs.Sacks AS FLOAT)) AS SacksPerGame,
+                   AVG(CAST(pgs.Interceptions AS FLOAT)) AS InterceptionsPerGame,
+                   AVG(CAST(pgs.ForcedFumbles AS FLOAT)) AS ForcedFumblesPerGame,
+                   AVG(CAST(pgs.PassesDefended AS FLOAT)) AS PassesDefendedPerGame,
+                   AVG(CAST(pgs.Fumbles AS FLOAT)) AS FumblesPerGame,
+                   p.RecruitingScore,
+                   CASE
+                       WHEN @Period IN ('last3Games', 'last3GamesHome', 'last3GamesAway') AND COUNT(pgs.GameID) >= 3 THEN 'True'
+                       WHEN @Period IN ('seasonHome', 'seasonAway', 'season') AND COUNT(pgs.GameID) >= 2 THEN 'True'
+                       WHEN @Period IN ('lastGame') AND COUNT(pgs.GameID) >= 1 THEN 'True'
+                       ELSE 'False'
+                       END AS PeriodCompleted
+            FROM #PlayerIDs pid
+                     LEFT JOIN Players p ON pid.PlayerID = p.PlayerID
+                     LEFT JOIN PlayerGameStats pgs ON p.PlayerID = pgs.PlayerID
+                     LEFT JOIN #GamesToConsider gc ON pgs.GameID = gc.GameID AND pgs.PlayerID = gc.PlayerID
+            GROUP BY pid.PlayerID, p.Name, p.RecruitingScore
+            ORDER BY MIN(pid.InsertOrder);
+
+-- Drop temporary tables at the end of your script to clean up
+            DROP TABLE IF EXISTS #PlayerIDs;
+            DROP TABLE IF EXISTS #GamesToConsider;
         `;
 
         const request = new Request(sql, (err) => {
@@ -864,7 +1106,7 @@ async function getPlayerStats(teamId, season, week, period) {
             }
         });
 
-        request.addParameter('TeamID', TYPES.NVarChar, teamId);
+        request.addParameter('playerIds', TYPES.NVarChar, JSON.stringify(playerIds));
         request.addParameter('Year', TYPES.Int, season);
         request.addParameter('Week', TYPES.Int, week);
         request.addParameter('Period', TYPES.NVarChar, period);

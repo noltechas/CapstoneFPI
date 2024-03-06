@@ -58,7 +58,7 @@ connection.on('error', () => {
 
 const fetchGameIDs = async () => {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT GameID FROM Schedule WHERE SEASON = 2021';
+        const sql = 'SELECT GameID FROM SCHEDULE WHERE HomeRushingAttempts IS NULL AND SEASON >= 2022';
         const gameIDs = [];
         const sqlRequest = new Request(sql, (err) => {
             if (err) {
@@ -213,9 +213,7 @@ const insertTeamGameStats = async (teamStats, gameID, isHomeTeam) => {
 const processGameStats = async (gameID) => {
     console.log(`Processing game with ID: ${gameID}`);
     try {
-        const response = await axios.get(`http://api.sportradar.us/ncaafb/trial/v7/en/games/${gameID}/statistics.xml?api_key=am4kj5e64x99kzxjurstysqc`);
-        // Next key: qyzxb5wcu4k79vqjet8zkesy
-        // More left: am4kj5e64x99kzxjurstysqc
+        const response = await axios.get(`http://api.sportradar.us/ncaafb/trial/v7/en/games/${gameID}/statistics.xml?api_key=xhsc9b9vr5t2kqbgsmuekagj`);
         const xml = response.data;
 
         const result = await parseXml(xml);
@@ -453,8 +451,8 @@ const processAllGames = async () => {
 
     try {
         const gameIDs = await fetchGameIDs();
-        const startIndex = gameIDs.indexOf('62e5007d-c9c2-4838-825c-6f8a4509238e');
-        // const startIndex = 0;
+        // const startIndex = gameIDs.indexOf('fed32ae7-05de-4b83-8c10-23ad616a7177');
+        const startIndex = 0;
         if (startIndex === -1) {
             console.error('Starting game ID not found.');
             return;
