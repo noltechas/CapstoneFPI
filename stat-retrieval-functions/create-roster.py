@@ -1,5 +1,5 @@
 import subprocess
-import json, os
+import json, os, time
 
 
 def call_js_function(func_name, *args):
@@ -247,8 +247,13 @@ def print_stats_for_position(player_stats_list, position_label):
 
 
 def create_full_team_objects(gameID):
+    start_time = time.time()  # Start timing
+
     try:
+        json_output_start_time = time.time()
         json_output = call_js_function('getMatchupInfo', gameID)
+        print(f"Call to getMatchupInfo took {time.time() - json_output_start_time} seconds.")
+
         if json_output:
             matchup_info = json.loads(json_output)
             home_team_ID = matchup_info['HomeTeamID']
@@ -256,41 +261,47 @@ def create_full_team_objects(gameID):
             week = str(matchup_info['Week'])
             season = str(matchup_info['Season'])
 
-            # Initialize lists for stats
             home_stats = []
             away_stats = []
 
             away_periods = ['season', 'last3Games', 'last3GamesAway', 'lastSeason', 'seasonAway']
 
-            # Process Away Team
             for period in away_periods:
+                period_start_time = time.time()
                 result = create_roster_object(away_team_ID, season, week, period)
+                print(f"Processing away period {period} took {time.time() - period_start_time} seconds.")
+
                 if result is not None:
                     result['period'] = period
                     away_stats.append(result)
                 else:
                     print(f"No data for away team in period: {period}")
 
-            # Define periods to iterate over
             home_periods = ['season', 'last3Games', 'last3GamesHome', 'lastSeason', 'seasonHome']
 
-            # Process Home Team
             for period in home_periods:
+                period_start_time = time.time()
                 result = create_roster_object(home_team_ID, season, week, period)
+                print(f"Processing home period {period} took {time.time() - period_start_time} seconds.")
+
                 if result is not None:
                     result['period'] = period
                     home_stats.append(result)
                 else:
                     print(f"No data for home team in period: {period}")
 
+            print(f"Total execution time for create_full_team_objects: {time.time() - start_time} seconds.")
             return home_stats, away_stats
 
         else:
             print("No data returned from getMatchupInfo function.")
+            print(f"Total execution time for create_full_team_objects: {time.time() - start_time} seconds.")
     except json.decoder.JSONDecodeError as e:
         print(f"Failed to decode JSON from getMatchupInfo function: {e}")
     except Exception as e:
         print(f"An error occurred: {e}")
+    finally:
+        print(f"Final total execution time for create_full_team_objects: {time.time() - start_time} seconds.")
 
 
 def print_full_team_objects(gameID):
@@ -381,7 +392,7 @@ def replace_none_with_negative_one(data):
 
 def fetch_team_stats(gameID):
     home_stats, away_stats = create_full_team_objects(gameID)
-    # Recursively replace None values with -1
+    # Recursively replace None values with 0
     replace_none_with_negative_one(home_stats)
     replace_none_with_negative_one(away_stats)
     return home_stats, away_stats

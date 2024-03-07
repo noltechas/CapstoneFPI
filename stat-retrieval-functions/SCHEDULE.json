@@ -14,13 +14,6 @@
     "Week": "6"
   },
   {
-    "GameID": "00135bdb-71d5-429a-afa9-9ccba572b000",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "4"
-  },
-  {
     "GameID": "0018316c-29e8-411c-ac1e-cba922592c2a",
     "HomePoints": "60",
     "AwayPoints": "27",
@@ -173,13 +166,6 @@
     "AwayPoints": "21",
     "Season": "2016",
     "Week": "9"
-  },
-  {
-    "GameID": "00750e19-5d59-41a9-8637-874bd298c3c6",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "6"
   },
   {
     "GameID": "0076c70b-a3b8-45f5-ae9a-1bbaf3a17066",
@@ -434,13 +420,6 @@
     "Week": "11"
   },
   {
-    "GameID": "01073873-bfb0-40ec-ae28-871a4ca53ba3",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2021",
-    "Week": "18"
-  },
-  {
     "GameID": "010c5bf9-0b68-4b32-a030-cf8f322e67f3",
     "HomePoints": "59",
     "AwayPoints": "28",
@@ -558,13 +537,6 @@
     "AwayPoints": "52",
     "Season": "2022",
     "Week": "4"
-  },
-  {
-    "GameID": "01428613-a3df-4975-9fe5-1cf41a160098",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "12"
   },
   {
     "GameID": "01489fcb-d0f7-4ca0-a1dd-1b69a8e7d2da",
@@ -1708,13 +1680,6 @@
     "Week": "7"
   },
   {
-    "GameID": "045b083d-1208-46ba-8054-3ef3ab58ca86",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "30"
-  },
-  {
     "GameID": "045c92c1-3c60-412a-ab1f-706a394c60bc",
     "HomePoints": "20",
     "AwayPoints": "45",
@@ -1764,25 +1729,11 @@
     "Week": "6"
   },
   {
-    "GameID": "047847a4-7d80-4d6d-ae99-69d0ce1c580d",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "24"
-  },
-  {
     "GameID": "04832270-b355-44ef-a3c2-a5ff61a98151",
     "HomePoints": "17",
     "AwayPoints": "21",
     "Season": "2019",
     "Week": "8"
-  },
-  {
-    "GameID": "0485fb7a-48ab-421e-8993-66534f1e50e0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2017",
-    "Week": "2"
   },
   {
     "GameID": "04887bfc-054e-498a-9688-5bd00566c88b",
@@ -2751,13 +2702,6 @@
     "Week": "11"
   },
   {
-    "GameID": "06dc62d6-607e-4588-bad1-b35842bcaacf",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
-  },
-  {
     "GameID": "06dfb32f-60a3-4361-900e-ed52a3d7ec92",
     "HomePoints": "48",
     "AwayPoints": "17",
@@ -3192,20 +3136,6 @@
     "Week": "2"
   },
   {
-    "GameID": "0817770c-c452-46de-a032-08b9784b1e26",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
-  },
-  {
-    "GameID": "081905ef-e59a-47db-b903-152279066d11",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "10"
-  },
-  {
     "GameID": "08208f3e-6ac7-4219-be10-72cabfb6df08",
     "HomePoints": "14",
     "AwayPoints": "55",
@@ -3395,13 +3325,6 @@
     "Week": "9"
   },
   {
-    "GameID": "089f9f84-256e-4d60-bbbd-cd33ed48276c",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2019",
-    "Week": "2"
-  },
-  {
     "GameID": "08a31efb-0cec-4115-8092-a2e1c9660f0a",
     "HomePoints": "41",
     "AwayPoints": "21",
@@ -3435,13 +3358,6 @@
     "AwayPoints": "59",
     "Season": "2022",
     "Week": "10"
-  },
-  {
-    "GameID": "08b94407-99a7-470d-ab8e-e887cad9e8ff",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
   },
   {
     "GameID": "08c3569a-0b75-4da6-8097-a6b50131911d",
@@ -3652,13 +3568,6 @@
     "AwayPoints": "21",
     "Season": "2022",
     "Week": "8"
-  },
-  {
-    "GameID": "0936633a-2eb8-4c37-a6f0-6cb2fdde0212",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "22"
   },
   {
     "GameID": "093723f2-3e5e-4ebe-94dc-8fddcfd731a9",
@@ -3990,13 +3899,6 @@
     "Week": "11"
   },
   {
-    "GameID": "0a39ad53-825f-4a33-8b9b-79171e238ea6",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "30"
-  },
-  {
     "GameID": "0a3f23fe-7db6-4543-a011-3477c350d80b",
     "HomePoints": "14",
     "AwayPoints": "27",
@@ -4205,13 +4107,6 @@
     "AwayPoints": "37",
     "Season": "2015",
     "Week": "6"
-  },
-  {
-    "GameID": "0ab985ec-d1aa-4ed3-924b-efcdedeae4b3",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "31"
   },
   {
     "GameID": "0abe1873-c7af-4dda-98da-e817570a4c1b",
@@ -4499,13 +4394,6 @@
     "AwayPoints": "38",
     "Season": "2018",
     "Week": "13"
-  },
-  {
-    "GameID": "0b80164d-9c8c-425e-8afd-936b72ca7f3c",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "10"
   },
   {
     "GameID": "0b8293b1-7835-40f2-bbd6-01081fd6fd6a",
@@ -5677,13 +5565,6 @@
     "Week": "18"
   },
   {
-    "GameID": "0e826f79-42a0-43e8-9b87-d71f00928cdc",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2016",
-    "Week": "1"
-  },
-  {
     "GameID": "0e83fe39-551c-4cec-8ac7-192f9abeec92",
     "HomePoints": "33",
     "AwayPoints": "30",
@@ -6090,13 +5971,6 @@
     "Week": "13"
   },
   {
-    "GameID": "0f8d7704-5c94-4bc3-ae87-d572880af82c",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2017",
-    "Week": "2"
-  },
-  {
     "GameID": "0f8ed3be-ea8c-43ca-80d7-25892a5ab0aa",
     "HomePoints": "49",
     "AwayPoints": "17",
@@ -6109,13 +5983,6 @@
     "AwayPoints": "28",
     "Season": "2018",
     "Week": "6"
-  },
-  {
-    "GameID": "0f92bf13-fad9-418e-b175-aee7d02335ee",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "24"
   },
   {
     "GameID": "0f9f0d15-587f-482e-8b65-f0b8ab0e62dd",
@@ -6228,13 +6095,6 @@
     "AwayPoints": "21",
     "Season": "2021",
     "Week": "12"
-  },
-  {
-    "GameID": "0fe1d817-fb4e-42ce-ac15-9ff1eb71ef86",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "4"
   },
   {
     "GameID": "0fe38df5-75c1-4e5e-9a8b-cd1cbd45e6d9",
@@ -6503,13 +6363,6 @@
     "Week": "4"
   },
   {
-    "GameID": "1095440b-2ce1-429c-b4ad-382a9c377c13",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
-  },
-  {
     "GameID": "1095c16e-8105-4ab9-b418-127da8fd32c3",
     "HomePoints": "49",
     "AwayPoints": "59",
@@ -6769,13 +6622,6 @@
     "Week": "7"
   },
   {
-    "GameID": "113644ea-f864-4545-9330-d932bae54216",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
-  },
-  {
     "GameID": "1138340b-1c7f-4591-a60b-d42d86a1c385",
     "HomePoints": "9",
     "AwayPoints": "31",
@@ -6879,13 +6725,6 @@
     "AwayPoints": "15",
     "Season": "2022",
     "Week": "12"
-  },
-  {
-    "GameID": "117a6a9a-d794-4154-860f-056164f24428",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "10"
   },
   {
     "GameID": "117db04e-c998-4b92-8b7d-12b8652863f5",
@@ -7231,13 +7070,6 @@
     "Week": "13"
   },
   {
-    "GameID": "126060b1-e780-4909-850c-036a14537d6b",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "16"
-  },
-  {
     "GameID": "1264a8a3-c8dd-4072-a428-16cf4504c3d8",
     "HomePoints": "40",
     "AwayPoints": "7",
@@ -7539,13 +7371,6 @@
     "Week": "4"
   },
   {
-    "GameID": "1323e792-4868-48ee-b8ec-2f5f30ed8589",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
-  },
-  {
     "GameID": "1328a416-00e8-4099-8ee3-4300c17b906c",
     "HomePoints": "28",
     "AwayPoints": "25",
@@ -7607,13 +7432,6 @@
     "AwayPoints": "48",
     "Season": "2019",
     "Week": "10"
-  },
-  {
-    "GameID": "135db1d1-020c-4cc2-811e-249c74ec2b46",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
   },
   {
     "GameID": "13617c22-dc2b-41e8-9074-ed206075ffdd",
@@ -7703,13 +7521,6 @@
     "GameID": "137d5779-7029-472c-a5f4-70b4abf06c19",
     "HomePoints": "30",
     "AwayPoints": "7",
-    "Season": "2018",
-    "Week": "3"
-  },
-  {
-    "GameID": "137f6a3b-7997-4e37-998b-5ac4457caa0f",
-    "HomePoints": "0",
-    "AwayPoints": "0",
     "Season": "2018",
     "Week": "3"
   },
@@ -7805,13 +7616,6 @@
     "Week": "8"
   },
   {
-    "GameID": "13bc80d3-f99f-456c-ab02-33bdef38b2a7",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
-  },
-  {
     "GameID": "13c29777-19fc-4868-93fb-54d2fff2efc3",
     "HomePoints": "42",
     "AwayPoints": "7",
@@ -7838,13 +7642,6 @@
     "AwayPoints": "44",
     "Season": "2016",
     "Week": "11"
-  },
-  {
-    "GameID": "13d8913a-f8a8-4dd8-8b52-c7e4bfddff78",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
   },
   {
     "GameID": "13db8798-039e-40d7-b1d9-9877ef690a0d",
@@ -7936,13 +7733,6 @@
     "AwayPoints": "10",
     "Season": "2020",
     "Week": "9"
-  },
-  {
-    "GameID": "14035755-6415-4dfa-9424-dbf532e0f562",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "3"
   },
   {
     "GameID": "1404d5cb-ed99-4219-9164-4fbefab52cdc",
@@ -8075,13 +7865,6 @@
     "HomePoints": "13",
     "AwayPoints": "19",
     "Season": "2016",
-    "Week": "1"
-  },
-  {
-    "GameID": "147f2fc8-3b15-4a55-a6cf-148603f747f5",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
     "Week": "1"
   },
   {
@@ -8351,13 +8134,6 @@
     "Week": "5"
   },
   {
-    "GameID": "153e2017-3997-4529-ab81-86ab7e9850cf",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
-  },
-  {
     "GameID": "15406778-c992-4c3f-98d3-c35fef816b50",
     "HomePoints": "38",
     "AwayPoints": "35",
@@ -8426,13 +8202,6 @@
     "AwayPoints": "52",
     "Season": "2020",
     "Week": "15"
-  },
-  {
-    "GameID": "1591c786-7904-40d3-a2d6-e37f62228efe",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "30"
   },
   {
     "GameID": "15adf98c-be12-4d9d-b999-bb3318385f05",
@@ -8559,13 +8328,6 @@
     "AwayPoints": "14",
     "Season": "2018",
     "Week": "14"
-  },
-  {
-    "GameID": "16326958-2856-4229-bfab-d449979852cf",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2021",
-    "Week": "17"
   },
   {
     "GameID": "163507c9-6fbd-47bf-8235-bb2f1e3fae14",
@@ -8736,13 +8498,6 @@
     "Week": "2"
   },
   {
-    "GameID": "16852dd1-8671-42ea-b1f4-090b6a2a3f59",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
-  },
-  {
     "GameID": "16889acc-af22-42a3-a1ec-1a98973d655d",
     "HomePoints": "28",
     "AwayPoints": "14",
@@ -8888,13 +8643,6 @@
     "AwayPoints": "7",
     "Season": "2018",
     "Week": "1"
-  },
-  {
-    "GameID": "16e3a891-afe7-4e49-b501-3510c4b98ff6",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
   },
   {
     "GameID": "16e904a6-44b5-4bf2-a17b-b72b3b6131ff",
@@ -9758,13 +9506,6 @@
     "Week": "2"
   },
   {
-    "GameID": "191684c2-060c-4ae8-8d1d-0c402b1d7997",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
-  },
-  {
     "GameID": "191b2d8c-9443-47d4-b1f4-2e23178a29f1",
     "HomePoints": "59",
     "AwayPoints": "17",
@@ -9814,13 +9555,6 @@
     "Week": "9"
   },
   {
-    "GameID": "1929dafa-1eae-47b1-85c1-ee6b7d248048",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "17"
-  },
-  {
     "GameID": "192ac0b5-e97c-464c-b4ed-fb39ba03721d",
     "HomePoints": "21",
     "AwayPoints": "9",
@@ -9847,13 +9581,6 @@
     "AwayPoints": "3",
     "Season": "2023",
     "Week": "8"
-  },
-  {
-    "GameID": "19383f54-0c22-4b8d-8fd8-702412551fba",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
   },
   {
     "GameID": "193aceb4-4129-40ec-952b-e628481cdde9",
@@ -10227,13 +9954,6 @@
     "Week": "5"
   },
   {
-    "GameID": "19f4533f-6f5a-4e6d-9a18-9ea38b420237",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
-  },
-  {
     "GameID": "19fce888-3056-49b2-b15b-7c35e8896008",
     "HomePoints": "28",
     "AwayPoints": "38",
@@ -10570,13 +10290,6 @@
     "Week": "5"
   },
   {
-    "GameID": "1ae60ae1-0a91-4e36-a6a4-0a60c54d4d78",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
-  },
-  {
     "GameID": "1ae87fee-ce43-4e84-afb3-38ce818c5052",
     "HomePoints": "42",
     "AwayPoints": "3",
@@ -10857,13 +10570,6 @@
     "Week": "12"
   },
   {
-    "GameID": "1bb74452-4272-4796-a648-bc2ddaccdfb3",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "3"
-  },
-  {
     "GameID": "1bc05d87-e5cd-47e7-9432-321a31494c51",
     "HomePoints": "26",
     "AwayPoints": "13",
@@ -11037,13 +10743,6 @@
     "AwayPoints": "23",
     "Season": "2014",
     "Week": "2"
-  },
-  {
-    "GameID": "1c2a18e2-c197-4d37-a7bc-cc7f61ac89f8",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
   },
   {
     "GameID": "1c2c765e-62c7-44b6-892e-eaf34f681c8b",
@@ -11534,13 +11233,6 @@
     "AwayPoints": "34",
     "Season": "2021",
     "Week": "6"
-  },
-  {
-    "GameID": "1d38e11a-1143-46b4-b43b-9a4534bcb4c3",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "18"
   },
   {
     "GameID": "1d3cd08d-2834-42b2-99dc-a125f01c63ba",
@@ -12327,13 +12019,6 @@
     "Week": "11"
   },
   {
-    "GameID": "1f179a86-1e1d-44b1-8daf-262bd0d200ec",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
-  },
-  {
     "GameID": "1f1a5c6d-b996-44df-b937-606aa0b98b05",
     "HomePoints": "6",
     "AwayPoints": "19",
@@ -12467,13 +12152,6 @@
     "Week": "1"
   },
   {
-    "GameID": "1f6a0db9-905e-447e-89fb-a329c2180dbc",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
-  },
-  {
     "GameID": "1f6fa2be-e2ec-4fdf-a25a-54174a0e37b0",
     "HomePoints": "14",
     "AwayPoints": "45",
@@ -12500,13 +12178,6 @@
     "AwayPoints": "28",
     "Season": "2022",
     "Week": "9"
-  },
-  {
-    "GameID": "1f852c79-80ae-46ec-afa2-508b913877c8",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "8"
   },
   {
     "GameID": "1f8aa232-5691-4295-a33e-07c713f2d1c0",
@@ -13769,13 +13440,6 @@
     "Week": "7"
   },
   {
-    "GameID": "22faa872-fe75-41ef-a6f4-56dba59dbf1e",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "22"
-  },
-  {
     "GameID": "22fe078f-b81e-47e0-89d5-7a5ed7b42ed4",
     "HomePoints": "15",
     "AwayPoints": "7",
@@ -13867,13 +13531,6 @@
     "Week": "13"
   },
   {
-    "GameID": "233503fa-8ac7-4bef-8564-0c39f0200b94",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
-  },
-  {
     "GameID": "2335ba00-e7ba-49e4-8fb9-94218a30ff4d",
     "HomePoints": "38",
     "AwayPoints": "14",
@@ -13942,13 +13599,6 @@
     "AwayPoints": "24",
     "Season": "2015",
     "Week": "1"
-  },
-  {
-    "GameID": "2356b1d7-0c86-414f-a95c-158b24ead25a",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
   },
   {
     "GameID": "235880a2-942a-4aff-8dad-ee70f2960505",
@@ -14126,13 +13776,6 @@
     "Week": "7"
   },
   {
-    "GameID": "23ba0c71-48f3-44f5-a9b3-1bb1dbaf67fa",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
-  },
-  {
     "GameID": "23ba2262-6c2f-4d5f-b511-02595bc09a40",
     "HomePoints": "27",
     "AwayPoints": "3",
@@ -14173,13 +13816,6 @@
     "AwayPoints": "31",
     "Season": "2023",
     "Week": "12"
-  },
-  {
-    "GameID": "23f74164-e771-4d30-a9b9-a6c79316f21b",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "31"
   },
   {
     "GameID": "23fb3ec7-17a4-47be-bda4-9706dddb8b9f",
@@ -14278,20 +13914,6 @@
     "AwayPoints": "35",
     "Season": "2023",
     "Week": "9"
-  },
-  {
-    "GameID": "24354cbd-6662-40fe-a643-5ffdcbe0c07d",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
-  },
-  {
-    "GameID": "2439d220-efa8-47a5-bf5b-bc4af4a89f13",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
   },
   {
     "GameID": "243ba2ff-bdbb-4746-8b00-d57f82fccc7f",
@@ -14425,13 +14047,6 @@
     "AwayPoints": "28",
     "Season": "2018",
     "Week": "7"
-  },
-  {
-    "GameID": "24803b36-d00f-4546-b037-a085beb9f2b2",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "2"
   },
   {
     "GameID": "2482a11e-9a39-4df8-8819-4b88a626127a",
@@ -14840,13 +14455,6 @@
     "Week": "2"
   },
   {
-    "GameID": "2558f4d1-5c52-4c4f-a6f7-9d7952898bee",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "6"
-  },
-  {
     "GameID": "25618dfc-1ee0-436a-a445-d9fd20a25ae2",
     "HomePoints": "46",
     "AwayPoints": "52",
@@ -14957,13 +14565,6 @@
     "AwayPoints": "27",
     "Season": "2017",
     "Week": "1"
-  },
-  {
-    "GameID": "25aa4ac4-447e-470f-b62d-2bfbe18c059b",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "16"
   },
   {
     "GameID": "25aacb94-8564-44cc-806f-75737f898efa",
@@ -15498,13 +15099,6 @@
     "Week": "11"
   },
   {
-    "GameID": "2716a040-dad4-41e0-80cd-41e2b967e9fe",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "22"
-  },
-  {
     "GameID": "2716f165-c789-49e9-8d15-37dc5fc6efa5",
     "HomePoints": "17",
     "AwayPoints": "45",
@@ -15685,13 +15279,6 @@
     "AwayPoints": "0",
     "Season": "2014",
     "Week": "11"
-  },
-  {
-    "GameID": "27792e08-f5fa-436c-bc24-ae821c7c0c6c",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
   },
   {
     "GameID": "277b5411-0ecb-4141-960f-8f4af9db0b13",
@@ -15986,13 +15573,6 @@
     "AwayPoints": "31",
     "Season": "2021",
     "Week": "10"
-  },
-  {
-    "GameID": "284ebf2f-e4f4-4b31-8767-ea013fc03795",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "6"
   },
   {
     "GameID": "28520bd2-8a8b-4eb2-af70-a0c9cfe5834b",
@@ -16317,13 +15897,6 @@
     "Week": "9"
   },
   {
-    "GameID": "2916ef43-ee60-4879-b604-3e3a183e43f4",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
-  },
-  {
     "GameID": "291772dc-6563-4894-ae96-bb9460dda628",
     "HomePoints": "26",
     "AwayPoints": "10",
@@ -16420,13 +15993,6 @@
     "AwayPoints": "17",
     "Season": "2018",
     "Week": "2"
-  },
-  {
-    "GameID": "295b3f0d-911c-4750-a5d2-05d31a896554",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "25"
   },
   {
     "GameID": "295b553e-9649-4e25-873f-b3fecdbab8ba",
@@ -16555,13 +16121,6 @@
     "Week": "3"
   },
   {
-    "GameID": "29b66ba3-7ec0-4cf2-a97f-6c1385b50666",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2015",
-    "Week": "1"
-  },
-  {
     "GameID": "29bd26cb-5f04-4483-8c85-ebf96c6d656b",
     "HomePoints": "3",
     "AwayPoints": "23",
@@ -16686,13 +16245,6 @@
     "AwayPoints": "44",
     "Season": "2015",
     "Week": "14"
-  },
-  {
-    "GameID": "2a23021f-7a16-47f1-9b20-c0918f4addcd",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
   },
   {
     "GameID": "2a2916d0-2868-4e00-8511-cf562fb3876b",
@@ -16996,13 +16548,6 @@
     "Week": "13"
   },
   {
-    "GameID": "2b305240-485c-4754-997c-3c78e54b44fa",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
-  },
-  {
     "GameID": "2b3d9fcc-ff9e-40db-8925-bfcf4f415281",
     "HomePoints": "27",
     "AwayPoints": "13",
@@ -17276,20 +16821,6 @@
     "Week": "1"
   },
   {
-    "GameID": "2bd259f7-28ba-4b04-8461-db948ec18692",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2017",
-    "Week": "5"
-  },
-  {
-    "GameID": "2bd3279e-1112-430f-be52-63dd32da3ad4",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "23"
-  },
-  {
     "GameID": "2bd67758-4d11-4d03-a238-4d2cbe41bebc",
     "HomePoints": "30",
     "AwayPoints": "23",
@@ -17526,13 +17057,6 @@
     "AwayPoints": "29",
     "Season": "2017",
     "Week": "7"
-  },
-  {
-    "GameID": "2c6e86d3-4a2a-4acc-bb85-e616a0397fc3",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "9"
   },
   {
     "GameID": "2c737c6d-7bbe-43a5-ae90-4d0d4689521f",
@@ -17794,13 +17318,6 @@
     "Week": "10"
   },
   {
-    "GameID": "2d080bb2-aac0-4084-90d0-551cce044478",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2022",
-    "Week": "12"
-  },
-  {
     "GameID": "2d0af9c1-e1ad-4605-a6c9-169ed3687cee",
     "HomePoints": "35",
     "AwayPoints": "31",
@@ -17946,13 +17463,6 @@
     "AwayPoints": "41",
     "Season": "2018",
     "Week": "3"
-  },
-  {
-    "GameID": "2d5795a0-8f78-411f-b021-4c86f38c5638",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2021",
-    "Week": "18"
   },
   {
     "GameID": "2d5c4114-0bdf-4050-b8eb-10bad6b02a15",
@@ -18289,13 +17799,6 @@
     "AwayPoints": "41",
     "Season": "2018",
     "Week": "2"
-  },
-  {
-    "GameID": "2e727f90-0b97-4dff-b53c-556ccb58f8cc",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
   },
   {
     "GameID": "2e730daf-2286-4306-a3ef-147fe7af0e19",
@@ -18900,13 +18403,6 @@
     "Week": "11"
   },
   {
-    "GameID": "2fe7115b-e7df-4b04-90ce-2a7e67c532ac",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "18"
-  },
-  {
     "GameID": "2fefca8b-58a7-4df4-89b5-38d2969e4f6a",
     "HomePoints": "10",
     "AwayPoints": "28",
@@ -18975,13 +18471,6 @@
     "AwayPoints": "41",
     "Season": "2021",
     "Week": "7"
-  },
-  {
-    "GameID": "301fcd50-7de4-4711-a583-3bdfc4957969",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
   },
   {
     "GameID": "3020bdd2-2766-47f1-afc7-227f25e6dd42",
@@ -19621,13 +19110,6 @@
     "Week": "5"
   },
   {
-    "GameID": "31d3dc04-e5fa-42b2-b3cd-baf0e793a3d4",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
-  },
-  {
     "GameID": "31d6e5ed-6e8c-4ea4-9f68-18c3b35ab478",
     "HomePoints": "14",
     "AwayPoints": "20",
@@ -19913,13 +19395,6 @@
     "AwayPoints": "24",
     "Season": "2017",
     "Week": "13"
-  },
-  {
-    "GameID": "32aa3fbf-2d4c-45b2-9a28-ab8b73dac599",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "7"
   },
   {
     "GameID": "32b1f70f-1f5d-4a32-9086-d1ea4af26111",
@@ -20685,13 +20160,6 @@
     "Week": "10"
   },
   {
-    "GameID": "34877619-fd56-4c64-8932-443f95e489f1",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "4"
-  },
-  {
     "GameID": "348aaa08-c354-40f7-be8e-ce1d5f0057e4",
     "HomePoints": "6",
     "AwayPoints": "24",
@@ -20818,13 +20286,6 @@
     "Week": "10"
   },
   {
-    "GameID": "34deb8d0-d60a-45ff-96d5-4e2bb53e6156",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "24"
-  },
-  {
     "GameID": "34e38931-21fa-484a-8043-929db7b8f79b",
     "HomePoints": "21",
     "AwayPoints": "38",
@@ -20949,13 +20410,6 @@
     "AwayPoints": "14",
     "Season": "2019",
     "Week": "14"
-  },
-  {
-    "GameID": "354a02ac-4201-40b3-9609-d352b188d469",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "10"
   },
   {
     "GameID": "3556facc-b8cd-4daf-bebf-ab25a213cfe4",
@@ -21175,25 +20629,11 @@
     "Week": "7"
   },
   {
-    "GameID": "35cc4142-39f2-4a76-8b5e-2d4e1edcd4b9",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2017",
-    "Week": "2"
-  },
-  {
     "GameID": "35cd4352-5c2d-4dd7-9f20-dba75be2ae19",
     "HomePoints": "34",
     "AwayPoints": "31",
     "Season": "2019",
     "Week": "8"
-  },
-  {
-    "GameID": "35cd48a4-b816-42fe-9dbb-3203f0b74cb6",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
   },
   {
     "GameID": "35ce05ee-09fa-436e-8b91-18e51a230f92",
@@ -21264,13 +20704,6 @@
     "AwayPoints": "42",
     "Season": "2014",
     "Week": "8"
-  },
-  {
-    "GameID": "35f8f37c-ddcf-44b7-a5dd-0eec1c7a3644",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
   },
   {
     "GameID": "35fa9807-e1d6-4359-b601-7062ae9dc6f6",
@@ -21462,13 +20895,6 @@
     "Week": "9"
   },
   {
-    "GameID": "366cd766-b373-4280-8c83-c0a3af4b4b80",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
-  },
-  {
     "GameID": "366fede8-1dbc-4820-a40f-ade3281559a0",
     "HomePoints": "35",
     "AwayPoints": "13",
@@ -21649,13 +21075,6 @@
     "AwayPoints": "21",
     "Season": "2016",
     "Week": "8"
-  },
-  {
-    "GameID": "3715b878-ccab-43c3-96ac-fba01091d546",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
   },
   {
     "GameID": "37193e41-97d3-43a1-979d-8a8450400f2b",
@@ -22862,13 +22281,6 @@
     "Week": "1"
   },
   {
-    "GameID": "39d1966e-6d8f-4278-96ad-f2c70d3f0b44",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
-  },
-  {
     "GameID": "39d1a7ec-25a0-43d3-b24d-1fb4d9577e54",
     "HomePoints": "14",
     "AwayPoints": "20",
@@ -23506,13 +22918,6 @@
     "Week": "9"
   },
   {
-    "GameID": "3b736bcc-85dc-4644-a30a-862b975322ad",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "3"
-  },
-  {
     "GameID": "3b74f466-eea1-411e-bff5-763d5fade73b",
     "HomePoints": "3",
     "AwayPoints": "42",
@@ -23560,13 +22965,6 @@
     "AwayPoints": "47",
     "Season": "2018",
     "Week": "11"
-  },
-  {
-    "GameID": "3b8a3ee3-ea87-4961-853e-c960a8860475",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "24"
   },
   {
     "GameID": "3b8bd37e-8b9e-4a27-8991-2178105ea25e",
@@ -23877,13 +23275,6 @@
     "Week": "2"
   },
   {
-    "GameID": "3c376d8c-d982-41c4-80f3-6a8efb3aa6b0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "26"
-  },
-  {
     "GameID": "3c37b666-31dd-408f-9877-9e2169e8413a",
     "HomePoints": "38",
     "AwayPoints": "31",
@@ -23987,13 +23378,6 @@
     "AwayPoints": "55",
     "Season": "2021",
     "Week": "12"
-  },
-  {
-    "GameID": "3c6886d4-0528-4aef-a9e0-cf88b9f4225b",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
   },
   {
     "GameID": "3c6c8b7d-8a9f-43a1-b312-db6e314b9fa6",
@@ -24591,13 +23975,6 @@
     "Week": "12"
   },
   {
-    "GameID": "3e0571f3-72b7-44f2-84f4-1e9499415422",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
-  },
-  {
     "GameID": "3e06a7c1-88a0-4744-8519-5fe92384dbdc",
     "HomePoints": "22",
     "AwayPoints": "48",
@@ -25011,13 +24388,6 @@
     "Week": "11"
   },
   {
-    "GameID": "3f1bb16a-0b78-4f78-8f31-d958c900c86f",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "26"
-  },
-  {
     "GameID": "3f253741-ce9f-4fcf-b421-f22f4dddb94d",
     "HomePoints": "24",
     "AwayPoints": "21",
@@ -25113,13 +24483,6 @@
     "HomePoints": "16",
     "AwayPoints": "21",
     "Season": "2021",
-    "Week": "8"
-  },
-  {
-    "GameID": "3f5f9c9b-9028-45de-8787-db7a6ec07af0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
     "Week": "8"
   },
   {
@@ -25436,13 +24799,6 @@
     "AwayPoints": "28",
     "Season": "2021",
     "Week": "12"
-  },
-  {
-    "GameID": "4057dd28-5ba9-419a-a161-e98e1f6af0dd",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "7"
   },
   {
     "GameID": "405ee40d-18d4-4d9e-9e31-f188fbff3e54",
@@ -25876,13 +25232,6 @@
     "HomePoints": "30",
     "AwayPoints": "19",
     "Season": "2023",
-    "Week": "13"
-  },
-  {
-    "GameID": "4188f547-8851-4941-afc5-3700846b3ee1",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
     "Week": "13"
   },
   {
@@ -26544,13 +25893,6 @@
     "Week": "10"
   },
   {
-    "GameID": "4383d3d5-2fb2-48c8-8276-691ab1655737",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
-  },
-  {
     "GameID": "438583c8-2216-4631-8dda-0e2eda6d531c",
     "HomePoints": "7",
     "AwayPoints": "34",
@@ -26563,13 +25905,6 @@
     "AwayPoints": "7",
     "Season": "2019",
     "Week": "8"
-  },
-  {
-    "GameID": "43913896-ebb2-40fa-b7e8-48a01a273859",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "10"
   },
   {
     "GameID": "4394e861-0410-4876-a00b-0a03444fbae2",
@@ -26738,13 +26073,6 @@
     "AwayPoints": "33",
     "Season": "2015",
     "Week": "1"
-  },
-  {
-    "GameID": "44334a00-74ab-4b2e-a262-f71a6cc77ee4",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
   },
   {
     "GameID": "4433f9af-d8a2-4ae3-b4d1-30a71c244d2d",
@@ -26999,13 +26327,6 @@
     "Week": "13"
   },
   {
-    "GameID": "44db49d0-5968-45c1-a66c-f6e7c7363d07",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "2"
-  },
-  {
     "GameID": "44e0660b-4719-4277-9e19-954e3d3587d0",
     "HomePoints": "58",
     "AwayPoints": "44",
@@ -27160,13 +26481,6 @@
     "Week": "7"
   },
   {
-    "GameID": "455098ff-52ba-4481-b23a-8f8dd7c89d64",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "26"
-  },
-  {
     "GameID": "4555b586-e39d-4ac2-9352-f31a59625eff",
     "HomePoints": "38",
     "AwayPoints": "14",
@@ -27277,13 +26591,6 @@
     "AwayPoints": "5",
     "Season": "2018",
     "Week": "4"
-  },
-  {
-    "GameID": "45a9ab47-4270-410e-b13c-228582d64c43",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
   },
   {
     "GameID": "45b60803-4541-41d6-a4ab-da09206a1e2d",
@@ -27776,13 +27083,6 @@
     "Week": "10"
   },
   {
-    "GameID": "46b519fd-c220-4aa0-aff0-b296bc91e473",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
-  },
-  {
     "GameID": "46b61abc-3b8b-416d-a1c7-b23ff82b1d8c",
     "HomePoints": "42",
     "AwayPoints": "39",
@@ -28217,13 +27517,6 @@
     "Week": "10"
   },
   {
-    "GameID": "47e0e2fe-6bfa-44c8-8e43-a5cd758e3079",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "8"
-  },
-  {
     "GameID": "47e2af63-c5b2-44b9-96e3-26b129256068",
     "HomePoints": "44",
     "AwayPoints": "28",
@@ -28285,13 +27578,6 @@
     "AwayPoints": "3",
     "Season": "2015",
     "Week": "1"
-  },
-  {
-    "GameID": "4839b5c3-bd98-4f6f-8d8b-d6081ad07eda",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
   },
   {
     "GameID": "483d38f9-a9a2-461a-9893-ff28d59215fb",
@@ -28397,13 +27683,6 @@
     "AwayPoints": "23",
     "Season": "2019",
     "Week": "4"
-  },
-  {
-    "GameID": "48703775-1359-490e-90a0-062873966962",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
   },
   {
     "GameID": "4870ffa8-af93-42a6-b211-50238e2024b2",
@@ -28609,13 +27888,6 @@
     "Week": "8"
   },
   {
-    "GameID": "48dfcd9c-a409-478b-928b-5387b6a5182f",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
-  },
-  {
     "GameID": "48e0aca3-1157-4968-b560-c28d29022be3",
     "HomePoints": "42",
     "AwayPoints": "41",
@@ -28733,13 +28005,6 @@
     "AwayPoints": "14",
     "Season": "2022",
     "Week": "9"
-  },
-  {
-    "GameID": "494b5477-d5a1-4685-a0c8-2e4e6025d9ca",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
   },
   {
     "GameID": "494d60be-5dcb-4a55-bc06-3b5cab12c0c3",
@@ -28922,13 +28187,6 @@
     "AwayPoints": "14",
     "Season": "2016",
     "Week": "7"
-  },
-  {
-    "GameID": "49e2a298-0eeb-405f-b68e-127ef0fcc067",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
   },
   {
     "GameID": "49e49158-670f-4cca-9a08-4a6534eeeae4",
@@ -29174,13 +28432,6 @@
     "AwayPoints": "22",
     "Season": "2016",
     "Week": "3"
-  },
-  {
-    "GameID": "4a8216a6-1c0d-4409-8467-28f2c155b3c3",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
   },
   {
     "GameID": "4a870a9a-e11f-49f3-9f4f-3b00f217fd81",
@@ -30702,20 +29953,6 @@
     "Week": "3"
   },
   {
-    "GameID": "4e689026-7020-4128-af26-a11042b768bd",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "3"
-  },
-  {
-    "GameID": "4e6e5019-1e6d-41bb-950a-31adf33795e8",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "3"
-  },
-  {
     "GameID": "4e6ed207-a4be-4bc6-b561-40430d9315d1",
     "HomePoints": "42",
     "AwayPoints": "41",
@@ -31899,13 +31136,6 @@
     "Week": "11"
   },
   {
-    "GameID": "515cb67a-e10a-4b73-9ca4-fe16334b83b0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "22"
-  },
-  {
     "GameID": "515eb842-9ebb-46ed-bbf3-d34b7b5cb33d",
     "HomePoints": "28",
     "AwayPoints": "24",
@@ -32037,13 +31267,6 @@
     "AwayPoints": "17",
     "Season": "2019",
     "Week": "14"
-  },
-  {
-    "GameID": "51b59e43-7fc5-4608-8cb1-3599e03e61b4",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2016",
-    "Week": "12"
   },
   {
     "GameID": "51b6bada-f798-45ec-b6fa-35639141aa85",
@@ -32340,13 +31563,6 @@
     "Week": "8"
   },
   {
-    "GameID": "524acbd1-30d3-4187-99ee-f0281b63f28a",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
-  },
-  {
     "GameID": "5250a9b8-8ae8-47c2-9236-59aa8a632852",
     "HomePoints": "24",
     "AwayPoints": "21",
@@ -32387,13 +31603,6 @@
     "AwayPoints": "27",
     "Season": "2020",
     "Week": "25"
-  },
-  {
-    "GameID": "52636b05-7686-44e7-9f39-ae0bb2be14f9",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2016",
-    "Week": "6"
   },
   {
     "GameID": "526a677a-5e91-4d83-bdc8-44236a3c15fb",
@@ -32457,13 +31666,6 @@
     "AwayPoints": "38",
     "Season": "2022",
     "Week": "4"
-  },
-  {
-    "GameID": "528b94c5-bfad-42aa-8b5c-c110957b7b9b",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "22"
   },
   {
     "GameID": "528bb895-da00-428e-8a9d-ebf6204bf8bf",
@@ -32688,13 +31890,6 @@
     "AwayPoints": "38",
     "Season": "2014",
     "Week": "2"
-  },
-  {
-    "GameID": "531cfc17-cc11-49e2-aab1-1dc922a7faf8",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
   },
   {
     "GameID": "53243644-2b80-4c53-9e71-f9d19c5a3dd3",
@@ -33677,13 +32872,6 @@
     "Week": "13"
   },
   {
-    "GameID": "55ac7bb5-9334-4fb9-9058-45e558c5943a",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
-  },
-  {
     "GameID": "55b3ff34-7d14-47dd-b984-1992b09e6701",
     "HomePoints": "42",
     "AwayPoints": "10",
@@ -33836,13 +33024,6 @@
     "AwayPoints": "14",
     "Season": "2019",
     "Week": "8"
-  },
-  {
-    "GameID": "55fb30fc-9259-4e30-8a8f-209c28030abe",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2022",
-    "Week": "5"
   },
   {
     "GameID": "55ff524c-2efa-4eb0-b058-1e5610bd2a11",
@@ -34221,13 +33402,6 @@
     "AwayPoints": "0",
     "Season": "2021",
     "Week": "12"
-  },
-  {
-    "GameID": "5712624f-b3d4-4b94-bdac-3e6270eecbeb",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2017",
-    "Week": "7"
   },
   {
     "GameID": "5712763b-e5f2-470a-bb23-c8e928ea77d1",
@@ -34769,13 +33943,6 @@
     "Week": "12"
   },
   {
-    "GameID": "58590424-f615-4b2e-8fe2-084e317d912c",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "30"
-  },
-  {
     "GameID": "5863df84-5bc3-46c1-a12f-6dfab7b705f8",
     "HomePoints": "19",
     "AwayPoints": "24",
@@ -34851,13 +34018,6 @@
     "AwayPoints": "20",
     "Season": "2022",
     "Week": "4"
-  },
-  {
-    "GameID": "588ae16e-91ec-43fd-b9a3-24684cdd1735",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2016",
-    "Week": "12"
   },
   {
     "GameID": "588b90a5-78ca-490d-9cde-725d8924dae3",
@@ -35175,13 +34335,6 @@
     "Week": "2"
   },
   {
-    "GameID": "59856a1b-0998-49ff-8e89-4b25b11af013",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "22"
-  },
-  {
     "GameID": "59919206-786b-419f-935d-9a7be83c4d42",
     "HomePoints": "45",
     "AwayPoints": "14",
@@ -35273,13 +34426,6 @@
     "Week": "10"
   },
   {
-    "GameID": "59d4a05e-e8c9-43b9-94c4-4c76cee941ad",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
-  },
-  {
     "GameID": "59e2060c-9189-4e0c-820e-8e226d90b473",
     "HomePoints": "27",
     "AwayPoints": "35",
@@ -35320,13 +34466,6 @@
     "AwayPoints": "7",
     "Season": "2019",
     "Week": "14"
-  },
-  {
-    "GameID": "59f8b2da-7b91-43c6-a05e-f3ac2baf84c2",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "6"
   },
   {
     "GameID": "59fa548f-09c0-4f4d-adae-b041c7c7e6fd",
@@ -36330,13 +35469,6 @@
     "Week": "2"
   },
   {
-    "GameID": "5c8bd1bc-1b30-4774-a03a-f941fcba3e74",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
-  },
-  {
     "GameID": "5c8ce418-dae4-4bd0-a1cd-fc12bee85c3a",
     "HomePoints": "73",
     "AwayPoints": "14",
@@ -37035,13 +36167,6 @@
     "AwayPoints": "24",
     "Season": "2023",
     "Week": "5"
-  },
-  {
-    "GameID": "5e4fb09c-21ef-4aae-9cce-0b6b271397a8",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
   },
   {
     "GameID": "5e5089e7-7e82-4cfa-8bf2-2741e3066d2b",
@@ -38164,13 +37289,6 @@
     "Week": "12"
   },
   {
-    "GameID": "61466ee0-2b62-4aae-b696-88f3bdbe3351",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "3"
-  },
-  {
     "GameID": "6148b532-643d-40d8-bea6-08a00f4bb34c",
     "HomePoints": "60",
     "AwayPoints": "7",
@@ -38232,13 +37350,6 @@
     "AwayPoints": "27",
     "Season": "2022",
     "Week": "10"
-  },
-  {
-    "GameID": "61750c78-d6f9-4672-ba80-af173c86336e",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
   },
   {
     "GameID": "617a3c21-71cc-4787-bd27-090fa1d6e839",
@@ -38878,13 +37989,6 @@
     "Week": "11"
   },
   {
-    "GameID": "63410a6d-e00e-4c54-bb32-e0c2603266c1",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
-  },
-  {
     "GameID": "6343b50b-2ccd-4d06-99dc-c78297c6f118",
     "HomePoints": "45",
     "AwayPoints": "21",
@@ -38904,13 +38008,6 @@
     "AwayPoints": "28",
     "Season": "2021",
     "Week": "6"
-  },
-  {
-    "GameID": "6353c33b-190c-4e9a-bae9-ce779375f8ce",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2021",
-    "Week": "1"
   },
   {
     "GameID": "63618abf-9910-4966-b88d-0a7ac1678b6a",
@@ -39704,13 +38801,6 @@
     "Week": "7"
   },
   {
-    "GameID": "65963626-8e5e-4e2b-af00-7ede67337f51",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "23"
-  },
-  {
     "GameID": "659c4eef-6c2e-4c6e-a3f2-9eab705a757d",
     "HomePoints": "35",
     "AwayPoints": "54",
@@ -39718,25 +38808,11 @@
     "Week": "12"
   },
   {
-    "GameID": "65a191c4-b91f-4fec-b999-ae33f65b72db",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
-  },
-  {
     "GameID": "65a51fc4-6243-4dc7-bd9b-d546ee9e102c",
     "HomePoints": "31",
     "AwayPoints": "23",
     "Season": "2019",
     "Week": "1"
-  },
-  {
-    "GameID": "65a6337b-d609-424a-a18b-ad61861f46ca",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2016",
-    "Week": "7"
   },
   {
     "GameID": "65adb250-d624-47bd-a1cc-4874d78c20ef",
@@ -40299,13 +39375,6 @@
     "Week": "11"
   },
   {
-    "GameID": "671327a6-89f2-43bf-ac5e-bce08f66487f",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "26"
-  },
-  {
     "GameID": "6715e7aa-8587-4e51-a80c-6a71e9d75436",
     "HomePoints": "35",
     "AwayPoints": "28",
@@ -40507,13 +39576,6 @@
     "AwayPoints": "31",
     "Season": "2018",
     "Week": "12"
-  },
-  {
-    "GameID": "67b3bb67-a144-442b-b416-671d0091411e",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "26"
   },
   {
     "GameID": "67b9e412-bdfc-4897-adef-d964dc531dfc",
@@ -41972,13 +41034,6 @@
     "Week": "14"
   },
   {
-    "GameID": "6b69d81f-c74f-44bc-8961-6026e173c42c",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "30"
-  },
-  {
     "GameID": "6b69d8c3-b71d-49cf-8edd-56d272a81e76",
     "HomePoints": "24",
     "AwayPoints": "27",
@@ -41997,13 +41052,6 @@
     "HomePoints": "38",
     "AwayPoints": "24",
     "Season": "2023",
-    "Week": "10"
-  },
-  {
-    "GameID": "6b6aa467-8092-4ca5-9058-2fc63b894dcc",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
     "Week": "10"
   },
   {
@@ -42117,13 +41165,6 @@
     "AwayPoints": "28",
     "Season": "2018",
     "Week": "3"
-  },
-  {
-    "GameID": "6bb47b57-44d9-424b-927b-7e54517fd296",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "26"
   },
   {
     "GameID": "6bb7d081-96a8-4726-bdb5-2dedb3aae5fb",
@@ -42348,13 +41389,6 @@
     "AwayPoints": "42",
     "Season": "2018",
     "Week": "7"
-  },
-  {
-    "GameID": "6c756652-388f-454d-9042-ebd6f7008071",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "30"
   },
   {
     "GameID": "6c76c4a6-c227-4ad4-bbf2-3e61b0833a1b",
@@ -42649,13 +41683,6 @@
     "AwayPoints": "10",
     "Season": "2014",
     "Week": "8"
-  },
-  {
-    "GameID": "6d24d88b-b1ff-4705-a31e-3a6a57db3736",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
   },
   {
     "GameID": "6d257e6a-66c7-4bc4-8dd0-c5ec1f4de541",
@@ -43127,20 +42154,6 @@
     "Week": "3"
   },
   {
-    "GameID": "6e46ea2b-63ea-46b3-a94a-663f1bf93505",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
-  },
-  {
-    "GameID": "6e4a99af-2b90-487e-84e3-b03064d2d30d",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
-  },
-  {
     "GameID": "6e4be3ef-1fd6-4039-82ad-abdcc059502e",
     "HomePoints": "48",
     "AwayPoints": "21",
@@ -43291,13 +42304,6 @@
     "GameID": "6ea1e6a3-861c-4839-bc45-1a215a20496b",
     "HomePoints": "13",
     "AwayPoints": "40",
-    "Season": "2017",
-    "Week": "2"
-  },
-  {
-    "GameID": "6ea2055f-100d-4035-a47a-f2b2cf1d1a97",
-    "HomePoints": "0",
-    "AwayPoints": "0",
     "Season": "2017",
     "Week": "2"
   },
@@ -43813,13 +42819,6 @@
     "Week": "1"
   },
   {
-    "GameID": "6fc6d747-f551-4ffe-aa50-1f05389c809c",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "26"
-  },
-  {
     "GameID": "6fcd7d0d-a379-4e87-87ef-4746cb7fe937",
     "HomePoints": "35",
     "AwayPoints": "49",
@@ -44014,13 +43013,6 @@
     "AwayPoints": "26",
     "Season": "2018",
     "Week": "2"
-  },
-  {
-    "GameID": "70373747-04c7-41c1-adfd-203a60a007d2",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
   },
   {
     "GameID": "7039ae95-713d-41ff-b81a-c829ef8aa702",
@@ -44455,13 +43447,6 @@
     "AwayPoints": "0",
     "Season": "2023",
     "Week": "2"
-  },
-  {
-    "GameID": "7176843d-7acc-45c1-afaa-5d3a68af216d",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
   },
   {
     "GameID": "7180bc79-312b-421d-ad2f-fd7e48a4d55f",
@@ -44912,13 +43897,6 @@
     "Week": "10"
   },
   {
-    "GameID": "72530570-62cc-4a24-a00c-a107c22a30a8",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
-  },
-  {
     "GameID": "72549036-1dce-42bb-b068-b3b1b36e0bea",
     "HomePoints": "21",
     "AwayPoints": "25",
@@ -45178,13 +44156,6 @@
     "Week": "14"
   },
   {
-    "GameID": "72d34f09-e0d1-41c8-8100-cf60674fcf0f",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
-  },
-  {
     "GameID": "72d7b7ac-c974-4079-a972-533e41f3ece6",
     "HomePoints": "45",
     "AwayPoints": "27",
@@ -45381,25 +44352,11 @@
     "Week": "4"
   },
   {
-    "GameID": "735cd54d-6ea1-4872-8333-b0712ede47e0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "26"
-  },
-  {
     "GameID": "735f6604-5a6c-4bc7-9266-fc3d189dc1ae",
     "HomePoints": "24",
     "AwayPoints": "17",
     "Season": "2022",
     "Week": "8"
-  },
-  {
-    "GameID": "73676ff0-ea1a-4b6f-87c0-e01850e5b6a3",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
   },
   {
     "GameID": "736a3025-8fd6-4374-980e-d9f49063b2b5",
@@ -45505,13 +44462,6 @@
     "AwayPoints": "10",
     "Season": "2022",
     "Week": "8"
-  },
-  {
-    "GameID": "73ac4c5b-6703-4491-9d47-70b64f65dc8c",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2019",
-    "Week": "1"
   },
   {
     "GameID": "73adb923-6ec8-4159-b2e3-1b934c2e76fe",
@@ -46282,13 +45232,6 @@
     "AwayPoints": "17",
     "Season": "2017",
     "Week": "5"
-  },
-  {
-    "GameID": "75975135-bf1b-4cb7-b606-5a1f8c219fc5",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
   },
   {
     "GameID": "7598fe5c-2933-4f8a-be24-9ba3f2991c34",
@@ -47194,13 +46137,6 @@
     "Week": "9"
   },
   {
-    "GameID": "77869fd1-71ac-49df-9187-0b7b49cc6667",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "2"
-  },
-  {
     "GameID": "7786c093-2280-4c5e-b9e7-463a53852c1b",
     "HomePoints": "20",
     "AwayPoints": "26",
@@ -47628,13 +46564,6 @@
     "Week": "12"
   },
   {
-    "GameID": "78b2364f-ad8c-4d9e-8e32-26836a08ec7a",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
-  },
-  {
     "GameID": "78b8f927-2e38-40ed-9134-8087014a15b2",
     "HomePoints": "14",
     "AwayPoints": "37",
@@ -47782,13 +46711,6 @@
     "Week": "11"
   },
   {
-    "GameID": "79171028-c048-42e0-82ba-d630653e9c93",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
-  },
-  {
     "GameID": "79190467-6a51-42d5-94da-aaaadbb4ea0f",
     "HomePoints": "3",
     "AwayPoints": "23",
@@ -47922,13 +46844,6 @@
     "Week": "13"
   },
   {
-    "GameID": "796af27c-6827-44a9-81af-8e62a6a40c26",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
-  },
-  {
     "GameID": "796b379c-1774-474f-b1a8-ee3bc5212f94",
     "HomePoints": "28",
     "AwayPoints": "0",
@@ -47997,13 +46912,6 @@
     "AwayPoints": "48",
     "Season": "2019",
     "Week": "12"
-  },
-  {
-    "GameID": "798ed579-feae-40e6-805d-10c971139137",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
   },
   {
     "GameID": "79945f58-c27d-4313-9704-9994314fe1e4",
@@ -48895,13 +47803,6 @@
     "Week": "14"
   },
   {
-    "GameID": "7ba8a9b0-6cba-4d65-a33f-cb864b10b91b",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "16"
-  },
-  {
     "GameID": "7bacc812-4092-478f-8707-eb6691144cc0",
     "HomePoints": "42",
     "AwayPoints": "10",
@@ -48935,13 +47836,6 @@
     "AwayPoints": "17",
     "Season": "2020",
     "Week": "11"
-  },
-  {
-    "GameID": "7bbad66c-c5cf-4d50-a22b-5f0d12d38511",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "16"
   },
   {
     "GameID": "7bbad97f-a618-4b1d-a343-d2467f69f286",
@@ -49039,13 +47933,6 @@
     "HomePoints": "35",
     "AwayPoints": "0",
     "Season": "2018",
-    "Week": "15"
-  },
-  {
-    "GameID": "7bdeadb6-756a-490a-a656-2ff6dcdec815",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
     "Week": "15"
   },
   {
@@ -50428,13 +49315,6 @@
     "Week": "5"
   },
   {
-    "GameID": "7f55162f-c441-419a-b338-719d087dd975",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
-  },
-  {
     "GameID": "7f5567e3-f665-43c6-9da7-af50fa0b445b",
     "HomePoints": "10",
     "AwayPoints": "31",
@@ -50482,13 +49362,6 @@
     "AwayPoints": "13",
     "Season": "2017",
     "Week": "1"
-  },
-  {
-    "GameID": "7f66185c-7716-4fce-a94a-a3d27ae34369",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
   },
   {
     "GameID": "7f672bbd-b57d-414c-a25a-3a8289195273",
@@ -50678,13 +49551,6 @@
     "AwayPoints": "7",
     "Season": "2015",
     "Week": "5"
-  },
-  {
-    "GameID": "7fbac986-c875-4cc5-bda1-94c0c17f4b3d",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "8"
   },
   {
     "GameID": "7fbd010d-7720-4fc2-a4be-fc61712996d7",
@@ -50918,13 +49784,6 @@
     "Week": "1"
   },
   {
-    "GameID": "805c309e-f60f-4adf-a8b1-a5abff4a2243",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
-  },
-  {
     "GameID": "8063adaa-bf85-48e3-a5a4-25421d070c34",
     "HomePoints": "56",
     "AwayPoints": "14",
@@ -50958,13 +49817,6 @@
     "AwayPoints": "17",
     "Season": "2017",
     "Week": "2"
-  },
-  {
-    "GameID": "8068d955-9cbe-4eb7-b2f7-e22f911bd8f4",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
   },
   {
     "GameID": "806a537d-ada8-4449-b91d-7bb87cbdd984",
@@ -51660,13 +50512,6 @@
     "Week": "11"
   },
   {
-    "GameID": "8221d068-8c04-4111-842c-aa1a85a7f762",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "3"
-  },
-  {
     "GameID": "822254ef-a9ac-4266-bf96-d0d1ad261bbb",
     "HomePoints": "42",
     "AwayPoints": "7",
@@ -52010,13 +50855,6 @@
     "Week": "3"
   },
   {
-    "GameID": "82c25ed1-e434-4442-9727-427a88a41aee",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
-  },
-  {
     "GameID": "82c6d9e4-db3e-4626-883a-afa56b0ff49e",
     "HomePoints": "24",
     "AwayPoints": "10",
@@ -52155,13 +50993,6 @@
     "AwayPoints": "33",
     "Season": "2022",
     "Week": "10"
-  },
-  {
-    "GameID": "831138fc-6c8e-48ef-a90e-d6962d54b5e9",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
   },
   {
     "GameID": "8315d83a-a4de-4c25-be46-981fb9d26745",
@@ -52330,13 +51161,6 @@
     "AwayPoints": "14",
     "Season": "2022",
     "Week": "1"
-  },
-  {
-    "GameID": "838169e7-272e-4a25-bd38-9da1e97ef3f6",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "9"
   },
   {
     "GameID": "8388c3e8-39e5-4197-a0f6-a23496984e67",
@@ -52892,25 +51716,11 @@
     "Week": "6"
   },
   {
-    "GameID": "84d6e46f-a904-4576-a2da-32c487e4c82b",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "2"
-  },
-  {
     "GameID": "84d90feb-e893-4cc5-a849-2650cd70d892",
     "HomePoints": "48",
     "AwayPoints": "3",
     "Season": "2019",
     "Week": "5"
-  },
-  {
-    "GameID": "84e1b381-4a33-40df-8773-02255d6c8039",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "25"
   },
   {
     "GameID": "84e6bd7c-dd26-4a4b-9491-ccec88bea8e5",
@@ -53100,13 +51910,6 @@
     "AwayPoints": "20",
     "Season": "2014",
     "Week": "19"
-  },
-  {
-    "GameID": "856f9e99-000c-4f59-b4e5-4e9adfa767c8",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
   },
   {
     "GameID": "85734a3f-dc7b-4edc-9e0b-c864d586374b",
@@ -53429,13 +52232,6 @@
     "AwayPoints": "14",
     "Season": "2023",
     "Week": "8"
-  },
-  {
-    "GameID": "8636e830-b484-48f1-8ea4-7945d46b7c0e",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "2"
   },
   {
     "GameID": "863a0009-70fa-45a6-9a25-07e0f8828780",
@@ -53807,13 +52603,6 @@
     "AwayPoints": "25",
     "Season": "2015",
     "Week": "7"
-  },
-  {
-    "GameID": "8734c787-2b00-4670-a764-118928d7481f",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
   },
   {
     "GameID": "87372d5c-ebca-49cb-8e5f-9d959e38f315",
@@ -54311,13 +53100,6 @@
     "AwayPoints": "27",
     "Season": "2017",
     "Week": "11"
-  },
-  {
-    "GameID": "88582713-ac80-4304-a45f-7d519d306bba",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "16"
   },
   {
     "GameID": "885b2985-5185-477d-bf35-587c5e788de4",
@@ -54901,13 +53683,6 @@
     "Week": "8"
   },
   {
-    "GameID": "89aa2ddf-df28-4d02-855d-04292ca934e8",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
-  },
-  {
     "GameID": "89aee1d4-f265-44c9-a20d-abbc1b2f0328",
     "HomePoints": "9",
     "AwayPoints": "6",
@@ -54969,13 +53744,6 @@
     "AwayPoints": "10",
     "Season": "2017",
     "Week": "1"
-  },
-  {
-    "GameID": "89d27b6b-e580-44ca-8f40-f0363dd24513",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
   },
   {
     "GameID": "89d2e20c-d3bf-4d5b-8702-0783ffe36a99",
@@ -55741,13 +54509,6 @@
     "Week": "11"
   },
   {
-    "GameID": "8bc5367a-d95d-49cd-b9a7-499637e16dfb",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
-  },
-  {
     "GameID": "8bc86f88-819f-4d90-932c-149ef12da0fe",
     "HomePoints": "31",
     "AwayPoints": "14",
@@ -55944,13 +54705,6 @@
     "Week": "5"
   },
   {
-    "GameID": "8c408657-445a-40c2-9041-2e0809ddbb88",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2017",
-    "Week": "3"
-  },
-  {
     "GameID": "8c424997-ddd6-4aff-b329-3f39d3094c9b",
     "HomePoints": "29",
     "AwayPoints": "26",
@@ -56088,13 +54842,6 @@
     "HomePoints": "29",
     "AwayPoints": "34",
     "Season": "2015",
-    "Week": "14"
-  },
-  {
-    "GameID": "8cbc4c77-3005-4f6a-8926-275284095ade",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
     "Week": "14"
   },
   {
@@ -56273,25 +55020,11 @@
     "Week": "12"
   },
   {
-    "GameID": "8d1f158d-bb50-4aca-b9a1-803a68cc344a",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "3"
-  },
-  {
     "GameID": "8d21ee3f-8284-4c4c-b94f-5eb5c4bf9034",
     "HomePoints": "48",
     "AwayPoints": "33",
     "Season": "2023",
     "Week": "2"
-  },
-  {
-    "GameID": "8d26d3bc-10d0-4bf6-bdfa-f6d44bd24d56",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
   },
   {
     "GameID": "8d37aebd-1424-4fbc-9381-fb8f1e9b1c65",
@@ -56483,13 +55216,6 @@
     "Week": "10"
   },
   {
-    "GameID": "8db1e9cd-ca8d-42d9-ae94-c596ae6f4dd0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
-  },
-  {
     "GameID": "8dba81fd-57dc-48a6-93e1-f8c157ab4e85",
     "HomePoints": "14",
     "AwayPoints": "38",
@@ -56665,13 +55391,6 @@
     "Week": "1"
   },
   {
-    "GameID": "8e1e4fd5-65a8-4c3b-9f10-258b38de71c7",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
-  },
-  {
     "GameID": "8e1f3dc9-9d2a-4be7-a3a6-720e936dce47",
     "HomePoints": "42",
     "AwayPoints": "20",
@@ -56789,13 +55508,6 @@
     "AwayPoints": "24",
     "Season": "2021",
     "Week": "5"
-  },
-  {
-    "GameID": "8e73490e-4eee-44c8-beb7-c763865bac7c",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
   },
   {
     "GameID": "8e7ad89f-1e78-464b-a5cd-ad946f26a61d",
@@ -57545,13 +56257,6 @@
     "AwayPoints": "16",
     "Season": "2014",
     "Week": "12"
-  },
-  {
-    "GameID": "908f9905-48c0-4c8b-b7d7-0a832a2bccba",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
   },
   {
     "GameID": "90913549-48fb-4716-9d98-a05259190c68",
@@ -58688,13 +57393,6 @@
     "Week": "12"
   },
   {
-    "GameID": "93cb72c9-339c-446a-abc6-4315f407fa05",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
-  },
-  {
     "GameID": "93e0a6ca-f668-4793-b74f-4894af736e3b",
     "HomePoints": "31",
     "AwayPoints": "12",
@@ -58835,13 +57533,6 @@
     "Week": "5"
   },
   {
-    "GameID": "9437702c-fabb-42e5-b96f-868a373779fe",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "16"
-  },
-  {
     "GameID": "9439bd8a-22c1-497a-b901-c69554ed6507",
     "HomePoints": "7",
     "AwayPoints": "35",
@@ -58919,13 +57610,6 @@
     "Week": "5"
   },
   {
-    "GameID": "9489a4fa-60b9-465a-9323-d6c40106f8bd",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
-  },
-  {
     "GameID": "948d1ce0-4802-44b7-bd23-d6b367656b75",
     "HomePoints": "35",
     "AwayPoints": "28",
@@ -58961,13 +57645,6 @@
     "Week": "4"
   },
   {
-    "GameID": "949ada8e-82ec-4f8d-babe-f223b41b0f92",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
-  },
-  {
     "GameID": "949c554e-65db-471e-8895-d201349b4ab2",
     "HomePoints": "37",
     "AwayPoints": "38",
@@ -58994,13 +57671,6 @@
     "AwayPoints": "3",
     "Season": "2017",
     "Week": "6"
-  },
-  {
-    "GameID": "94a5a7c5-ffe5-47a9-9dbd-e9368088be27",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
   },
   {
     "GameID": "94a5d38e-cbc5-43e4-947d-bfad6d06002c",
@@ -59619,13 +58289,6 @@
     "Week": "4"
   },
   {
-    "GameID": "962420ff-d937-4cff-a49e-746d383122c8",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "16"
-  },
-  {
     "GameID": "96246a23-a59a-4c76-bc4b-ffd17ecc1ec3",
     "HomePoints": "24",
     "AwayPoints": "16",
@@ -60207,13 +58870,6 @@
     "Week": "5"
   },
   {
-    "GameID": "9760b1e9-fde8-4c9c-b9be-9a664dc28da9",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
-  },
-  {
     "GameID": "97692674-dcf8-4fab-aa98-708564bcbdd7",
     "HomePoints": "7",
     "AwayPoints": "49",
@@ -60648,13 +59304,6 @@
     "Week": "7"
   },
   {
-    "GameID": "987687a4-1789-4c98-a1ed-d8758b6deb1d",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
-  },
-  {
     "GameID": "98776150-ee83-4808-a0d9-1900d08808c5",
     "HomePoints": "27",
     "AwayPoints": "13",
@@ -60828,13 +59477,6 @@
     "AwayPoints": "10",
     "Season": "2022",
     "Week": "3"
-  },
-  {
-    "GameID": "98edd649-61a1-4fec-9e56-8a5e3d6b51b4",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "18"
   },
   {
     "GameID": "98fa9673-0df7-4e84-84f1-f6374bbcef82",
@@ -61017,13 +59659,6 @@
     "AwayPoints": "37",
     "Season": "2022",
     "Week": "8"
-  },
-  {
-    "GameID": "9956fd6b-4408-4456-a31a-0946337b6057",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "31"
   },
   {
     "GameID": "996aaffa-e805-420a-9b0b-e7e55454dc46",
@@ -61509,13 +60144,6 @@
     "Week": "12"
   },
   {
-    "GameID": "9ab5323e-3545-4ca7-b7e5-616d0cb47386",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "4"
-  },
-  {
     "GameID": "9ab66f4d-2418-4a44-a73a-f14c0ebc6579",
     "HomePoints": "59",
     "AwayPoints": "13",
@@ -61922,13 +60550,6 @@
     "Week": "6"
   },
   {
-    "GameID": "9b83d9e5-7e68-43a8-9454-fe84f7fd9d48",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
-  },
-  {
     "GameID": "9b8f0d96-2ed1-4570-b7f8-ad37c7be342d",
     "HomePoints": "3",
     "AwayPoints": "17",
@@ -62179,13 +60800,6 @@
     "AwayPoints": "28",
     "Season": "2021",
     "Week": "9"
-  },
-  {
-    "GameID": "9c190b8d-b590-4de9-aa59-0df0b5d4ff46",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "10"
   },
   {
     "GameID": "9c1a7930-7025-4cf2-96e0-cef8b13cebec",
@@ -62578,13 +61192,6 @@
     "AwayPoints": "21",
     "Season": "2017",
     "Week": "13"
-  },
-  {
-    "GameID": "9d08adca-0db8-4c94-b608-af3cd7dab3a0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "5"
   },
   {
     "GameID": "9d08f82a-0a34-487c-a339-d927486ebcee",
@@ -64946,25 +63553,11 @@
     "Week": "8"
   },
   {
-    "GameID": "a29a3bc6-5c2d-4aec-974d-da238a114034",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
-  },
-  {
     "GameID": "a29ee58b-0373-4848-b002-572776fd90d6",
     "HomePoints": "34",
     "AwayPoints": "7",
     "Season": "2021",
     "Week": "2"
-  },
-  {
-    "GameID": "a2b0c13d-e3c8-44b9-b80a-54974fd7a8b7",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "16"
   },
   {
     "GameID": "a2b4dbdc-6298-4e13-b74d-0a931016e582",
@@ -65268,13 +63861,6 @@
     "Week": "20"
   },
   {
-    "GameID": "a36827e1-2732-4429-b7a3-1f04f00eb6cb",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
-  },
-  {
     "GameID": "a36c00d0-9a94-460d-9e11-07caa9efaaf6",
     "HomePoints": "31",
     "AwayPoints": "34",
@@ -65301,13 +63887,6 @@
     "AwayPoints": "19",
     "Season": "2016",
     "Week": "2"
-  },
-  {
-    "GameID": "a38758be-10d9-42ca-a1e9-1fd9551b2150",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
   },
   {
     "GameID": "a38a19e2-dab8-41fb-a939-25da4073979c",
@@ -65499,20 +64078,6 @@
     "Week": "13"
   },
   {
-    "GameID": "a4199b08-17f3-46e4-8359-f0a1001c7f02",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
-  },
-  {
-    "GameID": "a41e1b76-c626-45d6-aa37-7278a64843d0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2021",
-    "Week": "17"
-  },
-  {
     "GameID": "a41f7099-da16-4f70-a6e8-866bfa65f2e7",
     "HomePoints": "7",
     "AwayPoints": "45",
@@ -65532,13 +64097,6 @@
     "AwayPoints": "32",
     "Season": "2017",
     "Week": "9"
-  },
-  {
-    "GameID": "a425f69d-2db7-42bf-b9df-536c2d3e3021",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "24"
   },
   {
     "GameID": "a428f50d-184f-4be0-8ba6-d3678902df0d",
@@ -65651,13 +64209,6 @@
     "AwayPoints": "27",
     "Season": "2018",
     "Week": "13"
-  },
-  {
-    "GameID": "a4679aba-4b2c-4da8-8981-f86db43edfed",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "10"
   },
   {
     "GameID": "a469d651-9a19-4876-9440-27206f95108e",
@@ -65847,13 +64398,6 @@
     "AwayPoints": "17",
     "Season": "2018",
     "Week": "10"
-  },
-  {
-    "GameID": "a4d47afd-bb2e-475d-acb5-16a25bf5d772",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2023",
-    "Week": "7"
   },
   {
     "GameID": "a4d76a32-9cf1-4739-8529-ac27d4411952",
@@ -66169,13 +64713,6 @@
     "AwayPoints": "35",
     "Season": "2019",
     "Week": "10"
-  },
-  {
-    "GameID": "a56a2a70-4efc-4769-b4ec-2824cf75d57b",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "23"
   },
   {
     "GameID": "a575c4a3-47d5-4f6a-a901-496eb78903dd",
@@ -66696,13 +65233,6 @@
     "Week": "9"
   },
   {
-    "GameID": "a6cf5ba9-5952-40f5-a9a5-2a387e4fe455",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "7"
-  },
-  {
     "GameID": "a6d16e40-cc56-493c-b69b-474a693123b9",
     "HomePoints": "41",
     "AwayPoints": "21",
@@ -66862,13 +65392,6 @@
     "AwayPoints": "3",
     "Season": "2023",
     "Week": "4"
-  },
-  {
-    "GameID": "a731777d-64e2-4094-8dd2-aca6b2257b9c",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2021",
-    "Week": "1"
   },
   {
     "GameID": "a7371dde-fd40-4725-acf8-80b7c1e49b21",
@@ -67121,13 +65644,6 @@
     "AwayPoints": "7",
     "Season": "2017",
     "Week": "7"
-  },
-  {
-    "GameID": "a7de4b15-0c0d-49bb-9e9e-8bf75fd9d600",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "30"
   },
   {
     "GameID": "a7ded9f1-a2b6-4890-994a-6d703e3016f0",
@@ -67795,13 +66311,6 @@
     "Week": "6"
   },
   {
-    "GameID": "a9aa53b1-8d7e-4d44-bde3-de9a1448f09d",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "10"
-  },
-  {
     "GameID": "a9ae5871-b9ca-4cc7-a575-d86f2039b67d",
     "HomePoints": "14",
     "AwayPoints": "35",
@@ -68124,13 +66633,6 @@
     "Week": "3"
   },
   {
-    "GameID": "aa879992-fdb3-4a37-845c-691f006cf7fa",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "25"
-  },
-  {
     "GameID": "aa8c34c5-685c-463b-b034-cfc68d08f065",
     "HomePoints": "31",
     "AwayPoints": "20",
@@ -68325,13 +66827,6 @@
     "AwayPoints": "13",
     "Season": "2019",
     "Week": "1"
-  },
-  {
-    "GameID": "ab09dc84-faca-43ea-845b-13156b74f451",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
   },
   {
     "GameID": "ab0d40b2-5bfd-4f57-8716-710cd6d87f49",
@@ -68530,13 +67025,6 @@
     "Week": "12"
   },
   {
-    "GameID": "ab77bf65-5005-436f-9e6b-42e16eebc865",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
-  },
-  {
     "GameID": "ab7a73d7-83bb-4150-b64a-ea0987319ab2",
     "HomePoints": "17",
     "AwayPoints": "21",
@@ -68633,13 +67121,6 @@
     "AwayPoints": "22",
     "Season": "2023",
     "Week": "12"
-  },
-  {
-    "GameID": "aba5cecf-d939-483c-9fcb-762f894f9a75",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2017",
-    "Week": "5"
   },
   {
     "GameID": "aba5ebf9-4e2a-41ed-878d-25fe31afedda",
@@ -68787,13 +67268,6 @@
     "AwayPoints": "31",
     "Season": "2023",
     "Week": "5"
-  },
-  {
-    "GameID": "ac0d7124-7ded-4de0-8a49-041abf962535",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
   },
   {
     "GameID": "ac121b0e-d278-485b-bd0f-a3ab8e32b908",
@@ -69025,13 +67499,6 @@
     "AwayPoints": "24",
     "Season": "2020",
     "Week": "10"
-  },
-  {
-    "GameID": "aca4bc14-0039-4fc4-906c-c827cf5dc14e",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "23"
   },
   {
     "GameID": "acb31f4c-f17b-40c0-8e21-7d6115caee27",
@@ -69650,13 +68117,6 @@
     "Week": "9"
   },
   {
-    "GameID": "ae19a192-77d8-414a-9f1e-45284f6cf972",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "24"
-  },
-  {
     "GameID": "ae215203-b8f4-4168-b2e2-67521c9490fd",
     "HomePoints": "28",
     "AwayPoints": "24",
@@ -69697,13 +68157,6 @@
     "AwayPoints": "3",
     "Season": "2017",
     "Week": "1"
-  },
-  {
-    "GameID": "ae2ff678-f4ef-4143-9100-19a3e6fc93ca",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "9"
   },
   {
     "GameID": "ae327d1a-76d6-481c-adf1-07e75cc7d5bc",
@@ -69977,13 +68430,6 @@
     "AwayPoints": "44",
     "Season": "2014",
     "Week": "10"
-  },
-  {
-    "GameID": "aee70d76-d49d-4280-8e33-8f222ec2e9d5",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
   },
   {
     "GameID": "aee9c8be-438e-4cfc-a22b-53a95b200ba5",
@@ -70476,13 +68922,6 @@
     "Week": "13"
   },
   {
-    "GameID": "b025a94c-d16f-4784-9a5b-b05df9994812",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
-  },
-  {
     "GameID": "b025b267-9e82-4912-b2b9-d49bef1c4207",
     "HomePoints": "30",
     "AwayPoints": "28",
@@ -70530,20 +68969,6 @@
     "AwayPoints": "33",
     "Season": "2014",
     "Week": "4"
-  },
-  {
-    "GameID": "b05495ee-dee3-4d6f-aa1b-2870255a2a5c",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "23"
-  },
-  {
-    "GameID": "b05ae41f-cf46-4e52-a194-8d954759fc97",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "10"
   },
   {
     "GameID": "b05db365-f209-43e1-bf15-08f971853d55",
@@ -70770,13 +69195,6 @@
     "Week": "6"
   },
   {
-    "GameID": "b0e66b54-e09c-4723-beca-169146c0c067",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "22"
-  },
-  {
     "GameID": "b0e6de50-f262-4a50-a54b-1dc1e0b7ae9b",
     "HomePoints": "28",
     "AwayPoints": "33",
@@ -70868,13 +69286,6 @@
     "Week": "9"
   },
   {
-    "GameID": "b12cce4a-7da3-4aa7-a346-703b804ca1fb",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
-  },
-  {
     "GameID": "b12ccf09-e027-414a-b909-8a54673cd862",
     "HomePoints": "30",
     "AwayPoints": "27",
@@ -70887,13 +69298,6 @@
     "AwayPoints": "15",
     "Season": "2023",
     "Week": "18"
-  },
-  {
-    "GameID": "b139b197-b821-4a55-b362-c2d563b36595",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "12"
   },
   {
     "GameID": "b13f0ea4-6be7-44a3-90a2-489b2a22b845",
@@ -71146,13 +69550,6 @@
     "AwayPoints": "20",
     "Season": "2021",
     "Week": "12"
-  },
-  {
-    "GameID": "b1f28be6-ab18-4e85-95af-9c53b1e1dbc4",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2023",
-    "Week": "6"
   },
   {
     "GameID": "b1f30bf8-08bc-4311-acd4-20b1ec380cc6",
@@ -71561,13 +69958,6 @@
     "Week": "9"
   },
   {
-    "GameID": "b2c6ea26-b456-4a53-bf17-64e59973efab",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
-  },
-  {
     "GameID": "b2cca2a0-8a96-4cbe-b985-4de1236ed711",
     "HomePoints": "38",
     "AwayPoints": "14",
@@ -71601,13 +69991,6 @@
     "AwayPoints": "12",
     "Season": "2023",
     "Week": "8"
-  },
-  {
-    "GameID": "b2e61f87-1f2a-4d79-8d92-42530eb737fd",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2019",
-    "Week": "11"
   },
   {
     "GameID": "b2e722b6-c7cb-406f-bfd2-7affd2ba5474",
@@ -71713,13 +70096,6 @@
     "AwayPoints": "40",
     "Season": "2019",
     "Week": "11"
-  },
-  {
-    "GameID": "b32627b9-aded-4d70-86b9-848eaaae1d32",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
   },
   {
     "GameID": "b333a8f5-02d5-4278-ae2e-4fb8ea29f2dc",
@@ -71964,13 +70340,6 @@
     "HomePoints": "54",
     "AwayPoints": "16",
     "Season": "2017",
-    "Week": "3"
-  },
-  {
-    "GameID": "b3fbdb74-188d-4e1b-8788-f76a388e7bc0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
     "Week": "3"
   },
   {
@@ -72709,13 +71078,6 @@
     "Week": "6"
   },
   {
-    "GameID": "b5e3c907-380d-4bbb-afa0-aba56f4219c9",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
-  },
-  {
     "GameID": "b5e4987d-745c-4d5d-8628-d447b6d49140",
     "HomePoints": "14",
     "AwayPoints": "32",
@@ -72924,13 +71286,6 @@
     "AwayPoints": "49",
     "Season": "2017",
     "Week": "6"
-  },
-  {
-    "GameID": "b6a628d0-3b91-4c2e-9eef-9fe7a6201e5c",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "3"
   },
   {
     "GameID": "b6ad6a5d-f678-4f81-9876-34042f3094a3",
@@ -73437,13 +71792,6 @@
     "Week": "2"
   },
   {
-    "GameID": "b7c8060a-5e23-4040-bd16-6acbe530f5f4",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2017",
-    "Week": "3"
-  },
-  {
     "GameID": "b7cff49a-0c36-42c3-b286-a7a020c35db1",
     "HomePoints": "17",
     "AwayPoints": "24",
@@ -73631,13 +71979,6 @@
     "AwayPoints": "10",
     "Season": "2020",
     "Week": "13"
-  },
-  {
-    "GameID": "b821217f-d17a-4e0d-b0fb-4c6e6773dca0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
   },
   {
     "GameID": "b828fbce-2d26-476c-a677-1ece70126a0a",
@@ -73857,13 +72198,6 @@
     "Week": "8"
   },
   {
-    "GameID": "b8bcc6b5-037a-445c-80d3-1cbae424a170",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "22"
-  },
-  {
     "GameID": "b8be4cea-f2d8-4512-bae6-9f8caedc2cfb",
     "HomePoints": "14",
     "AwayPoints": "38",
@@ -73876,13 +72210,6 @@
     "AwayPoints": "43",
     "Season": "2023",
     "Week": "2"
-  },
-  {
-    "GameID": "b8c86e11-d0c5-4abb-8e48-e5bcc8607c33",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
   },
   {
     "GameID": "b8ccd113-1824-433a-aa32-2407b7feb6a1",
@@ -74767,13 +73094,6 @@
     "Week": "13"
   },
   {
-    "GameID": "bb163793-10de-4b40-965a-2ad01147addd",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "26"
-  },
-  {
     "GameID": "bb195452-6de5-443d-94bc-e848a199296f",
     "HomePoints": "20",
     "AwayPoints": "17",
@@ -75227,13 +73547,6 @@
     "AwayPoints": "10",
     "Season": "2020",
     "Week": "23"
-  },
-  {
-    "GameID": "bc16de1d-a545-4fe0-ada1-abda9d69e19d",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
   },
   {
     "GameID": "bc214663-d50b-4229-88e5-cb35de9ac241",
@@ -75831,13 +74144,6 @@
     "Week": "5"
   },
   {
-    "GameID": "bd91d137-b197-4e53-9ae0-85ddf58fd30e",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "7"
-  },
-  {
     "GameID": "bd9a85ac-cf11-4855-b3f8-0adb03d0d226",
     "HomePoints": "49",
     "AwayPoints": "7",
@@ -75976,13 +74282,6 @@
     "AwayPoints": "35",
     "Season": "2021",
     "Week": "10"
-  },
-  {
-    "GameID": "bdd2ee7b-992d-4104-b16b-514ac906c0a0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
   },
   {
     "GameID": "bdd4fe09-5f91-450b-b61d-ec5fae2b7d11",
@@ -76615,13 +74914,6 @@
     "Week": "23"
   },
   {
-    "GameID": "bf47445b-73a9-42fe-b6d4-63db20f4c270",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "9"
-  },
-  {
     "GameID": "bf5224fe-8f9f-434b-98d1-d4a9c0b3da8e",
     "HomePoints": "49",
     "AwayPoints": "14",
@@ -76790,13 +75082,6 @@
     "Week": "4"
   },
   {
-    "GameID": "bfb467a6-5679-4d86-9295-488ccaabf527",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2016",
-    "Week": "6"
-  },
-  {
     "GameID": "bfb57733-a6e4-482d-a041-fa91645f1776",
     "HomePoints": "17",
     "AwayPoints": "10",
@@ -76872,13 +75157,6 @@
     "AwayPoints": "19",
     "Season": "2023",
     "Week": "10"
-  },
-  {
-    "GameID": "bfe7c1be-6116-4f33-a142-d625eef9dd8d",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
   },
   {
     "GameID": "bfe7cc2b-8f25-4686-a2b0-dbb8b274a4af",
@@ -77042,13 +75320,6 @@
     "Week": "8"
   },
   {
-    "GameID": "c04888b3-933e-4ab5-9e90-1cff3e83612e",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
-  },
-  {
     "GameID": "c04a0cb1-8f5a-4200-a705-cc4fbd0bf063",
     "HomePoints": "21",
     "AwayPoints": "19",
@@ -77082,13 +75353,6 @@
     "AwayPoints": "9",
     "Season": "2022",
     "Week": "15"
-  },
-  {
-    "GameID": "c067007c-1222-44cc-b989-a8cb7c5b7ec5",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "3"
   },
   {
     "GameID": "c06b282e-5993-4434-b8e4-b82bf8a12f1b",
@@ -77166,13 +75430,6 @@
     "AwayPoints": "17",
     "Season": "2018",
     "Week": "12"
-  },
-  {
-    "GameID": "c0a3f356-a1bf-4a2c-bdb6-f409de05738d",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
   },
   {
     "GameID": "c0a45078-aad6-478d-bad4-03db5f49d3ef",
@@ -77483,13 +75740,6 @@
     "Week": "10"
   },
   {
-    "GameID": "c170fa9b-c4b9-4e34-8801-096c4e064157",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2023",
-    "Week": "11"
-  },
-  {
     "GameID": "c1726c0f-a119-468d-9f26-1d2027e03758",
     "HomePoints": "31",
     "AwayPoints": "7",
@@ -77642,13 +75892,6 @@
     "AwayPoints": "45",
     "Season": "2016",
     "Week": "12"
-  },
-  {
-    "GameID": "c1e0818a-cbf5-4fb5-ac95-ab9d054b705f",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "2"
   },
   {
     "GameID": "c1e3d6b7-fc6b-49bc-94cb-2cb6cc6e373a",
@@ -78106,13 +76349,6 @@
     "Week": "11"
   },
   {
-    "GameID": "c326fb1d-e67c-45b7-9959-823d69b23ce6",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "3"
-  },
-  {
     "GameID": "c32c9b3b-8c9e-406a-92ab-a20e8b86c3c4",
     "HomePoints": "21",
     "AwayPoints": "49",
@@ -78370,13 +76606,6 @@
     "AwayPoints": "10",
     "Season": "2022",
     "Week": "10"
-  },
-  {
-    "GameID": "c3b2c11a-ca7b-4b69-b074-130e0dfbddaa",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
   },
   {
     "GameID": "c3b6cc21-5207-4039-af94-f9b8caee9210",
@@ -79800,13 +78029,6 @@
     "Week": "11"
   },
   {
-    "GameID": "c7733e8b-a0af-42b0-bd81-d67a73623ccb",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "23"
-  },
-  {
     "GameID": "c779bf30-5f74-498a-8e7e-40f13f19f9d9",
     "HomePoints": "48",
     "AwayPoints": "20",
@@ -79898,13 +78120,6 @@
     "Week": "8"
   },
   {
-    "GameID": "c7aafc79-bbde-4985-b3c6-38d8b58032a1",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
-  },
-  {
     "GameID": "c7ab7c5e-043f-4c5a-8a39-945cf1b62861",
     "HomePoints": "32",
     "AwayPoints": "57",
@@ -79931,13 +78146,6 @@
     "AwayPoints": "10",
     "Season": "2022",
     "Week": "7"
-  },
-  {
-    "GameID": "c7c04288-3f6f-4f55-9cbc-53e337a3595e",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "3"
   },
   {
     "GameID": "c7c27fa5-c094-48d4-826b-0b6eeed5d937",
@@ -80045,13 +78253,6 @@
     "Week": "5"
   },
   {
-    "GameID": "c8046470-70de-41a9-8706-b83c975aa442",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
-  },
-  {
     "GameID": "c804f501-aa8c-4e48-bd46-e6fccffa324a",
     "HomePoints": "56",
     "AwayPoints": "53",
@@ -80106,13 +78307,6 @@
     "AwayPoints": "27",
     "Season": "2020",
     "Week": "13"
-  },
-  {
-    "GameID": "c8271c29-8eca-414a-8066-585bea259d5a",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2017",
-    "Week": "3"
   },
   {
     "GameID": "c82ad9b7-15b2-4cc4-a622-ec8eb4537fc0",
@@ -80267,13 +78461,6 @@
     "AwayPoints": "28",
     "Season": "2016",
     "Week": "3"
-  },
-  {
-    "GameID": "c8b84c5f-1919-4d1d-962b-165430eb28c0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "23"
   },
   {
     "GameID": "c8ba5ed2-511e-44a4-911d-bc2d01ca0780",
@@ -80437,13 +78624,6 @@
     "Week": "2"
   },
   {
-    "GameID": "c9214a4a-004f-4ff8-af9c-399c52b32ac1",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "3"
-  },
-  {
     "GameID": "c921a930-93c5-45ca-b0aa-bf5ee42bb78a",
     "HomePoints": "40",
     "AwayPoints": "35",
@@ -80568,13 +78748,6 @@
     "AwayPoints": "0",
     "Season": "2019",
     "Week": "3"
-  },
-  {
-    "GameID": "c9744e4f-6b91-47b5-a28d-eb53e8418811",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
   },
   {
     "GameID": "c97c5465-a994-46e0-88b2-b39dd013fa1b",
@@ -80780,13 +78953,6 @@
     "Week": "16"
   },
   {
-    "GameID": "c9e2464f-aa03-4aa6-8e58-073825feec11",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "30"
-  },
-  {
     "GameID": "c9e74929-ef77-45c2-925c-1ed47cbbc51a",
     "HomePoints": "59",
     "AwayPoints": "14",
@@ -80834,13 +79000,6 @@
     "AwayPoints": "24",
     "Season": "2018",
     "Week": "6"
-  },
-  {
-    "GameID": "ca0974ff-ef38-4658-9c99-ae7ab48734c0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "24"
   },
   {
     "GameID": "ca09fe9e-f8b4-47c4-84b1-21403ab0f6ab",
@@ -81340,13 +79499,6 @@
     "Week": "4"
   },
   {
-    "GameID": "cb5ddcb1-8a80-47b3-a232-88573789fa41",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "7"
-  },
-  {
     "GameID": "cb621af8-8361-44ed-b22d-a30714a19b54",
     "HomePoints": "28",
     "AwayPoints": "23",
@@ -81403,13 +79555,6 @@
     "Week": "13"
   },
   {
-    "GameID": "cb8f8371-57f7-402c-b49c-e51be6bfcad5",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "30"
-  },
-  {
     "GameID": "cb8ffa41-93b9-4885-b75f-dc5f77acab8b",
     "HomePoints": "43",
     "AwayPoints": "10",
@@ -81459,13 +79604,6 @@
     "Week": "3"
   },
   {
-    "GameID": "cba16c13-39e0-4d88-b08e-7d84e5abeb41",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "3"
-  },
-  {
     "GameID": "cba58c5b-51ac-4204-bcab-12c27e334129",
     "HomePoints": "13",
     "AwayPoints": "15",
@@ -81478,13 +79616,6 @@
     "AwayPoints": "48",
     "Season": "2023",
     "Week": "11"
-  },
-  {
-    "GameID": "cbb61a2c-9782-4fc7-9557-696f8081242f",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
   },
   {
     "GameID": "cbb964c4-5302-4dc1-ad18-afeb6c48190d",
@@ -81534,13 +79665,6 @@
     "AwayPoints": "33",
     "Season": "2023",
     "Week": "2"
-  },
-  {
-    "GameID": "cbcde871-0e1f-43d0-921e-85b0da99c307",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
   },
   {
     "GameID": "cbcdf96e-d55c-4ceb-87b5-d150acb27d39",
@@ -81739,13 +79863,6 @@
     "Week": "6"
   },
   {
-    "GameID": "cc57d9d4-64f9-4a97-8dc9-765f5a684a96",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
-  },
-  {
     "GameID": "cc58da20-1c8d-46b3-a59f-d5e7de0b97c6",
     "HomePoints": "72",
     "AwayPoints": "10",
@@ -81914,13 +80031,6 @@
     "Week": "13"
   },
   {
-    "GameID": "ccca045f-73db-457a-8300-fe90a9a0e142",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2017",
-    "Week": "2"
-  },
-  {
     "GameID": "ccd5fdec-e4c2-4ba1-9c72-793d65db0676",
     "HomePoints": "42",
     "AwayPoints": "0",
@@ -81975,13 +80085,6 @@
     "AwayPoints": "35",
     "Season": "2014",
     "Week": "13"
-  },
-  {
-    "GameID": "cd053735-577d-45e1-86a0-38dd575799ac",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "4"
   },
   {
     "GameID": "cd06d631-d6e3-4d14-9353-cea5174a7b7e",
@@ -82122,13 +80225,6 @@
     "AwayPoints": "14",
     "Season": "2018",
     "Week": "8"
-  },
-  {
-    "GameID": "cd4ea26c-383b-4944-baa1-2924d62eaa78",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2022",
-    "Week": "13"
   },
   {
     "GameID": "cd4ed290-0a24-4a30-a738-f15ac39b1b0d",
@@ -82600,13 +80696,6 @@
     "Week": "13"
   },
   {
-    "GameID": "ce33327a-264e-4b3f-a416-50e70ac7fce4",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "6"
-  },
-  {
     "GameID": "ce395eea-1d39-42e6-b3ae-ddcbe73cb883",
     "HomePoints": "10",
     "AwayPoints": "41",
@@ -82787,13 +80876,6 @@
     "AwayPoints": "20",
     "Season": "2016",
     "Week": "2"
-  },
-  {
-    "GameID": "ceb1ffee-3eb7-4a77-9993-e2fd0fd6ed31",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
   },
   {
     "GameID": "cebaac40-7fa5-4fbf-a925-6f2b98f847a4",
@@ -83370,13 +81452,6 @@
     "Week": "11"
   },
   {
-    "GameID": "d005e219-3b47-4405-8569-5e4f958708ae",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "23"
-  },
-  {
     "GameID": "d00784d7-d4fd-4424-bd34-c1e5a2fca506",
     "HomePoints": "34",
     "AwayPoints": "30",
@@ -83727,13 +81802,6 @@
     "Week": "3"
   },
   {
-    "GameID": "d10347b4-d6fb-442b-b1ed-c95782686eb1",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "26"
-  },
-  {
     "GameID": "d10fac16-013c-482b-aad1-079cf6fc8c48",
     "HomePoints": "10",
     "AwayPoints": "13",
@@ -84000,13 +82068,6 @@
     "Week": "12"
   },
   {
-    "GameID": "d19f4c96-4507-454d-8680-c76185018609",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "11"
-  },
-  {
     "GameID": "d1a3c5b1-1699-4ddb-842c-206d6df70456",
     "HomePoints": "44",
     "AwayPoints": "31",
@@ -84161,13 +82222,6 @@
     "Week": "9"
   },
   {
-    "GameID": "d22a089b-b38f-4762-9b70-895ed1822297",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "2"
-  },
-  {
     "GameID": "d232e732-c0ec-4892-88a5-542377d15263",
     "HomePoints": "28",
     "AwayPoints": "20",
@@ -84203,13 +82257,6 @@
     "Week": "3"
   },
   {
-    "GameID": "d242db40-b6f8-4469-964e-ae1857bc9ea4",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "24"
-  },
-  {
     "GameID": "d2486f4f-18b2-4e40-81a3-39b539742744",
     "HomePoints": "52",
     "AwayPoints": "22",
@@ -84236,13 +82283,6 @@
     "AwayPoints": "10",
     "Season": "2021",
     "Week": "12"
-  },
-  {
-    "GameID": "d25c2cfc-bcc6-4350-9426-8a9b3b79163b",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
   },
   {
     "GameID": "d25c74dd-f2eb-4fe5-b326-b8b482a99143",
@@ -84917,13 +82957,6 @@
     "Week": "13"
   },
   {
-    "GameID": "d3c18c27-49cc-4788-9ab1-be0e75ce7b91",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "3"
-  },
-  {
     "GameID": "d3c3beef-911a-4f3a-bec7-487b6e17ab4a",
     "HomePoints": "44",
     "AwayPoints": "24",
@@ -85204,13 +83237,6 @@
     "Week": "5"
   },
   {
-    "GameID": "d461c99b-39ff-4cb1-bec0-5a4fd1726853",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
-  },
-  {
     "GameID": "d4698a70-953f-4992-a7e5-c8a079ad0a38",
     "HomePoints": "7",
     "AwayPoints": "34",
@@ -85386,13 +83412,6 @@
     "Week": "9"
   },
   {
-    "GameID": "d4fffbed-a60c-4dcb-987c-8be06538915c",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "25"
-  },
-  {
     "GameID": "d5026e0c-d5a3-4517-8bf8-61e8262b1d0a",
     "HomePoints": "25",
     "AwayPoints": "28",
@@ -85561,13 +83580,6 @@
     "Week": "13"
   },
   {
-    "GameID": "d55e865a-3ef5-46f0-8a9c-cadb15f85c85",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
-  },
-  {
     "GameID": "d55ea8a0-dd88-4602-9fca-e7607d7531c6",
     "HomePoints": "27",
     "AwayPoints": "0",
@@ -85638,13 +83650,6 @@
     "Week": "4"
   },
   {
-    "GameID": "d5877fdb-3b0e-4532-a47b-374b41da61e0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2023",
-    "Week": "12"
-  },
-  {
     "GameID": "d597cb4f-c4f8-416e-842c-8bc022f3d090",
     "HomePoints": "16",
     "AwayPoints": "13",
@@ -85701,13 +83706,6 @@
     "Week": "9"
   },
   {
-    "GameID": "d5c54b42-37cd-4578-bd94-ddaed262255e",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
-  },
-  {
     "GameID": "d5cc00e2-7d9d-4c52-a53f-3612fc67ebb3",
     "HomePoints": "38",
     "AwayPoints": "65",
@@ -85750,25 +83748,11 @@
     "Week": "10"
   },
   {
-    "GameID": "d5f1b20e-cbce-4519-899c-414970127109",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
-  },
-  {
     "GameID": "d5f452ca-33e7-4811-88a5-60d0a5adf7a2",
     "HomePoints": "16",
     "AwayPoints": "31",
     "Season": "2017",
     "Week": "2"
-  },
-  {
-    "GameID": "d5f72f3c-3321-4d7e-bbb2-deac1165d8d1",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "4"
   },
   {
     "GameID": "d5fec797-50bf-4240-a84e-6cf10f7f9e3a",
@@ -86051,13 +84035,6 @@
     "Week": "10"
   },
   {
-    "GameID": "d69d2386-c842-42b3-a025-c997db800419",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2023",
-    "Week": "9"
-  },
-  {
     "GameID": "d69eaf34-5655-4443-bd97-6dfdffedacea",
     "HomePoints": "45",
     "AwayPoints": "3",
@@ -86224,13 +84201,6 @@
     "AwayPoints": "33",
     "Season": "2019",
     "Week": "5"
-  },
-  {
-    "GameID": "d6f70ed6-25cc-4679-8716-5b28176aebac",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
   },
   {
     "GameID": "d7021e32-e0a0-4763-af54-618ebebc9483",
@@ -86667,13 +84637,6 @@
     "Week": "5"
   },
   {
-    "GameID": "d8036a79-7fff-4397-96f7-171fd5dd209e",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
-  },
-  {
     "GameID": "d804ff2d-bb42-4364-8965-95b77dd6e196",
     "HomePoints": "7",
     "AwayPoints": "9",
@@ -86989,13 +84952,6 @@
     "Week": "9"
   },
   {
-    "GameID": "d89d437f-fc1b-434e-b14a-e15dac096692",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2014",
-    "Week": "13"
-  },
-  {
     "GameID": "d89ebf35-f671-4048-a982-2c69d881f281",
     "HomePoints": "18",
     "AwayPoints": "12",
@@ -87008,13 +84964,6 @@
     "AwayPoints": "14",
     "Season": "2015",
     "Week": "4"
-  },
-  {
-    "GameID": "d8a57ca1-e81f-4c1c-ac0c-f16828d0b375",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "1"
   },
   {
     "GameID": "d8a6e535-e733-4751-a1bb-934e27919366",
@@ -87192,13 +85141,6 @@
     "Week": "11"
   },
   {
-    "GameID": "d91280e4-3b6f-40ea-a34e-23940b47abda",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "9"
-  },
-  {
     "GameID": "d918922f-a28b-4fe4-b2b0-8bf6cccca9a2",
     "HomePoints": "49",
     "AwayPoints": "31",
@@ -87367,13 +85309,6 @@
     "Week": "5"
   },
   {
-    "GameID": "d96e10b0-0c64-4efd-aa81-666c352fee34",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
-  },
-  {
     "GameID": "d96f2c23-4696-48c6-851d-ae7356c6ae79",
     "HomePoints": "31",
     "AwayPoints": "24",
@@ -87505,13 +85440,6 @@
     "AwayPoints": "27",
     "Season": "2023",
     "Week": "6"
-  },
-  {
-    "GameID": "d9c522dd-a503-449a-a9d2-d31a07d1ddf3",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2017",
-    "Week": "2"
   },
   {
     "GameID": "d9c78c1d-73fc-41f9-a821-71cbb22c5898",
@@ -87815,13 +85743,6 @@
     "Week": "9"
   },
   {
-    "GameID": "da5d0263-054a-48d7-a35b-0811ecfbcbf1",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "12"
-  },
-  {
     "GameID": "da5d8f8e-cffc-4ed0-aa09-c4145c2acac6",
     "HomePoints": "41",
     "AwayPoints": "14",
@@ -88060,13 +85981,6 @@
     "Week": "13"
   },
   {
-    "GameID": "db153eb1-2ddb-4a0f-ba8e-cdf03dc91b7a",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "26"
-  },
-  {
     "GameID": "db181de6-0511-4a3f-8a45-377dacc5e374",
     "HomePoints": "12",
     "AwayPoints": "24",
@@ -88149,13 +86063,6 @@
     "AwayPoints": "28",
     "Season": "2019",
     "Week": "8"
-  },
-  {
-    "GameID": "db53d469-8fb7-4c83-a7ea-acfdacf7da5a",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "30"
   },
   {
     "GameID": "db5a7ced-1444-4ec8-bb70-6c15ec25c165",
@@ -88347,13 +86254,6 @@
     "Week": "1"
   },
   {
-    "GameID": "dbd3b866-465e-46fb-b0aa-351a0eb5fd75",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
-  },
-  {
     "GameID": "dbd4757e-bf35-4b10-81f6-9b3ba72ab46f",
     "HomePoints": "17",
     "AwayPoints": "14",
@@ -88424,13 +86324,6 @@
     "Week": "2"
   },
   {
-    "GameID": "dc061c33-7f84-42fe-a53f-e01b3b997c17",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "16"
-  },
-  {
     "GameID": "dc0ddeb8-eb72-4347-8007-d43af4a904a1",
     "HomePoints": "42",
     "AwayPoints": "17",
@@ -88478,13 +86371,6 @@
     "AwayPoints": "41",
     "Season": "2015",
     "Week": "9"
-  },
-  {
-    "GameID": "dc334637-0fc3-45ee-8d1a-9e0ff50a35e4",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "7"
   },
   {
     "GameID": "dc35c577-3df7-4e3c-886b-bcae02bf95d0",
@@ -89082,13 +86968,6 @@
     "Week": "12"
   },
   {
-    "GameID": "dd719038-602f-4779-860d-27009385236f",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "22"
-  },
-  {
     "GameID": "dd7c674f-6a4d-44e3-bff7-3bc1d0867e85",
     "HomePoints": "17",
     "AwayPoints": "9",
@@ -89397,13 +87276,6 @@
     "Week": "3"
   },
   {
-    "GameID": "de5f8a8e-6beb-4377-acbf-fa2ab66493db",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "3"
-  },
-  {
     "GameID": "de604ddd-4b83-471c-8e69-00808dd0e633",
     "HomePoints": "20",
     "AwayPoints": "14",
@@ -89465,13 +87337,6 @@
     "AwayPoints": "20",
     "Season": "2019",
     "Week": "2"
-  },
-  {
-    "GameID": "de7ee172-27cd-481e-a6cf-8fa742d6b5a0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "16"
   },
   {
     "GameID": "de82ef13-3acc-425a-bbc4-98c69dd678cf",
@@ -89614,13 +87479,6 @@
     "Week": "6"
   },
   {
-    "GameID": "def57463-0cd8-4f05-a07a-74a19175dce5",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
-  },
-  {
     "GameID": "defdbc67-e7a5-4eaa-9f55-8fb48fb74d5d",
     "HomePoints": "34",
     "AwayPoints": "18",
@@ -89740,13 +87598,6 @@
     "Week": "5"
   },
   {
-    "GameID": "df1fafe2-6dcb-4910-be87-c4ee8d9716fb",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "28"
-  },
-  {
     "GameID": "df22d342-9917-408c-9d3e-56747d4104d0",
     "HomePoints": "24",
     "AwayPoints": "13",
@@ -89828,13 +87679,6 @@
     "HomePoints": "20",
     "AwayPoints": "41",
     "Season": "2015",
-    "Week": "5"
-  },
-  {
-    "GameID": "df4fbfd0-09ca-4c6a-8bed-2570149e9c56",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
     "Week": "5"
   },
   {
@@ -89920,13 +87764,6 @@
     "AwayPoints": "41",
     "Season": "2018",
     "Week": "1"
-  },
-  {
-    "GameID": "df7e058a-8c1e-4340-9343-090076f7a597",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2023",
-    "Week": "10"
   },
   {
     "GameID": "df894e67-c7c3-4822-b384-115f1274fd3d",
@@ -90496,13 +88333,6 @@
     "Week": "10"
   },
   {
-    "GameID": "e0e089ac-27c7-480f-ae98-730cbf281716",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
-  },
-  {
     "GameID": "e0e477f1-a1e0-498e-9570-a1a67612dd20",
     "HomePoints": "27",
     "AwayPoints": "28",
@@ -90669,13 +88499,6 @@
     "AwayPoints": "41",
     "Season": "2015",
     "Week": "2"
-  },
-  {
-    "GameID": "e15989c3-f576-4997-ba29-7453d85cef3d",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "29"
   },
   {
     "GameID": "e159edee-a9de-4a0f-ad0d-672ff2bf3f8f",
@@ -91532,13 +89355,6 @@
     "Week": "4"
   },
   {
-    "GameID": "e3811f88-ce99-45b7-9c7d-0f0dade82b53",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "9"
-  },
-  {
     "GameID": "e387c76f-3964-4a40-adf9-92595ee1447d",
     "HomePoints": "10",
     "AwayPoints": "24",
@@ -91798,13 +89614,6 @@
     "Week": "8"
   },
   {
-    "GameID": "e42c02bf-2253-460b-b528-3d3e1b37880d",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "6"
-  },
-  {
     "GameID": "e42ed00e-93dd-4663-8dd3-f5fb666e0214",
     "HomePoints": "7",
     "AwayPoints": "21",
@@ -91908,13 +89717,6 @@
     "AwayPoints": "7",
     "Season": "2019",
     "Week": "13"
-  },
-  {
-    "GameID": "e46db2a7-6385-4044-9bf9-ff3d650dac4b",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
   },
   {
     "GameID": "e46f4653-9a5f-4160-9101-e4764ea471f8",
@@ -92064,13 +89866,6 @@
     "Week": "5"
   },
   {
-    "GameID": "e4c35ec8-e6d1-4fb1-be61-63a4f3b15e8a",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "3"
-  },
-  {
     "GameID": "e4c475c1-749b-440c-b858-85aa2701fa62",
     "HomePoints": "41",
     "AwayPoints": "33",
@@ -92090,13 +89885,6 @@
     "AwayPoints": "27",
     "Season": "2019",
     "Week": "10"
-  },
-  {
-    "GameID": "e4dbdbea-58c5-47c9-9bb7-451d6a6f6147",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
   },
   {
     "GameID": "e4e1d089-d49e-45c3-88ac-841ae8ce51ea",
@@ -92300,13 +90088,6 @@
     "AwayPoints": "42",
     "Season": "2015",
     "Week": "4"
-  },
-  {
-    "GameID": "e56efa7d-2897-4547-b667-600b6c48aec7",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
   },
   {
     "GameID": "e5769938-4d0e-464e-8e61-a5e8ddaa5705",
@@ -92937,13 +90718,6 @@
     "AwayPoints": "44",
     "Season": "2016",
     "Week": "7"
-  },
-  {
-    "GameID": "e6e468ff-231f-4a06-aa45-07b4473d30e5",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
   },
   {
     "GameID": "e6e480c4-9d15-46e6-8ec9-4fab44a40687",
@@ -94479,13 +92253,6 @@
     "Week": "3"
   },
   {
-    "GameID": "eacdf0f5-b2be-4361-bb11-b6ec29c8cbf4",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "1"
-  },
-  {
     "GameID": "ead24181-d31a-4b08-865c-7140778e2cf6",
     "HomePoints": "38",
     "AwayPoints": "13",
@@ -95137,13 +92904,6 @@
     "Week": "5"
   },
   {
-    "GameID": "ec6c0afc-d82a-4459-9da8-406ef68828b7",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "4"
-  },
-  {
     "GameID": "ec6ea092-2a32-43ae-8cdf-a3cf2167f019",
     "HomePoints": "27",
     "AwayPoints": "17",
@@ -95291,13 +93051,6 @@
     "Week": "11"
   },
   {
-    "GameID": "ecd028c6-11e4-43c0-a800-22df7e6fb50c",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
-  },
-  {
     "GameID": "ecd37699-27ef-43e0-84aa-821992753aa3",
     "HomePoints": "21",
     "AwayPoints": "10",
@@ -95352,13 +93105,6 @@
     "AwayPoints": "25",
     "Season": "2019",
     "Week": "8"
-  },
-  {
-    "GameID": "ecedeaaf-b633-4a06-adb1-50b09c5790ce",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
   },
   {
     "GameID": "ecf0f54c-c36c-4d39-9c15-04a36c3c9bc8",
@@ -96320,13 +94066,6 @@
     "Week": "14"
   },
   {
-    "GameID": "ef8959f5-b999-4a9c-8a46-915268ed36fa",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
-  },
-  {
     "GameID": "ef90502b-bb3a-43d7-9820-7f274972ed30",
     "HomePoints": "34",
     "AwayPoints": "0",
@@ -96465,13 +94204,6 @@
     "AwayPoints": "14",
     "Season": "2023",
     "Week": "13"
-  },
-  {
-    "GameID": "efea99fc-7160-43a0-ac76-3f18cf14baea",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "16"
   },
   {
     "GameID": "efed434b-f72a-45ee-9f68-5242f7f5c948",
@@ -96831,13 +94563,6 @@
     "Week": "8"
   },
   {
-    "GameID": "f0bfccda-4783-4f08-8570-95c186f6dfa1",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2022",
-    "Week": "8"
-  },
-  {
     "GameID": "f0c9b6d0-e7b8-4115-bdc4-0963d2d635be",
     "HomePoints": "38",
     "AwayPoints": "31",
@@ -96976,13 +94701,6 @@
     "AwayPoints": "44",
     "Season": "2019",
     "Week": "14"
-  },
-  {
-    "GameID": "f1016490-f043-486d-8122-c6ab2c05ba08",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "30"
   },
   {
     "GameID": "f1060cb3-9f3e-41d7-810a-2f3bd5688c4e",
@@ -97629,13 +95347,6 @@
     "Week": "5"
   },
   {
-    "GameID": "f2aed14c-8935-44c7-b7e6-1db63c054d99",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "6"
-  },
-  {
     "GameID": "f2b6c251-4607-4d80-8b0d-7338556781d9",
     "HomePoints": "27",
     "AwayPoints": "45",
@@ -97830,13 +95541,6 @@
     "AwayPoints": "21",
     "Season": "2019",
     "Week": "11"
-  },
-  {
-    "GameID": "f344472e-f283-41aa-a697-b2e516464e6d",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2017",
-    "Week": "1"
   },
   {
     "GameID": "f34e2ffe-5ba9-49bc-8c30-d22a52eb845d",
@@ -98203,13 +95907,6 @@
     "Week": "8"
   },
   {
-    "GameID": "f3f684ed-fa95-4d39-90ab-e600fa71803a",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2021",
-    "Week": "18"
-  },
-  {
     "GameID": "f3f6ebad-ffbe-4581-9488-3b52db19c08a",
     "HomePoints": "10",
     "AwayPoints": "38",
@@ -98313,13 +96010,6 @@
     "AwayPoints": "26",
     "Season": "2019",
     "Week": "13"
-  },
-  {
-    "GameID": "f431396c-6f60-4f68-98de-6c523e8c1138",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
   },
   {
     "GameID": "f434cf40-2c5a-4b07-bfdd-e07fc1e8508e",
@@ -98481,13 +96171,6 @@
     "AwayPoints": "14",
     "Season": "2022",
     "Week": "2"
-  },
-  {
-    "GameID": "f4a34d38-52a6-4cc0-a4c1-099fa1526498",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "30"
   },
   {
     "GameID": "f4a7d5f6-7293-410c-9847-5c9137c3e45a",
@@ -98784,13 +96467,6 @@
     "Week": "9"
   },
   {
-    "GameID": "f5455097-950f-4373-9578-3b7ba594f5b9",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2018",
-    "Week": "18"
-  },
-  {
     "GameID": "f54be1a4-bdb5-4a3b-8ec4-e96bdd6af5de",
     "HomePoints": "7",
     "AwayPoints": "35",
@@ -99057,13 +96733,6 @@
     "Week": "14"
   },
   {
-    "GameID": "f5f40e86-51c8-4ac5-805b-24f2c928776c",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
-  },
-  {
     "GameID": "f5f7e2b2-f95d-40b5-a420-00501fbfdfed",
     "HomePoints": "42",
     "AwayPoints": "14",
@@ -99127,13 +96796,6 @@
     "Week": "11"
   },
   {
-    "GameID": "f61c947a-1481-465d-b50b-c323c612f5bc",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "13"
-  },
-  {
     "GameID": "f61cd640-f98f-44c8-8ca0-2acc3aa7f10e",
     "HomePoints": "6",
     "AwayPoints": "47",
@@ -99169,13 +96831,6 @@
     "Week": "8"
   },
   {
-    "GameID": "f63ab77e-dcf3-4d50-84e0-639619ab5e34",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2016",
-    "Week": "6"
-  },
-  {
     "GameID": "f63be1e1-400a-4358-93fb-e83735219599",
     "HomePoints": "24",
     "AwayPoints": "17",
@@ -99188,13 +96843,6 @@
     "AwayPoints": "56",
     "Season": "2015",
     "Week": "1"
-  },
-  {
-    "GameID": "f641f050-7055-43a5-8cc2-bcef720c5902",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
   },
   {
     "GameID": "f6444f08-89d1-4ac5-b0e3-31dfb0e40bf5",
@@ -99243,13 +96891,6 @@
     "HomePoints": "17",
     "AwayPoints": "20",
     "Season": "2019",
-    "Week": "7"
-  },
-  {
-    "GameID": "f65b283a-ed8f-406c-b630-79fc67525745",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
     "Week": "7"
   },
   {
@@ -99356,13 +96997,6 @@
     "AwayPoints": "36",
     "Season": "2014",
     "Week": "9"
-  },
-  {
-    "GameID": "f6b6b8a1-8c73-4a0a-bb8b-e5fb75bc9eb9",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2014",
-    "Week": "1"
   },
   {
     "GameID": "f6b6d620-d2f9-41b5-83a5-89727a29d28d",
@@ -99722,13 +97356,6 @@
     "Week": "11"
   },
   {
-    "GameID": "f7c34697-7016-4099-872a-ba2e9c6b97f5",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
-  },
-  {
     "GameID": "f7ccef10-47ec-46bc-a96f-9a9ca08f9961",
     "HomePoints": "20",
     "AwayPoints": "27",
@@ -99778,13 +97405,6 @@
     "Week": "14"
   },
   {
-    "GameID": "f7f09fa5-cc13-4f79-9ba9-ca50523af3ad",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "26"
-  },
-  {
     "GameID": "f7f7f579-75be-42b6-a3c4-0b8899692674",
     "HomePoints": "14",
     "AwayPoints": "56",
@@ -99818,13 +97438,6 @@
     "AwayPoints": "31",
     "Season": "2019",
     "Week": "3"
-  },
-  {
-    "GameID": "f803097a-b841-4257-a764-b0fc2b488167",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "15"
   },
   {
     "GameID": "f808ae1e-e969-4fe4-921f-9d4a7427ce3f",
@@ -99911,13 +97524,6 @@
     "Week": "2"
   },
   {
-    "GameID": "f82bbf45-050f-4a70-bdb4-2f1ec64e5ec2",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "16"
-  },
-  {
     "GameID": "f82dbbe2-beea-43e5-ac12-b2db446f6e3a",
     "HomePoints": "0",
     "AwayPoints": "20",
@@ -99986,13 +97592,6 @@
     "AwayPoints": "45",
     "Season": "2015",
     "Week": "13"
-  },
-  {
-    "GameID": "f862b709-fbbc-450e-ba74-b22d2076d086",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
   },
   {
     "GameID": "f868415e-5b75-443e-8805-d56e24b665eb",
@@ -100632,13 +98231,6 @@
     "Week": "13"
   },
   {
-    "GameID": "fa0516d7-b16a-4d2b-bdcd-4b6987bec1f4",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "14"
-  },
-  {
     "GameID": "fa052320-72d2-4542-863a-5c1c76656f18",
     "HomePoints": "3",
     "AwayPoints": "14",
@@ -101024,13 +98616,6 @@
     "Week": "7"
   },
   {
-    "GameID": "faeddd53-e532-453f-a631-42bdebf79ba4",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "11"
-  },
-  {
     "GameID": "faf0850b-b126-4c16-b3d0-e311edaf06a7",
     "HomePoints": "45",
     "AwayPoints": "14",
@@ -101085,13 +98670,6 @@
     "AwayPoints": "10",
     "Season": "2019",
     "Week": "2"
-  },
-  {
-    "GameID": "fb1bc457-67fd-4065-a8bb-471e873fb109",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "16"
   },
   {
     "GameID": "fb1f55f5-5b14-4dbe-bd82-7464c4a18176",
@@ -101428,13 +99006,6 @@
     "AwayPoints": "13",
     "Season": "2022",
     "Week": "7"
-  },
-  {
-    "GameID": "fbf2b3ed-9170-4d8d-8964-57e10f9db27f",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "27"
   },
   {
     "GameID": "fbf3882a-8d59-4ba4-bb66-3ba7422fab6b",
@@ -102179,13 +99750,6 @@
     "Week": "8"
   },
   {
-    "GameID": "fdc44ac8-09a8-4b3a-927c-2b6ef25d030d",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2015",
-    "Week": "1"
-  },
-  {
     "GameID": "fdc91761-62a0-433e-8362-94cef78d1e7a",
     "HomePoints": "31",
     "AwayPoints": "7",
@@ -102865,13 +100429,6 @@
     "Week": "7"
   },
   {
-    "GameID": "ff78b7ee-3a5b-4011-bab2-0cac9f2340a0",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2017",
-    "Week": "1"
-  },
-  {
     "GameID": "ff7a1fe0-6823-466a-8c40-677b232814f9",
     "HomePoints": "16",
     "AwayPoints": "45",
@@ -102947,20 +100504,6 @@
     "AwayPoints": "21",
     "Season": "2016",
     "Week": "1"
-  },
-  {
-    "GameID": "ffae2f3b-769b-4330-94b4-3339e414bd79",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2020",
-    "Week": "22"
-  },
-  {
-    "GameID": "ffb354e7-d5af-4214-ad39-a67921428e10",
-    "HomePoints": "0",
-    "AwayPoints": "0",
-    "Season": "2022",
-    "Week": "12"
   },
   {
     "GameID": "ffb4c925-640a-4ceb-9be0-cb9b910081e8",
