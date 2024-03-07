@@ -24,7 +24,11 @@ def preprocess_data(games):
         def add_period_stats(period_stats, max_players):
             team_stats_fields = ['win_percentage', 'strength_of_record', 'points_per_game', 'points_allowed_per_game', 'total_YPG', 'turnovers_per_game', 'penalties_per_game', '3rd_down_eff', 'redzone_eff', 'sacks_per_game', 'interceptions_per_game', 'forced_fumbles_per_game', 'yards_per_play', 'yards_allowed_per_game', 'yards_allowed_per_play', 'FBS_opponent_ratio']
             for field in team_stats_fields:
-                game_features.append(float(period_stats.get(field, 0)))
+                if field == 'division':
+                    # Convert "FBS" to 1 and "FCS" to 0
+                    game_features.append(1 if period_stats.get(field, 'FBS') == 'FBS' else 0)
+                else:
+                    game_features.append(float(period_stats.get(field, 0)))
 
             player_roles = ['QB', 'RBs', 'WRs/TEs', 'Defenders', 'OLs']
             player_stats_fields = ['fumbles_per_game', 'recruiting_score', 'completion_percentage', 'passing_yards_per_game', 'TD_INT_ratio', 'QBR', 'rushing_yards', 'rushing_touchdowns', 'passing_touchdowns', 'tackles_per_game', 'sacks_per_game', 'interceptions_per_game', 'forced_fumbles_per_game', 'passes_defended_per_game', 'rushing_yards_per_game', 'rushing_yards_per_carry', 'rushing_touchdowns_per_game', 'receiving_touchdowns_per_game', 'receptions_per_game', 'receiving_yards_per_game', 'receiving_yards_per_catch']
@@ -34,7 +38,11 @@ def preprocess_data(games):
                 for i in range(max_players[role]):
                     player = players[i] if i < len(players) else {}
                     for field in player_stats_fields:
-                        game_features.append(float(player.get(field, 0)))
+                        if field == 'period_completed':
+                            # Convert "True" or "False" to 1 or 0
+                            game_features.append(1 if player.get(field, True) == 'True' else 0)
+                        else:
+                            game_features.append(float(player.get(field, 0)))
 
         for period_stats in game['HomeStats']:
             add_period_stats(period_stats, max_players)
@@ -61,19 +69,19 @@ def load_data(filename):
 
 def create_model(input_shape):
     model = Sequential([
-        Dense(128, activation='relu', input_shape=(input_shape,)),
+        Dense(256, activation='relu', input_shape=(input_shape,)),
         Dropout(0.1),
         Dense(64, activation='relu'),
         Dropout(0.1),
-        Dense(32, activation='relu'),
-        Dense(3, activation='linear')  # Predict HomeScore, AwayScore, and HomeWinPercentage
+        Dense(16, activation='relu'),
+        Dense(2, activation='linear')  # Adjusted to predict HomeScore, AwayScore only
     ])
     model.compile(optimizer='adam', loss='mse', metrics=['mae'])
     return model
 
 def train_model(X_train, y_train, X_val, y_val):
     model = create_model(X_train.shape[1])
-    history = model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=100, batch_size=10)
+    history = model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=1000, batch_size=20)
     return model, history
 
 def select_random_game(schedule_filename):
@@ -101,8 +109,15 @@ def main():
     print("Shape of X:", X.shape)
     print("Shape of y:", y.shape)
 
+    # Print the total number of games used for training and validation
+    print(f"Total number of games for training and validation: {X.shape[0]}")
+
     # Split data into training and validation sets
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Print the number of games in training and validation sets
+    print(f"Number of games in training set: {X_train.shape[0]}")
+    print(f"Number of games in validation set: {X_val.shape[0]}")
 
     # Ensure the input to the model is correct
     print("Shape of X_train:", X_train.shape)

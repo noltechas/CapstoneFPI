@@ -875,6 +875,51 @@ async function getTeamStats(teamId, season, week, period) {
     });
 }
 
+function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+function getDefaultStats() {
+    return {
+        // Common stats for all players
+        PlayerName: "Unknown",
+        PlayerID: uuidv4(),
+        RecruitingScore: 0,
+        PeriodCompleted: 'False', // Assuming 'True' or 'False' as string values
+
+        // Passing stats (primarily for QBs)
+        PassingYardsPerGame: 0,
+        PassingTouchdownsPerGame: 0,
+        PassingAttemptsPerGame: 0,
+        PassingCompletionsPerGame: 0,
+        PassingInterceptionsPerGame: 0,
+
+        // Rushing stats (for QBs, RBs)
+        RushingYardsPerGame: 0,
+        RushingYardsPerCarry: 0,
+        RushingTouchdownsPerGame: 0,
+
+        // Receiving stats (for WRs/TEs, RBs)
+        ReceivingYardsPerGame: 0,
+        ReceptionsPerGame: 0,
+        ReceivingTouchdownsPerGame: 0,
+
+        // Defensive stats (for Defenders)
+        TacklesPerGame: 0,
+        SacksPerGame: 0,
+        InterceptionsPerGame: 0,
+        ForcedFumblesPerGame: 0,
+        PassesDefendedPerGame: 0,
+
+        // General stats applicable to many positions
+        FumblesPerGame: 0,
+
+    };
+}
+
 async function getPlayerStats(playerIds, season, week, period) {
     await connectPromise; // Ensures the database connection is ready
 
@@ -887,8 +932,25 @@ async function getPlayerStats(playerIds, season, week, period) {
             return reject('Invalid playerIds format');
         }
 
-        // Now playerIds is an array, and you can safely use .map()
-        let playerIdsValues = playerIdsArray.map(id => `('${id}')`).join(",\n");
+        // Track positions of blank player IDs and prepare valid player IDs for SQL
+        let validPlayerIdsValues = [];
+        let blankPlayerPositions = [];
+
+        playerIdsArray.forEach((id, index) => {
+            if (id.trim() === "") {
+                blankPlayerPositions.push(index); // Remember position of the blank player ID
+            } else {
+                validPlayerIdsValues.push(`('${id}')`); // Only non-blank IDs for SQL
+            }
+        });
+
+        // Continue if there are valid player IDs; otherwise, fill blanks immediately
+        if (validPlayerIdsValues.length === 0) {
+            let defaultStatsArray = playerIdsArray.map(id => id.trim() === "" ? getDefaultStats() : {});
+            return resolve(defaultStatsArray);
+        }
+
+        let playerIdsValues = validPlayerIdsValues.join(",\n");
 
         let sql = `
             CREATE TABLE #PlayerIDs (InsertOrder INT IDENTITY(1,1), PlayerID NVARCHAR(50));
@@ -1122,7 +1184,20 @@ async function getPlayerStats(playerIds, season, week, period) {
         });
 
         request.on('requestCompleted', () => {
-            resolve(results); // Resolve with the array of all players' stats
+            // Placeholder for default stats in blank player ID positions
+            let finalResults = new Array(playerIdsArray.length).fill(null);
+
+            // Insert fetched stats into their original positions
+            results.forEach((result, fetchedIndex) => {
+                finalResults[playerIdsArray.indexOf(result.PlayerID)] = result;
+            });
+
+            // Fill in default stats for blank player IDs
+            blankPlayerPositions.forEach(position => {
+                finalResults[position] = getDefaultStats(); // Assign default stats
+            });
+
+            resolve(finalResults.filter(result => result)); // Filter out nulls if any remain
         });
 
         request.on('error', (err) => {

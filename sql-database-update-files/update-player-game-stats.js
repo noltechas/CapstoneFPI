@@ -58,7 +58,7 @@ connection.on('error', () => {
 
 const fetchGameIDs = async () => {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT GameID FROM SCHEDULE WHERE HomeRushingAttempts IS NULL AND SEASON >= 2022';
+        const sql = 'SELECT GameID FROM SCHEDULE WHERE HomeRushingAttempts IS NULL';
         const gameIDs = [];
         const sqlRequest = new Request(sql, (err) => {
             if (err) {
@@ -213,7 +213,7 @@ const insertTeamGameStats = async (teamStats, gameID, isHomeTeam) => {
 const processGameStats = async (gameID) => {
     console.log(`Processing game with ID: ${gameID}`);
     try {
-        const response = await axios.get(`http://api.sportradar.us/ncaafb/trial/v7/en/games/${gameID}/statistics.xml?api_key=xhsc9b9vr5t2kqbgsmuekagj`);
+        const response = await axios.get(`http://api.sportradar.us/ncaafb/trial/v7/en/games/${gameID}/statistics.xml?api_key=gxgfz4wc5gs8vfh3vfv8zhsj`);
         const xml = response.data;
 
         const result = await parseXml(xml);
