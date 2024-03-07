@@ -246,7 +246,12 @@ def print_stats_for_position(player_stats_list, position_label):
         print()  # Print a newline for better readability between players
 
 
+total_execution_time = 0
+execution_count = 0
+
 def create_full_team_objects(gameID):
+    global total_execution_time, execution_count  # Use the global variables
+
     start_time = time.time()  # Start timing
 
     try:
@@ -290,18 +295,25 @@ def create_full_team_objects(gameID):
                 else:
                     print(f"No data for home team in period: {period}")
 
-            print(f"Total execution time for create_full_team_objects: {time.time() - start_time} seconds.")
+            # At the end, before returning:
+            execution_time = time.time() - start_time
+            total_execution_time += execution_time  # Accumulate total execution time
+            execution_count += 1  # Increment execution count
+
+            print(f"Total execution time for create_full_team_objects: {execution_time} seconds.")
+
             return home_stats, away_stats
 
         else:
             print("No data returned from getMatchupInfo function.")
-            print(f"Total execution time for create_full_team_objects: {time.time() - start_time} seconds.")
     except json.decoder.JSONDecodeError as e:
         print(f"Failed to decode JSON from getMatchupInfo function: {e}")
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
-        print(f"Final total execution time for create_full_team_objects: {time.time() - start_time} seconds.")
+        if execution_count > 0:
+            average_execution_time = total_execution_time / execution_count
+            print(f"Average execution time after {execution_count} executions: {average_execution_time} seconds.")
 
 
 def print_full_team_objects(gameID):

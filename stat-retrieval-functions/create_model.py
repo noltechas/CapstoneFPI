@@ -3,8 +3,9 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from keras.models import Sequential
-from keras.layers import Dense, Dropout
+from keras.models import Sequential, Model
+from keras.layers import Dense, Dropout, Input
+from keras.optimizers import Adam
 
 def preprocess_data(games):
     features = []
@@ -51,10 +52,12 @@ def preprocess_data(games):
 
         home_points = float(game['HomePoints'])
         away_points = float(game['AwayPoints'])
-        home_win_percentage = home_points / (home_points + away_points) if (home_points + away_points) > 0 else 0.5
+        home_win_percentage = 0
+        if home_points > away_points:
+            home_win_percentage = 1
 
         features.append(game_features)
-        labels.append([home_points, away_points])
+        labels.append([home_points, away_points, home_win_percentage])
 
     # Convert features and labels to NumPy arrays of type float
     X = np.array(features, dtype=float)
@@ -68,27 +71,98 @@ def load_data(filename):
     return data
 
 def create_model(input_shape):
-    model = Sequential([
-        Dense(256, activation='relu', input_shape=(input_shape,)),
-        Dropout(0.1),
-        Dense(64, activation='relu'),
-        Dropout(0.1),
-        Dense(16, activation='relu'),
-        Dense(2, activation='linear')  # Adjusted to predict HomeScore, AwayScore only
-    ])
-    model.compile(optimizer='adam', loss='mse', metrics=['mae'])
+    # Define the input layer with the shape of your features
+    inputs = Input(shape=(input_shape,))
+
+    # Build the neural network layers
+    x = Dense(16, activation='relu')(inputs)
+    x = Dropout(0.1)(x)
+    x = Dense(32, activation='relu')(x)
+    x = Dropout(0.2)(x)
+    x = Dense(64, activation='relu')(x)
+    x = Dropout(0.3)(x)
+    x = Dense(128, activation='relu')(x)
+    x = Dropout(0.4)(x)
+    x = Dense(256, activation='relu')(x)
+    x = Dropout(0.5)(x)
+    x = Dense(512, activation='relu')(x)
+
+    # Define two outputs for the scores prediction
+    scores_output = Dense(2, activation='linear', name='scores_output')(x)
+    # Define one output for the win chance prediction with sigmoid activation for a probability
+    win_chance_output = Dense(1, activation='sigmoid', name='win_chance_output')(x)
+
+    # Define the model with its input and outputs
+    model = Model(inputs=inputs, outputs=[scores_output, win_chance_output])
+
+    # Compile the model with different loss functions for each output and add metrics for monitoring
+    model.compile(optimizer=Adam(),
+                  loss={'scores_output': 'mse', 'win_chance_output': 'binary_crossentropy'},
+                  metrics={'scores_output': ['mae'], 'win_chance_output': ['accuracy']},
+                  loss_weights={'scores_output': 1.0, 'win_chance_output': 1.0})  # Adjust loss weights as needed
+
+    return model
+
+def create_model_flipped(input_shape):
+    # Define the input layer with the shape of your features
+    inputs = Input(shape=(input_shape,))
+
+    # Build the neural network layers
+    x = Dense(512, activation='relu')(inputs)
+    x = Dropout(0.5)(x)
+    x = Dense(256, activation='relu')(x)
+    x = Dropout(0.4)(x)
+    x = Dense(128, activation='relu')(x)
+    x = Dropout(0.3)(x)
+    x = Dense(64, activation='relu')(x)
+    x = Dropout(0.2)(x)
+    x = Dense(32, activation='relu')(x)
+    x = Dropout(0.1)(x)
+    x = Dense(16, activation='relu')(x)
+
+    # Define two outputs for the scores prediction
+    scores_output = Dense(2, activation='linear', name='scores_output')(x)
+    # Define one output for the win chance prediction with sigmoid activation for a probability
+    win_chance_output = Dense(1, activation='sigmoid', name='win_chance_output')(x)
+
+    # Define the model with its input and outputs
+    model = Model(inputs=inputs, outputs=[scores_output, win_chance_output])
+
+    # Compile the model with different loss functions for each output and add metrics for monitoring
+    model.compile(optimizer=Adam(),
+                  loss={'scores_output': 'mse', 'win_chance_output': 'binary_crossentropy'},
+                  metrics={'scores_output': ['mae'], 'win_chance_output': ['accuracy']},
+                  loss_weights={'scores_output': 1.0, 'win_chance_output': 1.0})  # Adjust loss weights as needed
+
     return model
 
 def train_model(X_train, y_train, X_val, y_val):
-    model = create_model(X_train.shape[1])
-    history = model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=1000, batch_size=20)
+    # Split y_train and y_val into separate targets for each output
+    y_train_scores = y_train[:, :2]  # First two columns for scores
+    y_train_win_chance = y_train[:, 2]  # Third column for win chance
+
+    y_val_scores = y_val[:, :2]  # First two columns for scores
+    y_val_win_chance = y_val[:, 2]  # Third column for win chance
+
+    model = create_model_flipped(X_train.shape[1])
+
+    # Adjust model.fit to accept a dictionary matching output names to their data
+    history = model.fit(
+        X_train,
+        {'scores_output': y_train_scores, 'win_chance_output': y_train_win_chance},
+        validation_data=(X_val, {'scores_output': y_val_scores, 'win_chance_output': y_val_win_chance}),
+        epochs=2500,
+        batch_size=64
+    )
+
     return model, history
 
 def select_random_game(schedule_filename):
     with open(schedule_filename, 'r') as file:
         schedule = json.load(file)
     random_game = random.choice(schedule)  # Adjust according to the structure of your schedule file
-    print(random_game)
+    # Print only the home and away points
+    print(f"HomePoints: {random_game['HomePoints']}, AwayPoints: {random_game['AwayPoints']}")
     return [random_game]  # Wrap it in a list to match the expected input format for preprocess_data
 
 def predict_game_outcome(model, game_data):
@@ -144,7 +218,21 @@ def main():
 
     # Predict the outcome of the random game
     prediction = predict_game_outcome(model, random_game_scaled)
-    print("Prediction (HomePoints, AwayPoints, HomeWinPercentage):", prediction)
+    # Assuming prediction returns a list of arrays like the one mentioned
+    predicted_scores, predicted_win_chance = prediction
+
+    # Extract score predictions
+    predicted_home_score = predicted_scores[0][0]
+    predicted_away_score = predicted_scores[0][1]
+
+    # Extract win chance prediction
+    predicted_home_win_chance = predicted_win_chance[0][0]
+
+    # Format the predictions into a readable string
+    prediction_str = f"Prediction (HomePoints, AwayPoints, HomeWinChance): ({predicted_home_score:.2f}, {predicted_away_score:.2f}, {predicted_home_win_chance:.4f})"
+
+    print(prediction_str)
+
 
 
 
