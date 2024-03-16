@@ -34,19 +34,11 @@ def preprocess_data(games, pre_2023_period=True):
                            'receiving_yards_per_game', 'receiving_yards_per_catch']
     max_players = {'QB': 1, 'RBs': 4, 'WRs/TEs': 7, 'Defenders': 12, 'OLs': 5}
 
-    # Prepare feature names
-    for team in ["Home", "Away"]:
-        for stat in team_stats_fields:
-            feature_names.append(f"{team}_{stat}")
-        for role, count in max_players.items():
-            for i in range(count):
-                for stat in player_stats_fields:
-                    feature_names.append(f"{team}_{role}_{i}_{stat}")
-
     # Process each game
     for game in games:
         if (pre_2023_period and int(game['Season']) < 2023) or (not pre_2023_period and int(game['Season']) >= 2023):
-            game_feature = [float(game['Season']), float(game['Week'])]
+            game_feature = [float(game['Season']), float(game['Week']), float(game['HomeStats'][0]['division'] == "FBS"),
+                            float(game['AwayStats'][0]['division'] == "FBS")]
             # Aggregate stats from all periods
             for period_stats in game['HomeStats'] + game['AwayStats']:
                 # Team stats
@@ -118,13 +110,36 @@ def create_win_chance_model(input_shape):
 
     return model
 
+def create_combined_model(input_shape):
+    inputs = Input(shape=(input_shape,))
+    regularizer = l2(0.05)
 
-def rolling_average(values, window_size=100):
-    """Compute rolling average of a list of values, considering the specified window size."""
-    if len(values) < window_size:
-        # If there are not enough values, compute average of available values
-        return np.mean(values)
-    return np.mean(values[-window_size:])
+    # Shared layers
+    x = Dense(64, activation='relu', kernel_regularizer=regularizer)(inputs)
+    x = Dropout(0.15)(x)
+    x = Dense(128, activation='relu', kernel_regularizer=regularizer)(x)
+    x = Dropout(0.15)(x)
+    x = Dense(256, activation='relu', kernel_regularizer=regularizer)(x)
+    x = Dropout(0.15)(x)
+    x = Dense(512, activation='relu', kernel_regularizer=regularizer)(x)
+
+    # Outputs directly from shared layers
+    scores_output = Dense(2, activation='linear', name='scores_output')(x)
+    win_chance_output = Dense(1, activation='sigmoid', name='win_chance_output')(x)
+
+    # Create a model with inputs and two outputs
+    model = Model(inputs=inputs, outputs=[scores_output, win_chance_output])
+
+    # Compile the model
+    model.compile(optimizer=Adam(),
+                  loss={'scores_output': 'mse', 'win_chance_output': 'binary_crossentropy'},
+                  metrics={'scores_output': 'mae', 'win_chance_output': 'accuracy'})
+
+    return model
+
+
+def rolling_average(data, window_size=100):
+    return np.convolve(data, np.ones(window_size)/window_size, mode='valid')
 
 
 def load_feature_names(filename):
@@ -134,21 +149,19 @@ def load_feature_names(filename):
 
 
 def lasso_feature_selection(X_train_scaled, y_train_scores, y_train_win_chance):
-    # Assuming y_train_scores is a 2D array with shape (n_samples, 2)
-    # where the first column is home scores and the second column is away scores
-    home_scores = y_train_scores[:, 0]  # Home team scores
-    away_scores = y_train_scores[:, 1]  # Away team scores
+    home_scores = y_train_scores[:, 0]  # Extract home scores
+    away_scores = y_train_scores[:, 1]  # Extract away scores
 
     # Lasso for home scores
-    lasso_home_scores = LassoCV(cv=5, max_iter=1000000, verbose=1).fit(X_train_scaled, home_scores)
+    lasso_home_scores = LassoCV(cv=5, max_iter=1000000, verbose=1, n_jobs=-1).fit(X_train_scaled, home_scores)
     home_scores_coef = lasso_home_scores.coef_
 
     # Lasso for away scores
-    lasso_away_scores = LassoCV(cv=5, max_iter=1000000, verbose=1).fit(X_train_scaled, away_scores)
+    lasso_away_scores = LassoCV(cv=5, max_iter=1000000, verbose=1, n_jobs=-1).fit(X_train_scaled, away_scores)
     away_scores_coef = lasso_away_scores.coef_
 
     # Lasso for win chance
-    lasso_win_chance = LassoCV(cv=5, max_iter=1000000, verbose=1).fit(X_train_scaled, y_train_win_chance)
+    lasso_win_chance = LassoCV(cv=5, max_iter=1000000, verbose=1, n_jobs=-1).fit(X_train_scaled, y_train_win_chance)
     win_chance_coef = lasso_win_chance.coef_
 
     return home_scores_coef, away_scores_coef, win_chance_coef
@@ -176,6 +189,33 @@ def train_win_chance_model(X_train, y_train_win_chance, X_val, y_val_win_chance)
     return model, history
 
 
+def train_combined_model(X_train, y_train_scores, y_train_win_chance, X_val, y_val_scores, y_val_win_chance):
+    input_shape = X_train.shape[1]
+    model = create_combined_model(input_shape)
+
+    # Early stopping to prevent overfitting
+    early_stopping = EarlyStopping(monitor='val_loss', patience=100, restore_best_weights=True)
+
+    # Assume you have or will implement an AverageMetrics callback if necessary
+    average_metrics_callback = AverageMetrics(n_epochs=100)
+
+    # Organizing the labels for training and validation
+    labels = {
+        'scores_output': y_train_scores,
+        'win_chance_output': y_train_win_chance
+    }
+    val_labels = {
+        'scores_output': y_val_scores,
+        'win_chance_output': y_val_win_chance
+    }
+
+    # Training the model
+    history = model.fit(X_train, labels, validation_data=(X_val, val_labels),
+                        epochs=2500, batch_size=64, callbacks=[early_stopping, average_metrics_callback])
+
+    return model, history
+
+
 def predict_game_outcome(model, game_data):
     # Assuming game_data is already processed and scaled
     predictions = model.predict(game_data)
@@ -188,43 +228,29 @@ def rolling_average(data, window_size):
 
 
 def plot_model_history(history, title='', window_size=25):
-    plt.figure(figsize=(12, 6))
+    # Filter out keys that are validation metrics
+    validation_metrics = [key for key in history.history.keys() if key.startswith('val_')]
 
-    # Plot Loss with rolling average
-    plt.subplot(1, 2, 1)
-    train_loss_rolling = rolling_average(history.history['loss'], window_size)
-    val_loss_rolling = rolling_average(history.history['val_loss'], window_size)
-    plt.plot(train_loss_rolling, label='Train Loss Rolling Avg')
-    plt.plot(val_loss_rolling, label='Val Loss Rolling Avg')
-    plt.title(f'{title} Loss (Rolling Avg)')
-    plt.xlabel('Epochs')
-    plt.ylabel('Loss')
-    plt.legend()
+    for metric in validation_metrics:
+        metric_name = metric.replace('val_', '')
+        if metric_name == 'loss':  # Skip plotting loss here if you want it separate
+            continue
 
-    # Plot Accuracy or MAE with rolling average
-    if 'accuracy' in history.history:
-        plt.subplot(1, 2, 2)
-        train_accuracy_rolling = rolling_average(history.history['accuracy'], window_size)
-        val_accuracy_rolling = rolling_average(history.history['val_accuracy'], window_size)
-        plt.plot(train_accuracy_rolling, label='Train Accuracy Rolling Avg')
-        plt.plot(val_accuracy_rolling, label='Val Accuracy Rolling Avg')
-        plt.title(f'{title} Accuracy (Rolling Avg)')
+        plt.figure(figsize=(10, 4))
+
+        # Calculate rolling average for smoother curves
+        val_metric_rolling = rolling_average(history.history[metric], window_size)
+
+        plt.plot(val_metric_rolling, label=f'Validation {metric_name.replace("_", " ").title()} Rolling Avg', color='blue')
+
+        plt.title(f'{title} Validation {metric_name.replace("_", " ").title()} (Rolling Avg)')
         plt.xlabel('Epochs')
-        plt.ylabel('Accuracy')
-    else:
-        plt.subplot(1, 2, 2)
-        train_mae_rolling = rolling_average(history.history['mae'], window_size)
-        val_mae_rolling = rolling_average(history.history['val_mae'], window_size)
-        plt.plot(train_mae_rolling, label='Train MAE Rolling Avg')
-        plt.plot(val_mae_rolling, label='Val MAE Rolling Avg')
-        plt.title(f'{title} MAE (Rolling Avg)')
-        plt.xlabel('Epochs')
-        plt.ylabel('MAE')
-    plt.legend()
-    plt.show()
+        plt.ylabel(metric_name.replace('_', ' ').title())
+        plt.legend()
+        plt.show()
 
 
-def load_and_predict_all_games(filename, scores_model_filename, win_chance_model_filename):
+def load_and_predict_all_games(filename, model):
 
     # Define the spread categories
     bucket_ranges = [
@@ -253,36 +279,40 @@ def load_and_predict_all_games(filename, scores_model_filename, win_chance_model
     with open(filename, 'r') as file:
         games = json.load(file)
 
-    # Preprocess the data
+    # Assuming preprocess_data and other necessary preprocessing steps are defined elsewhere
     X, y_true = preprocess_data(games, False)
 
-    # Load the saved models
-    scores_model = load_model(scores_model_filename)
-    win_chance_model = load_model(win_chance_model_filename)
+    # Load the combined model
+    combined_model = load_model(model)
 
     # Load the saved scaler
     scaler = joblib.load('scaler.save')
     X_scaled = scaler.transform(X)
 
-    # Predict the outcomes
-    predicted_scores = scores_model.predict(X_scaled)
-    predicted_win_chance = win_chance_model.predict(X_scaled).flatten()
+    # Predict the outcomes using the combined model for all games at once
+    predictions = combined_model.predict(X_scaled)
+
+    # Process predictions correctly based on their format
+    if isinstance(predictions, dict):
+        predicted_scores = predictions['scores_output']
+        predicted_win_chance = predictions['win_chance_output'].flatten()
+    else:
+        predicted_scores = predictions[0]  # Assuming scores output comes first
+        predicted_win_chance = predictions[1].flatten()  # Assuming win chance output comes second
+
+    # Loop through the games and print predictions - no need to predict again inside the loop
+    for i, (score, win_chance) in enumerate(zip(predicted_scores, predicted_win_chance)):
+        actual_score = y_true[i][:2]  # Assuming y_true structure [actual_home_score, actual_away_score, actual_win]
+        print(f"Game {i + 1}:\n"
+              f"Predicted Score - Home: {score[0]:.2f}, Away: {score[1]:.2f}\n"
+              f"Home Win Chance: {win_chance * 100:.2f}%\n"
+              f"Actual Score - Home: {actual_score[0]}, Away: {actual_score[1]}")
 
     # Sort games by predicted home team margin
     games_sorted = sorted(
         zip(games, predicted_scores, y_true),
         key=lambda x: x[1][0] - x[1][1]
     )
-
-    # Ensure iteration is within bounds of predicted_scores
-    num_predictions = len(predicted_scores)
-
-    # Iterate over each game within the bound and print the predicted and actual scores
-    for i in range(num_predictions):
-        predicted_score = predicted_scores[i]
-        actual_score = y_true[i][:2]  # Assuming the actual scores are the first two elements in y_true
-        print(f"Game {i + 1}:\n Predicted Score - Home: {predicted_score[0]:.2f}, Away: {predicted_score[1]:.2f}\n"
-              f"Actual Score - Home: {actual_score[0]}, Away: {actual_score[1]}")
 
     # Initialize variables for tracking the wins
     win_counts = {bucket: {'games': 0, 'wins': 0} for bucket in buckets.keys()}
@@ -356,32 +386,30 @@ def main():
     X_val_scaled = scaler.transform(X_val)
 
     # Print the size of the training and validation sets
-    print(f"Training set size: {X_train_scaled.shape[0]} games")
-    print(f"Validation set size: {X_val_scaled.shape[0]} games")
+    print(f"Training set size: {X_train_scaled.shape[0]} games with {X_train_scaled.shape[1]} features each")
+    print(f"Validation set size: {X_val_scaled.shape[0]} games with {X_val_scaled.shape[1]} features each")
 
-    # Train Scores Model
-    scores_model, scores_history = train_scores_model(X_train_scaled, y_train_scores, X_val_scaled, y_val_scores)
-    plot_model_history(scores_history, title='Scores Model')
-
-    # Train Win Chance Model
-    win_chance_model, win_chance_history = train_win_chance_model(X_train_scaled, y_train_win_chance, X_val_scaled, y_val_win_chance)
-    plot_model_history(win_chance_history, title='Win Chance Model')
+    # Train Combined Model
+    combined_model, combined_history = train_combined_model(X_train_scaled, y_train_scores, y_train_win_chance, X_val_scaled, y_val_scores, y_val_win_chance)
+    plot_model_history(combined_history, title='Combined Model')
 
     # Save models and scaler
-    scores_model.save('scores_prediction_model.h5')
-    win_chance_model.save('win_chance_prediction_model.h5')
+    combined_model.save('combined_model.h5')
     joblib.dump(scaler, 'scaler.save')
 
     # Load feature names
     feature_names = load_feature_names('feature_names.txt')
 
     # Perform Lasso feature selection and save importances
-    scores_coef, win_chance_coef = lasso_feature_selection(X_train_scaled, y_train_scores, y_train_win_chance)
-    save_feature_importances(scores_coef, feature_names, 'scores_feature_importances.txt')
-    save_feature_importances(win_chance_coef, feature_names, 'win_chance_feature_importances.txt')
+    # home_scores_coef, away_scores_coef, win_chance_coef = lasso_feature_selection(X_train_scaled, y_train_scores, y_train_win_chance)
+
+    # Save feature importances to files
+    # save_feature_importances(home_scores_coef, feature_names, 'home_scores_feature_importances.txt')
+    # save_feature_importances(away_scores_coef, feature_names, 'away_scores_feature_importances.txt')
+    # save_feature_importances(win_chance_coef, feature_names, 'win_chance_feature_importances.txt')
 
     # Example usage with the new setup
-    load_and_predict_all_games(filename, 'scores_prediction_model.h5', 'win_chance_prediction_model.h5')
+    load_and_predict_all_games('game_stats_for_dnn.json', 'combined_model.h5')
 
 
 if __name__ == '__main__':
