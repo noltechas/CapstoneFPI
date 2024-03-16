@@ -89,8 +89,6 @@ def create_scores_model(input_shape):
     x = Dense(256, activation='relu', kernel_regularizer=regularizer)(x)
     x = Dropout(0.15)(x)
     x = Dense(512, activation='relu', kernel_regularizer=regularizer)(x)
-    x = Dropout(0.15)(x)
-    x = Dense(1024, activation='relu', kernel_regularizer=regularizer)(x)
 
     # Only one output for scores prediction
     scores_output = Dense(2, activation='linear', name='scores_output')(x)
@@ -129,15 +127,31 @@ def rolling_average(values, window_size=100):
     return np.mean(values[-window_size:])
 
 
-def lasso_feature_selection(X, y_scores, y_win_chance):
-    # Enable verbose output
-    lasso_scores = LassoCV(cv=5, max_iter=1000000, verbose=1).fit(X, y_scores)
-    scores_coef = lasso_scores.coef_
+def load_feature_names(filename):
+    with open(filename, 'r') as file:
+        feature_names = [line.strip() for line in file.readlines()]
+    return feature_names
 
-    lasso_win_chance = LassoCV(cv=5, max_iter=1000000, verbose=1).fit(X, y_win_chance)
+
+def lasso_feature_selection(X_train_scaled, y_train_scores, y_train_win_chance):
+    # Assuming y_train_scores is a 2D array with shape (n_samples, 2)
+    # where the first column is home scores and the second column is away scores
+    home_scores = y_train_scores[:, 0]  # Home team scores
+    away_scores = y_train_scores[:, 1]  # Away team scores
+
+    # Lasso for home scores
+    lasso_home_scores = LassoCV(cv=5, max_iter=1000000, verbose=1).fit(X_train_scaled, home_scores)
+    home_scores_coef = lasso_home_scores.coef_
+
+    # Lasso for away scores
+    lasso_away_scores = LassoCV(cv=5, max_iter=1000000, verbose=1).fit(X_train_scaled, away_scores)
+    away_scores_coef = lasso_away_scores.coef_
+
+    # Lasso for win chance
+    lasso_win_chance = LassoCV(cv=5, max_iter=1000000, verbose=1).fit(X_train_scaled, y_train_win_chance)
     win_chance_coef = lasso_win_chance.coef_
 
-    return scores_coef, win_chance_coef
+    return home_scores_coef, away_scores_coef, win_chance_coef
 
 
 def train_scores_model(X_train, y_train_scores, X_val, y_val_scores):
@@ -313,11 +327,8 @@ def load_and_predict_all_games(filename, scores_model_filename, win_chance_model
         print("No games to calculate a total win rate.")
 
 
-
 def save_feature_importances(coef, feature_names, filename):
-    # Pair feature names with coefficients
     feature_importances = sorted(zip(feature_names, coef), key=lambda x: abs(x[1]), reverse=True)
-    # Write to file
     with open(filename, 'w') as f:
         for name, importance in feature_importances:
             f.write(f"{name}: {importance}\n")
@@ -361,11 +372,16 @@ def main():
     win_chance_model.save('win_chance_prediction_model.h5')
     joblib.dump(scaler, 'scaler.save')
 
+    # Load feature names
+    feature_names = load_feature_names('feature_names.txt')
+
+    # Perform Lasso feature selection and save importances
+    scores_coef, win_chance_coef = lasso_feature_selection(X_train_scaled, y_train_scores, y_train_win_chance)
+    save_feature_importances(scores_coef, feature_names, 'scores_feature_importances.txt')
+    save_feature_importances(win_chance_coef, feature_names, 'win_chance_feature_importances.txt')
+
     # Example usage with the new setup
-    filename = 'game_stats_for_dnn.json'
-    scores_model_filename = 'scores_prediction_model.h5'
-    win_chance_model_filename = 'win_chance_prediction_model.h5'
-    load_and_predict_all_games(filename, scores_model_filename, win_chance_model_filename)
+    load_and_predict_all_games(filename, 'scores_prediction_model.h5', 'win_chance_prediction_model.h5')
 
 
 if __name__ == '__main__':
