@@ -69,47 +69,6 @@ def load_data(filename):
         data = json.load(file)
     return data
 
-
-def create_scores_model(input_shape):
-    inputs = Input(shape=(input_shape,))
-    regularizer = l2(0.05)
-
-    x = Dense(64, activation='relu', kernel_regularizer=regularizer)(inputs)
-    x = Dropout(0.15)(x)
-    x = Dense(128, activation='relu', kernel_regularizer=regularizer)(x)
-    x = Dropout(0.15)(x)
-    x = Dense(256, activation='relu', kernel_regularizer=regularizer)(x)
-    x = Dropout(0.15)(x)
-    x = Dense(512, activation='relu', kernel_regularizer=regularizer)(x)
-
-    # Only one output for scores prediction
-    scores_output = Dense(2, activation='linear', name='scores_output')(x)
-
-    model = Model(inputs=inputs, outputs=scores_output)
-    model.compile(optimizer=Adam(), loss='mse', metrics=['mae'])
-
-    return model
-
-
-def create_win_chance_model(input_shape):
-    inputs = Input(shape=(input_shape,))
-    regularizer = l2(0.05)
-
-    x = Dense(64, activation='relu', kernel_regularizer=regularizer)(inputs)
-    x = Dropout(0.15)(x)
-    x = Dense(128, activation='relu', kernel_regularizer=regularizer)(x)
-    x = Dropout(0.15)(x)
-    x = Dense(256, activation='relu', kernel_regularizer=regularizer)(x)
-
-
-    # Only one output for win chance prediction with sigmoid activation for a probability
-    win_chance_output = Dense(1, activation='sigmoid', name='win_chance_output')(x)
-
-    model = Model(inputs=inputs, outputs=win_chance_output)
-    model.compile(optimizer=Adam(), loss='binary_crossentropy', metrics=['accuracy'])
-
-    return model
-
 def create_combined_model(input_shape):
     inputs = Input(shape=(input_shape,))
     regularizer = l2(0.05)
@@ -119,13 +78,15 @@ def create_combined_model(input_shape):
     x = Dropout(0.15)(x)
     x = Dense(128, activation='relu', kernel_regularizer=regularizer)(x)
     x = Dropout(0.15)(x)
-    x = Dense(256, activation='relu', kernel_regularizer=regularizer)(x)
-    x = Dropout(0.15)(x)
-    x = Dense(512, activation='relu', kernel_regularizer=regularizer)(x)
 
-    # Outputs directly from shared layers
-    scores_output = Dense(2, activation='linear', name='scores_output')(x)
-    win_chance_output = Dense(1, activation='sigmoid', name='win_chance_output')(x)
+    # Separate paths
+    scores_path = Dense(256, activation='relu', kernel_regularizer=regularizer)(x)
+    scores_path = Dropout(0.15)(scores_path)
+    scores_output = Dense(2, activation='linear', name='scores_output')(scores_path)
+
+    win_chance_path = Dense(128, activation='relu', kernel_regularizer=regularizer)(x)
+    win_chance_path = Dropout(0.25)(win_chance_path)  # Increased dropout for win chance path
+    win_chance_output = Dense(1, activation='sigmoid', name='win_chance_output')(win_chance_path)
 
     # Create a model with inputs and two outputs
     model = Model(inputs=inputs, outputs=[scores_output, win_chance_output])
@@ -133,7 +94,8 @@ def create_combined_model(input_shape):
     # Compile the model
     model.compile(optimizer=Adam(),
                   loss={'scores_output': 'mse', 'win_chance_output': 'binary_crossentropy'},
-                  metrics={'scores_output': 'mae', 'win_chance_output': 'accuracy'})
+                  metrics={'scores_output': 'mae', 'win_chance_output': 'accuracy'},
+                  loss_weights={'scores_output': 1.0, 'win_chance_output': 0.5})  # Adjust loss weights if needed
 
     return model
 
@@ -165,29 +127,6 @@ def lasso_feature_selection(X_train_scaled, y_train_scores, y_train_win_chance):
     win_chance_coef = lasso_win_chance.coef_
 
     return home_scores_coef, away_scores_coef, win_chance_coef
-
-
-def train_scores_model(X_train, y_train_scores, X_val, y_val_scores):
-    model = create_scores_model(X_train.shape[1])
-    early_stopping = EarlyStopping(monitor='val_loss', patience=200, restore_best_weights=True)
-    average_metrics_callback = AverageMetrics(n_epochs=50)
-
-    history = model.fit(X_train, y_train_scores, validation_data=(X_val, y_val_scores),
-                        epochs=2500, batch_size=64, callbacks=[early_stopping, average_metrics_callback])
-
-    return model, history
-
-
-def train_win_chance_model(X_train, y_train_win_chance, X_val, y_val_win_chance):
-    model = create_win_chance_model(X_train.shape[1])
-    early_stopping = EarlyStopping(monitor='val_loss', patience=100, restore_best_weights=True)
-    average_metrics_callback = AverageMetrics(n_epochs=50)
-
-    history = model.fit(X_train, y_train_win_chance, validation_data=(X_val, y_val_win_chance),
-                        epochs=2500, batch_size=64, callbacks=[early_stopping, average_metrics_callback])
-
-    return model, history
-
 
 def train_combined_model(X_train, y_train_scores, y_train_win_chance, X_val, y_val_scores, y_val_win_chance):
     input_shape = X_train.shape[1]

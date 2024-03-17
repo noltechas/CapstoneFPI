@@ -443,7 +443,14 @@ def main(schedule_json_path='schedule.json', output_json_path='game_stats_for_dn
         gameID = game['GameID']
         if gameID not in existing_game_ids:
             print(f"Processing game {gameID}")
-            home_stats, away_stats = fetch_team_stats(gameID)
+            try:
+                home_stats, away_stats = fetch_team_stats(gameID)
+                if home_stats is None or away_stats is None:  # Check if either is None
+                    print(f"Skipping game {gameID} due to missing stats.")
+                    continue  # Skip this game
+            except TypeError:  # Handle the case where fetch_team_stats returns None
+                print(f"Skipping game {gameID} due to an error fetching stats.")
+                continue
 
             structured_data = structure_data_for_dnn(game, home_stats, away_stats)
             append_to_json(structured_data, output_json_path)
