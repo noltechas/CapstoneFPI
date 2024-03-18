@@ -116,19 +116,19 @@ def create_combined_model(input_shape):
     regularizer = l2(0.05)
 
     # Shared layers
-    x = Dense(32, activation='relu', kernel_regularizer=regularizer)(inputs)
-    x = Dropout(0.15)(x)
-    x = Dense(64, activation='relu', kernel_regularizer=regularizer)(x)
-    x = Dropout(0.15)(x)
+    x = Dense(16, activation='relu', kernel_regularizer=regularizer)(inputs)
+    x = Dropout(0.5)(x)
+    x = Dense(32, activation='relu', kernel_regularizer=regularizer)(x)
+    x = Dropout(0.5)(x)
 
     # Separate paths
-    scores_path = Dense(128, activation='relu', kernel_regularizer=regularizer)(x)
-    scores_path = Dropout(0.15)(scores_path)
+    scores_path = Dense(64, activation='relu', kernel_regularizer=regularizer)(x)
+    scores_path = Dropout(0.5)(scores_path)
+    scores_path = Dense(128, activation='relu', kernel_regularizer=regularizer)(scores_path)
+    scores_path = Dropout(0.5)(scores_path)
     scores_output = Dense(2, activation='linear', name='scores_output')(scores_path)
 
-    win_chance_path = Dense(64, activation='relu', kernel_regularizer=regularizer)(x)
-    win_chance_path = Dropout(0.25)(win_chance_path)  # Increased dropout for win chance path
-    win_chance_output = Dense(1, activation='sigmoid', name='win_chance_output')(win_chance_path)
+    win_chance_output = Dense(1, activation='sigmoid', name='win_chance_output')(x)
 
     # Create a model with inputs and two outputs
     model = Model(inputs=inputs, outputs=[scores_output, win_chance_output])
@@ -137,7 +137,7 @@ def create_combined_model(input_shape):
     model.compile(optimizer=Adam(),
                   loss={'scores_output': 'mse', 'win_chance_output': 'binary_crossentropy'},
                   metrics={'scores_output': 'mae', 'win_chance_output': 'accuracy'},
-                  loss_weights={'scores_output': 0.5, 'win_chance_output': 0.5})  # Adjust loss weights if needed
+                  loss_weights={'scores_output': 1.0, 'win_chance_output': 0.5})  # Adjust loss weights if needed
 
     return model
 
