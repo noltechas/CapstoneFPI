@@ -49,6 +49,9 @@ def preprocess_data(games, pre_2023_period=True):
                 float(game['AwayStats'][0]['division'] == "FBS")
             ]
 
+            if any(len(period.get('QB', [])) == 0 for period in game['HomeStats']) or any(len(period.get('QB', [])) == 0 for period in game['AwayStats']):
+                continue
+
             # Function to extract recruiting scores from players, filling in zeros if needed
             def get_recruiting_scores(players, max_count):
                 scores = [float(player.get('recruiting_score', 0)) for player in players[:max_count]]
@@ -70,8 +73,6 @@ def preprocess_data(games, pre_2023_period=True):
                     game_feature.append(float(period_stats.get(field, 0)))
                 # Player stats
                 for role in player_roles:
-                    if role == 'OLs':
-                        pass
                     players = period_stats.get(role, [{}]*max_players[role])
                     for i in range(max_players[role]):
                         player = players[i] if i < len(players) else {}
