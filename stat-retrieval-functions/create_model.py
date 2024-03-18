@@ -25,20 +25,44 @@ def preprocess_data(games, pre_2023_period=True):
                          'total_YPG', 'turnovers_per_game', 'penalties_per_game', '3rd_down_eff',
                          'redzone_eff', 'sacks_per_game', 'interceptions_per_game', 'forced_fumbles_per_game',
                          'yards_per_play', 'yards_allowed_per_game', 'yards_allowed_per_play', 'FBS_opponent_ratio']
-    player_roles = ['QB', 'RBs', 'WRs/TEs', 'Defenders', 'OLs']
-    player_stats_fields = ['fumbles_per_game', 'recruiting_score', 'completion_percentage', 'passing_yards_per_game',
-                           'TD_INT_ratio', 'QBR', 'rushing_yards', 'rushing_touchdowns', 'passing_touchdowns',
-                           'tackles_per_game', 'sacks_per_game', 'interceptions_per_game', 'forced_fumbles_per_game',
-                           'passes_defended_per_game', 'rushing_yards_per_game', 'rushing_yards_per_carry',
-                           'rushing_touchdowns_per_game', 'receiving_touchdowns_per_game', 'receptions_per_game',
-                           'receiving_yards_per_game', 'receiving_yards_per_catch', 'period_completed']
+    player_roles = ['QB', 'RBs', 'WRs/TEs', 'Defenders']
+
+    QB_stats_fields = ['fumbles_per_game', 'period_completed', 'completion_percentage', 'passing_yards_per_game',
+                       'TD_INT_ratio', 'QBR', 'rushing_yards', 'rushing_touchdowns', 'passing_touchdowns']
+
+    skill_position_stat_fields = ['fumbles_per_game', 'period_completed', 'rushing_yards_per_game', 'rushing_yards_per_carry',
+                      'rushing_touchdowns_per_game', 'receiving_touchdowns_per_game', 'receptions_per_game',
+                      'receiving_yards_per_game', 'receiving_yards_per_catch']
+
+    defender_stat_fields = ['fumbles_per_game', 'period_completed', 'tackles_per_game', 'sacks_per_game',
+                            'interceptions_per_game', 'forced_fumbles_per_game', 'passes_defended_per_game']
+
     max_players = {'QB': 1, 'RBs': 4, 'WRs/TEs': 7, 'Defenders': 12, 'OLs': 5}
 
     # Process each game
     for game in games:
         if (pre_2023_period and int(game['Season']) < 2023) or (not pre_2023_period and int(game['Season']) >= 2023):
-            game_feature = [float(game['Season']), float(game['Week']), float(game['HomeStats'][0]['division'] == "FBS"),
-                            float(game['AwayStats'][0]['division'] == "FBS")]
+            game_feature = [
+                float(game['Season']),
+                float(game['Week']),
+                float(game['HomeStats'][0]['division'] == "FBS"),
+                float(game['AwayStats'][0]['division'] == "FBS")
+            ]
+
+            # Function to extract recruiting scores from players, filling in zeros if needed
+            def get_recruiting_scores(players, max_count):
+                scores = [float(player.get('recruiting_score', 0)) for player in players[:max_count]]
+                scores += [0] * (max_count - len(scores))  # Fill the remaining slots with zeros
+                return scores
+
+            # Loop over HomeStats and AwayStats
+            for team_key in ['HomeStats', 'AwayStats']:
+                # Loop over each position group and retrieve the recruiting scores
+                for position, max_count in max_players.items():
+                    players = game[team_key][0].get(position, [])
+                    recruiting_scores = get_recruiting_scores(players, max_count)
+                    game_feature.extend(recruiting_scores)
+
             # Aggregate stats from all periods
             for period_stats in game['HomeStats'] + game['AwayStats']:
                 # Team stats
@@ -46,10 +70,23 @@ def preprocess_data(games, pre_2023_period=True):
                     game_feature.append(float(period_stats.get(field, 0)))
                 # Player stats
                 for role in player_roles:
+                    if role == 'OLs':
+                        pass
                     players = period_stats.get(role, [{}]*max_players[role])
                     for i in range(max_players[role]):
                         player = players[i] if i < len(players) else {}
-                        for field in player_stats_fields:
+
+                        stats_to_use = []
+                        if role == 'QB':
+                            stats_to_use = QB_stats_fields
+                        elif role in ['RBs', 'WRs/TEs']:
+                            stats_to_use = skill_position_stat_fields
+                        elif role == 'Defenders':
+                            stats_to_use = defender_stat_fields
+                        else:
+                            print("ERROR!!!! ROLE IS " + role)
+
+                        for field in stats_to_use:
                             # Convert period_completed from True/False to 1/0
                             if field == 'period_completed':
                                 game_feature.append(float(player.get(field, False) == "True"))
@@ -78,17 +115,17 @@ def create_combined_model(input_shape):
     regularizer = l2(0.05)
 
     # Shared layers
-    x = Dense(64, activation='relu', kernel_regularizer=regularizer)(inputs)
+    x = Dense(32, activation='relu', kernel_regularizer=regularizer)(inputs)
     x = Dropout(0.15)(x)
-    x = Dense(128, activation='relu', kernel_regularizer=regularizer)(x)
+    x = Dense(64, activation='relu', kernel_regularizer=regularizer)(x)
     x = Dropout(0.15)(x)
 
     # Separate paths
-    scores_path = Dense(256, activation='relu', kernel_regularizer=regularizer)(x)
+    scores_path = Dense(128, activation='relu', kernel_regularizer=regularizer)(x)
     scores_path = Dropout(0.15)(scores_path)
     scores_output = Dense(2, activation='linear', name='scores_output')(scores_path)
 
-    win_chance_path = Dense(128, activation='relu', kernel_regularizer=regularizer)(x)
+    win_chance_path = Dense(64, activation='relu', kernel_regularizer=regularizer)(x)
     win_chance_path = Dropout(0.25)(win_chance_path)  # Increased dropout for win chance path
     win_chance_output = Dense(1, activation='sigmoid', name='win_chance_output')(win_chance_path)
 
@@ -99,7 +136,7 @@ def create_combined_model(input_shape):
     model.compile(optimizer=Adam(),
                   loss={'scores_output': 'mse', 'win_chance_output': 'binary_crossentropy'},
                   metrics={'scores_output': 'mae', 'win_chance_output': 'accuracy'},
-                  loss_weights={'scores_output': 1.0, 'win_chance_output': 0.5})  # Adjust loss weights if needed
+                  loss_weights={'scores_output': 0.5, 'win_chance_output': 0.5})  # Adjust loss weights if needed
 
     return model
 
@@ -154,7 +191,7 @@ def train_combined_model(X_train, y_train_scores, y_train_win_chance, X_val, y_v
 
     # Training the model
     history = model.fit(X_train, labels, validation_data=(X_val, val_labels),
-                        epochs=2500, batch_size=64, callbacks=[early_stopping, average_metrics_callback])
+                        epochs=250000, batch_size=64, callbacks=[early_stopping, average_metrics_callback])
 
     return model, history
 
@@ -197,18 +234,18 @@ def load_and_predict_all_games(filename, model):
 
     # Define the spread categories
     bucket_ranges = [
-        (0.5, 3),
-        (3.5, 7),
-        (7.5, 10),
-        (10.5, 14),
-        (14.5, 17),
-        (17.5, 21),
-        (21.5, 24),
-        (24.5, 28),
-        (28.5, 35),
-        (35.5, 42),
-        (42.5, 49),
-        (49.5, 56),
+        (0.5, 3.5),
+        (3.5, 7.5),
+        (7.5, 10.5),
+        (10.5, 14.5),
+        (14.5, 17.5),
+        (17.5, 21.5),
+        (21.5, 24.5),
+        (24.5, 28.5),
+        (28.5, 35.5),
+        (35.5, 42.5),
+        (42.5, 49.5),
+        (49.5, 56.5),
         (56.5, float('inf'))
     ]
 
@@ -344,12 +381,12 @@ def main():
     feature_names = load_feature_names('feature_names.txt')
 
     # Perform Lasso feature selection and save importances
-    home_scores_coef, away_scores_coef, win_chance_coef = lasso_feature_selection(X_train_scaled, y_train_scores, y_train_win_chance)
+    # home_scores_coef, away_scores_coef, win_chance_coef = lasso_feature_selection(X_train_scaled, y_train_scores, y_train_win_chance)
 
     # Save feature importances to files
-    save_feature_importances(home_scores_coef, feature_names, 'home_scores_feature_importances.txt')
-    save_feature_importances(away_scores_coef, feature_names, 'away_scores_feature_importances.txt')
-    save_feature_importances(win_chance_coef, feature_names, 'win_chance_feature_importances.txt')
+    # save_feature_importances(home_scores_coef, feature_names, 'home_scores_feature_importances.txt')
+    # save_feature_importances(away_scores_coef, feature_names, 'away_scores_feature_importances.txt')
+    # save_feature_importances(win_chance_coef, feature_names, 'win_chance_feature_importances.txt')
 
     # Example usage with the new setup
     load_and_predict_all_games('game_stats_for_dnn.json', 'combined_model.h5')
