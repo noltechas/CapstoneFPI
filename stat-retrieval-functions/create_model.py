@@ -46,7 +46,7 @@ def preprocess_data(games, pre_2023_period=True):
     games_passed_checks = 0
     # Process each game
     for game in games:
-        if (pre_2023_period) or (not pre_2023_period and int(game['Season']) >= 2023):
+        if (pre_2023_period and int(game['Season']) < 2023) or (not pre_2023_period and int(game['Season']) >= 2023):
             game_feature = [
                 float(game['Season']) - 2014.0,
                 float(game['Week']),

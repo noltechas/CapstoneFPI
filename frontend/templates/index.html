@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>2023 College Football Predictions</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+
+        .game {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            background-image: linear-gradient(to right, #888888, #888888);
+        }
+
+        .team-logo {
+            width: auto;
+            height: 120px;
+        }
+
+        .team-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .team-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #fff;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+
+        .predicted-score {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+
+        .pie-chart {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            // Function to load predictions for a specific week
+            function loadPredictions(week) {
+                $.ajax({
+                    url: '/predictions/' + week,
+                    method: 'GET',
+                    success: function(data) {
+                        updatePredictions(data);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+
+            // Function to update the frontend with the predictions
+            function updatePredictions(predictions) {
+                var predictionsContainer = $('#predictions');
+                predictionsContainer.empty();
+
+                predictions.forEach(function(game) {
+                    var gameElement = $('<div>').addClass('game');
+
+                    var awayTeamInfo = $('<div>').addClass('team-info');
+                    var awayTeamName = $('<div>').addClass('team-name').text(game.AwayTeam + ' (' + game.AwayTeamWins + '-' + game.AwayTeamLosses + ')');
+                    var awayLogoUrl = '/logos/' + game.AwayTeam.replace(/\s/g, '') + '.png';
+                    var awayLogo = $('<img>').attr('src', awayLogoUrl).addClass('team-logo').on('error', function() {
+                        $(this).attr('src', '/logos/default.png');
+                    });
+                    var awayScore = $('<div>').addClass('predicted-score').text(game.PredictedAwayScore.toFixed(2));
+                    awayTeamInfo.append(awayTeamName);
+                    awayTeamInfo.append(awayLogo);
+                    awayTeamInfo.append(awayScore);
+
+                    var homeTeamInfo = $('<div>').addClass('team-info');
+                    var homeTeamName = $('<div>').addClass('team-name').text(game.HomeTeam + ' (' + game.HomeTeamWins + '-' + game.HomeTeamLosses + ')');
+                    var homeLogoUrl = '/logos/' + game.HomeTeam.replace(/\s/g, '') + '.png';
+                    var homeLogo = $('<img>').attr('src', homeLogoUrl).addClass('team-logo').on('error', function() {
+                        $(this).attr('src', '/logos/default.png');
+                    });
+                    var homeScore = $('<div>').addClass('predicted-score').text(game.PredictedHomeScore.toFixed(2));
+                    homeTeamInfo.append(homeTeamName);
+                    homeTeamInfo.append(homeLogo);
+                    homeTeamInfo.append(homeScore);
+
+                    var pieChartElement = $('<canvas>').addClass('pie-chart');
+
+                    // Use the primary and secondary colors for the background gradient
+                    var awayColor = game.AwayTeamSecondaryColor || '#888888';
+                    var homeColor = game.HomeTeamSecondaryColor || '#888888';
+                    gameElement.css('background-image', 'linear-gradient(to right, ' + awayColor + ', ' + homeColor + ')');
+
+                    gameElement.append(awayTeamInfo);
+                    gameElement.append(pieChartElement);
+                    gameElement.append(homeTeamInfo);
+
+                    predictionsContainer.append(gameElement);
+
+                    // Create the pie chart
+                    var pieChart = new Chart(pieChartElement, {
+                        type: 'pie',
+                        data: {
+                            labels: [game.HomeTeamAlias, game.AwayTeamAlias],
+                            datasets: [{
+                                data: [game.HomeWinProbability, 1 - game.HomeWinProbability],
+                                backgroundColor: [game.HomeTeamPrimaryColor || '#888888', game.AwayTeamPrimaryColor || '#888888']
+                            }]
+                        },
+                        options: {
+                            responsive: false
+                        }
+                    });
+                });
+            }
+
+            // Load predictions for the initial week
+            loadPredictions('1');
+
+            // Handle week navigation
+            $('.week-nav').click(function() {
+                var week = $(this).data('week');
+                loadPredictions(week);
+            });
+        });
+    </script>
+</head>
+<body>
+<h1>2023 College Football Predictions</h1>
+
+<div id="predictions"></div>
+
+<div class="week-navigation">
+    <button class="week-nav" data-week="1">Week 1</button>
+    <button class="week-nav" data-week="2">Week 2</button>
+    <button class="week-nav" data-week="3">Week 3</button>
+    <button class="week-nav" data-week="4">Week 4</button>
+    <button class="week-nav" data-week="5">Week 5</button>
+    <button class="week-nav" data-week="6">Week 6</button>
+    <button class="week-nav" data-week="7">Week 7</button>
+    <button class="week-nav" data-week="8">Week 8</button>
+    <button class="week-nav" data-week="9">Week 9</button>
+    <button class="week-nav" data-week="10">Week 10</button>
+    <button class="week-nav" data-week="11">Week 11</button>
+    <button class="week-nav" data-week="12">Week 12</button>
+    <button class="week-nav" data-week="13">Week 13</button>
+    <button class="week-nav" data-week="14">Conf Championship Week</button>
+    <button class="week-nav" data-week="15">Army/Navy</button>
+    <button class="week-nav" data-week="16">Bowl Week 1</button>
+    <button class="week-nav" data-week="17">Bowl Week 2</button>
+    <button class="week-nav" data-week="18">Bowl Week 3</button>
+    <button class="week-nav" data-week="19">Bowl Week 4</button>
+    <!-- Add more week buttons as needed -->
+</div>
+</body>
+</html>
