@@ -7,19 +7,42 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
 
-        .game {
+        .game-container {
+            perspective: 750px;
+            margin-bottom: 20px;
+        }
+
+        .game-flipper {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .game-container.flipped .game-flipper {
+            transform: rotateY(180deg);
+        }
+
+        .game-front, .game-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 20px;
-            margin-bottom: 20px;
             border-radius: 10px;
-            background-image: linear-gradient(to right, #888888, #888888);
+        }
+
+        .game-back {
+            transform: rotateY(180deg);
         }
 
         .team-logo {
             width: auto;
-            height: 120px;
+            height: 80px;
         }
 
         .team-info {
@@ -30,24 +53,24 @@
 
         .team-name {
             font-family: 'Montserrat', sans-serif;
-            font-size: 24px;
+            font-size: 18px;
             font-weight: bold;
             margin-bottom: 5px;
             color: #fff;
             text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
 
-        .predicted-score {
+        .score {
             font-family: 'Montserrat', sans-serif;
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
             color: #fff;
             text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
 
         .pie-chart {
-            width: 200px;
-            height: 200px;
+            width: 60px;
+            height: 60px;
         }
     </style>
     <script>
@@ -71,59 +94,154 @@
                 var predictionsContainer = $('#predictions');
                 predictionsContainer.empty();
 
-                predictions.forEach(function(game) {
-                    var gameElement = $('<div>').addClass('game');
+                // Sort the predictions based on team divisions, total wins, and home win probability
+                predictions.sort(function(a, b) {
+                    // Compare team divisions
+                    var divisionComparison = compareDivisions(a, b);
+                    if (divisionComparison !== 0) {
+                        return divisionComparison;
+                    }
 
-                    var awayTeamInfo = $('<div>').addClass('team-info');
-                    var awayTeamName = $('<div>').addClass('team-name').text(game.AwayTeam + ' (' + game.AwayTeamWins + '-' + game.AwayTeamLosses + ')');
-                    var awayLogoUrl = '/logos/' + game.AwayTeam.replace(/\s/g, '') + '.png';
-                    var awayLogo = $('<img>').attr('src', awayLogoUrl).addClass('team-logo').on('error', function() {
-                        $(this).attr('src', '/logos/default.png');
-                    });
-                    var awayScore = $('<div>').addClass('predicted-score').text(game.PredictedAwayScore.toFixed(2));
-                    awayTeamInfo.append(awayTeamName);
-                    awayTeamInfo.append(awayLogo);
-                    awayTeamInfo.append(awayScore);
+                    // Compare total wins
+                    var totalWinsA = a.HomeTeamWins + a.AwayTeamWins;
+                    var totalWinsB = b.HomeTeamWins + b.AwayTeamWins;
+                    if (totalWinsA !== totalWinsB) {
+                        return totalWinsB - totalWinsA;
+                    }
 
-                    var homeTeamInfo = $('<div>').addClass('team-info');
-                    var homeTeamName = $('<div>').addClass('team-name').text(game.HomeTeam + ' (' + game.HomeTeamWins + '-' + game.HomeTeamLosses + ')');
-                    var homeLogoUrl = '/logos/' + game.HomeTeam.replace(/\s/g, '') + '.png';
-                    var homeLogo = $('<img>').attr('src', homeLogoUrl).addClass('team-logo').on('error', function() {
-                        $(this).attr('src', '/logos/default.png');
-                    });
-                    var homeScore = $('<div>').addClass('predicted-score').text(game.PredictedHomeScore.toFixed(2));
-                    homeTeamInfo.append(homeTeamName);
-                    homeTeamInfo.append(homeLogo);
-                    homeTeamInfo.append(homeScore);
-
-                    var pieChartElement = $('<canvas>').addClass('pie-chart');
-
-                    // Use the primary and secondary colors for the background gradient
-                    var awayColor = game.AwayTeamSecondaryColor || '#888888';
-                    var homeColor = game.HomeTeamSecondaryColor || '#888888';
-                    gameElement.css('background-image', 'linear-gradient(to right, ' + awayColor + ', ' + homeColor + ')');
-
-                    gameElement.append(awayTeamInfo);
-                    gameElement.append(pieChartElement);
-                    gameElement.append(homeTeamInfo);
-
-                    predictionsContainer.append(gameElement);
-
-                    // Create the pie chart
-                    var pieChart = new Chart(pieChartElement, {
-                        type: 'pie',
-                        data: {
-                            labels: [game.HomeTeamAlias, game.AwayTeamAlias],
-                            datasets: [{
-                                data: [game.HomeWinProbability, 1 - game.HomeWinProbability],
-                                backgroundColor: [game.HomeTeamPrimaryColor || '#888888', game.AwayTeamPrimaryColor || '#888888']
-                            }]
-                        },
-                        options: {
-                            responsive: false
-                        }
-                    });
+                    // Compare home win probability
+                    var probabilityDiffA = Math.abs(a.HomeWinProbability - 0.5);
+                    var probabilityDiffB = Math.abs(b.HomeWinProbability - 0.5);
+                    return probabilityDiffA - probabilityDiffB;
                 });
+
+                predictions.forEach(function(game) {
+                    var gameContainer = $('<div>').addClass('game-container');
+                    var gameFlipper = $('<div>').addClass('game-flipper');
+
+                    var gameFront = createGameFront(game);
+                    var gameBack = createGameBack(game);
+
+                    gameFlipper.append(gameFront);
+                    gameFlipper.append(gameBack);
+                    gameContainer.append(gameFlipper);
+
+                    gameContainer.click(function() {
+                        $(this).toggleClass('flipped');
+                    });
+
+                    predictionsContainer.append(gameContainer);
+                });
+            }
+
+            function createGameFront(game) {
+                var gameElement = $('<div>').addClass('game-front');
+                gameElement.css('background-image', 'linear-gradient(to right, ' + (game.AwayTeamSecondaryColor || '#888888') + ', ' + (game.HomeTeamSecondaryColor || '#888888') + ')');
+
+                var awayTeamInfo = $('<div>').addClass('team-info');
+                var awayTeamName = $('<div>').addClass('team-name').text(game.AwayTeam + ' (' + game.AwayTeamWins + '-' + game.AwayTeamLosses + ')');
+                var awayLogoUrl = '/logos/' + game.AwayTeam.replace(/\s/g, '') + '.png';
+                var awayLogo = $('<img>').attr('src', awayLogoUrl).addClass('team-logo').on('error', function() {
+                    $(this).attr('src', '/logos/default.png');
+                });
+                var awayScore = $('<div>').addClass('score predicted-score').text(game.PredictedAwayScore.toFixed(2));
+                awayTeamInfo.append(awayTeamName);
+                awayTeamInfo.append(awayLogo);
+                awayTeamInfo.append(awayScore);
+
+                var homeTeamInfo = $('<div>').addClass('team-info');
+                var homeTeamName = $('<div>').addClass('team-name').text(game.HomeTeam + ' (' + game.HomeTeamWins + '-' + game.HomeTeamLosses + ')');
+                var homeLogoUrl = '/logos/' + game.HomeTeam.replace(/\s/g, '') + '.png';
+                var homeLogo = $('<img>').attr('src', homeLogoUrl).addClass('team-logo').on('error', function() {
+                    $(this).attr('src', '/logos/default.png');
+                });
+                var homeScore = $('<div>').addClass('score predicted-score').text(game.PredictedHomeScore.toFixed(2));
+                homeTeamInfo.append(homeTeamName);
+                homeTeamInfo.append(homeLogo);
+                homeTeamInfo.append(homeScore);
+
+                var pieChartElement = $('<canvas>').addClass('pie-chart');
+
+                gameElement.append(awayTeamInfo);
+                gameElement.append(pieChartElement);
+                gameElement.append(homeTeamInfo);
+
+                // Create the pie chart
+                var pieChart = new Chart(pieChartElement, {
+                    type: 'pie',
+                    data: {
+                        labels: [game.HomeTeamAlias, game.AwayTeamAlias],
+                        datasets: [{
+                            data: [game.HomeWinProbability, 1 - game.HomeWinProbability],
+                            backgroundColor: [game.HomeTeamPrimaryColor || '#888888', game.AwayTeamPrimaryColor || '#888888']
+                        }]
+                    },
+                    options: {
+                        responsive: false
+                    }
+                });
+
+                return gameElement;
+            }
+
+            function createGameBack(game) {
+                var gameElement = $('<div>').addClass('game-back');
+
+                var awayTeamInfo = $('<div>').addClass('team-info');
+                var awayTeamName = $('<div>').addClass('team-name').text(game.AwayTeam + ' (' + game.AwayTeamWins + '-' + game.AwayTeamLosses + ')');
+                var awayLogoUrl = '/logos/' + game.AwayTeam.replace(/\s/g, '') + '.png';
+                var awayLogo = $('<img>').attr('src', awayLogoUrl).addClass('team-logo').on('error', function() {
+                    $(this).attr('src', '/logos/default.png');
+                });
+                var awayScore = $('<div>').addClass('score actual-score').text(game.ActualAwayScore);
+                awayTeamInfo.append(awayTeamName);
+                awayTeamInfo.append(awayLogo);
+                awayTeamInfo.append(awayScore);
+
+                var homeTeamInfo = $('<div>').addClass('team-info');
+                var homeTeamName = $('<div>').addClass('team-name').text(game.HomeTeam + ' (' + game.HomeTeamWins + '-' + game.HomeTeamLosses + ')');
+                var homeLogoUrl = '/logos/' + game.HomeTeam.replace(/\s/g, '') + '.png';
+                var homeLogo = $('<img>').attr('src', homeLogoUrl).addClass('team-logo').on('error', function() {
+                    $(this).attr('src', '/logos/default.png');
+                });
+                var homeScore = $('<div>').addClass('score actual-score').text(game.ActualHomeScore);
+                homeTeamInfo.append(homeTeamName);
+                homeTeamInfo.append(homeLogo);
+                homeTeamInfo.append(homeScore);
+
+                var predictionResult = $('<div>').addClass('prediction-result');
+                if ((game.HomeWinProbability > 0.5 && game.ActualHomeScore > game.ActualAwayScore) ||
+                    (game.HomeWinProbability < 0.5 && game.ActualHomeScore < game.ActualAwayScore)) {
+                    predictionResult.text('Prediction: Correct');
+                    gameElement.css('background-color', 'lime');
+                } else {
+                    predictionResult.text('Prediction: Incorrect');
+                    gameElement.css('background-color', 'red');
+                }
+
+                gameElement.append(awayTeamInfo);
+                gameElement.append(predictionResult);
+                gameElement.append(homeTeamInfo);
+
+                return gameElement;
+            }
+
+            // Function to compare team divisions
+            function compareDivisions(a, b) {
+                var divisionA = getDivisionScore(a.HomeTeamDivision, a.AwayTeamDivision);
+                var divisionB = getDivisionScore(b.HomeTeamDivision, b.AwayTeamDivision);
+                return divisionB - divisionA;
+            }
+
+            // Function to assign a score based on team divisions
+            function getDivisionScore(homeTeamDivision, awayTeamDivision) {
+                if (homeTeamDivision === 'FBS' && awayTeamDivision === 'FBS') {
+                    return 2;
+                } else if (homeTeamDivision === 'FBS' || awayTeamDivision === 'FBS') {
+                    return 1;
+                } else {
+                    return 0;
+                }
             }
 
             // Load predictions for the initial week
@@ -139,8 +257,6 @@
 </head>
 <body>
 <h1>2023 College Football Predictions</h1>
-
-<div id="predictions"></div>
 
 <div class="week-navigation">
     <button class="week-nav" data-week="1">Week 1</button>
@@ -164,5 +280,7 @@
     <button class="week-nav" data-week="19">Bowl Week 4</button>
     <!-- Add more week buttons as needed -->
 </div>
+
+<div id="predictions"></div>
 </body>
 </html>

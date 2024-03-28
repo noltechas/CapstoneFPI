@@ -175,6 +175,8 @@ def get_predictions(week):
                 'AwayTeamLosses': game_info.get('AwayTeamLosses', ''),
                 'HomeTeamDivision': game_info.get('HomeTeamDivision', ''),
                 'AwayTeamDivision': game_info.get('AwayTeamDivision', ''),
+                'ActualHomeScore': game_info.get('HomePoints', ''),
+                'ActualAwayScore': game_info.get('AwayPoints', ''),
                 'PredictedHomeScore': float(predicted_scores[0]),
                 'PredictedAwayScore': float(predicted_scores[1]),
                 'HomeWinProbability': float(win_probability[0])
