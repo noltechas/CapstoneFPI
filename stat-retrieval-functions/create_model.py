@@ -15,7 +15,7 @@ from keras.callbacks import EarlyStopping
 from sklearn.linear_model import LassoCV
 from keras.layers import BatchNormalization
 import tensorflow as tf
-from keras.losses import BinaryCrossentropy
+from keras.losses import BinaryCrossentropy, mean_squared_error
 
 
 def preprocess_data(games, pre_2023_period=True):
@@ -46,7 +46,7 @@ def preprocess_data(games, pre_2023_period=True):
     games_passed_checks = 0
     # Process each game
     for game in games:
-        if (pre_2023_period and int(game['Season']) < 2023) or (not pre_2023_period and int(game['Season']) >= 2023):
+        if (pre_2023_period and int(game['Season']) <= 2023) or (not pre_2023_period and int(game['Season']) >= 2023):
             game_feature = [
                 float(game['Season']) - 2014.0,
                 float(game['Week']),
@@ -198,7 +198,7 @@ def create_combined_model(input_shape, reg_strength):
 
     # Compile the model
     model.compile(optimizer=Adam(),
-                  loss={'scores_output': 'mse', 'win_chance_output': 'binary_crossentropy'},
+                  loss={'scores_output': mean_squared_error, 'win_chance_output': 'binary_crossentropy'},
                   metrics={'scores_output': 'mae', 'win_chance_output': 'accuracy'},
                   loss_weights={'scores_output': 0.5, 'win_chance_output': 1.0})
 

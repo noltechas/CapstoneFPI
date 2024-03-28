@@ -6,10 +6,26 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap');
+
+        body {
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box; /* Apply box-sizing to all elements */
+            background-color: #2a2624; /* Sets the background color for the entire page */
+            color: #d9d4cb; /* Default text color for the page */
+        }
+
+        *, *::before, *::after {
+            box-sizing: inherit; /* Inherit box-sizing from body */
+        }
 
         .game-container {
-            perspective: 750px;
-            margin-bottom: 20px;
+            perspective: 1000px;
+            margin-top: 20px;
+            width: 90%; /* Set width to 90% */
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .game-flipper {
@@ -18,14 +34,17 @@
             height: 150px;
             transition: transform 0.6s;
             transform-style: preserve-3d;
+            transform-origin: center; /* Added this line */
         }
 
         .game-container.flipped .game-flipper {
-            transform: rotateY(180deg);
+            transform: rotateX(180deg);
         }
 
         .game-front, .game-back {
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
@@ -36,42 +55,107 @@
             border-radius: 10px;
         }
 
+        .game-front {
+            background-image: linear-gradient(to right, #888888, #888888);
+        }
+
+
         .game-back {
-            transform: rotateY(180deg);
+            transform: rotateX(180deg);
+            backface-visibility: hidden;
         }
 
         .team-logo {
-            width: auto;
-            height: 80px;
+            height: 9vh; /* Set the height relative to the viewport height */
+            width: auto; /* Ensure the width is adjusted to maintain the aspect ratio */
         }
 
         .team-info {
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 30%;
+            text-align: center;
         }
 
-        .team-name {
+        .team-name, .prediction-result {
             font-family: 'Montserrat', sans-serif;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             margin-bottom: 5px;
             color: #fff;
             text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .score {
             font-family: 'Montserrat', sans-serif;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             color: #fff;
             text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
 
-        .pie-chart {
-            width: 60px;
-            height: 60px;
+        .pie-chart-container {
+            width: 17%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5px;
         }
+
+        .pie-chart {
+            width: 9vh; /* Set a fixed width to maintain aspect ratio if necessary */
+            height: 9vh; /* Set the height to match the team logos */
+        }
+
+        @font-face {
+            font-family: "PF Synch Pro Black";
+            src: url("fonts/PFSynchPro-Black.woff2");
+        }
+
+        @font-face {
+            font-family: 'PF Synch Pro Medium';
+            src: url('fonts/PFSynchPro-Medium.woff2');
+        }
+
+
+        h1 {
+            text-align: center; /* Centers the header text */
+            font-family: 'PF Synch Pro Bold', sans-serif; /* Uses PF Synch Pro Bold if available */
+            font-weight: bold; /* Ensures the weight is bold if fallback fonts are used */
+            margin-bottom: 1em; /* Adds some space below the header */
+            color: #c39029; /* Sets the color of the main heading */
+        }
+
+        .week-navigation {
+            text-align: center; /* Centers the buttons container */
+            margin-bottom: 20px; /* Adds some space below the buttons */
+        }
+
+        .week-nav {
+            font-family: 'PF Synch Pro Medium', sans-serif; /* Uses PF Synch Pro Bold if available */
+            font-weight: bold; /* Makes button text bolder */
+            background-color: #91948c; /* Sets the background color for the week buttons */
+            color: #d9d4cb; /* Sets the text color for the week buttons */
+            border: none; /* Removes the border */
+            border-radius: 5px; /* Rounded corners for buttons */
+            padding: 10px 15px; /* Top and bottom padding of 10px, left and right padding of 15px */
+            margin: 5px; /* Adds margin around buttons */
+            cursor: pointer; /* Changes cursor to pointer to indicate button */
+            transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+        }
+
+        .week-nav:hover {
+            background-color: #7a7d74; /* Darkens the button on hover for a subtle effect */
+        }
+
+        .week-nav:active {
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2); /* Adds an inset shadow to make button appear pressed */
+        }
+
     </style>
     <script>
         $(document).ready(function() {
@@ -139,31 +223,33 @@
                 gameElement.css('background-image', 'linear-gradient(to right, ' + (game.AwayTeamSecondaryColor || '#888888') + ', ' + (game.HomeTeamSecondaryColor || '#888888') + ')');
 
                 var awayTeamInfo = $('<div>').addClass('team-info');
-                var awayTeamName = $('<div>').addClass('team-name').text(game.AwayTeam + ' (' + game.AwayTeamWins + '-' + game.AwayTeamLosses + ')');
+                var awayTeamNameRecord = $('<div>').addClass('team-name').text(game.AwayTeam + ' (' + game.AwayTeamWins + '-' + game.AwayTeamLosses + ')');
                 var awayLogoUrl = '/logos/' + game.AwayTeam.replace(/\s/g, '') + '.png';
                 var awayLogo = $('<img>').attr('src', awayLogoUrl).addClass('team-logo').on('error', function() {
                     $(this).attr('src', '/logos/default.png');
                 });
                 var awayScore = $('<div>').addClass('score predicted-score').text(game.PredictedAwayScore.toFixed(2));
-                awayTeamInfo.append(awayTeamName);
+                awayTeamInfo.append(awayTeamNameRecord);
                 awayTeamInfo.append(awayLogo);
                 awayTeamInfo.append(awayScore);
 
                 var homeTeamInfo = $('<div>').addClass('team-info');
-                var homeTeamName = $('<div>').addClass('team-name').text(game.HomeTeam + ' (' + game.HomeTeamWins + '-' + game.HomeTeamLosses + ')');
+                var homeTeamNameRecord = $('<div>').addClass('team-name').text(game.HomeTeam + ' (' + game.HomeTeamWins + '-' + game.HomeTeamLosses + ')');
                 var homeLogoUrl = '/logos/' + game.HomeTeam.replace(/\s/g, '') + '.png';
                 var homeLogo = $('<img>').attr('src', homeLogoUrl).addClass('team-logo').on('error', function() {
                     $(this).attr('src', '/logos/default.png');
                 });
                 var homeScore = $('<div>').addClass('score predicted-score').text(game.PredictedHomeScore.toFixed(2));
-                homeTeamInfo.append(homeTeamName);
+                homeTeamInfo.append(homeTeamNameRecord);
                 homeTeamInfo.append(homeLogo);
                 homeTeamInfo.append(homeScore);
 
+                var pieChartContainer = $('<div>').addClass('pie-chart-container');
                 var pieChartElement = $('<canvas>').addClass('pie-chart');
+                pieChartContainer.append(pieChartElement);
 
                 gameElement.append(awayTeamInfo);
-                gameElement.append(pieChartElement);
+                gameElement.append(pieChartContainer);
                 gameElement.append(homeTeamInfo);
 
                 // Create the pie chart
@@ -177,7 +263,8 @@
                         }]
                     },
                     options: {
-                        responsive: false
+                        responsive: true,
+                        maintainAspectRatio: false
                     }
                 });
 
@@ -188,32 +275,44 @@
                 var gameElement = $('<div>').addClass('game-back');
 
                 var awayTeamInfo = $('<div>').addClass('team-info');
-                var awayTeamName = $('<div>').addClass('team-name').text(game.AwayTeam + ' (' + game.AwayTeamWins + '-' + game.AwayTeamLosses + ')');
+                var awayTeamNameRecord = $('<div>').addClass('team-name').text(game.AwayTeam + ' (' + game.AwayTeamWins + '-' + game.AwayTeamLosses + ')');
                 var awayLogoUrl = '/logos/' + game.AwayTeam.replace(/\s/g, '') + '.png';
                 var awayLogo = $('<img>').attr('src', awayLogoUrl).addClass('team-logo').on('error', function() {
                     $(this).attr('src', '/logos/default.png');
                 });
                 var awayScore = $('<div>').addClass('score actual-score').text(game.ActualAwayScore);
-                awayTeamInfo.append(awayTeamName);
+                awayTeamInfo.append(awayTeamNameRecord);
                 awayTeamInfo.append(awayLogo);
                 awayTeamInfo.append(awayScore);
 
                 var homeTeamInfo = $('<div>').addClass('team-info');
-                var homeTeamName = $('<div>').addClass('team-name').text(game.HomeTeam + ' (' + game.HomeTeamWins + '-' + game.HomeTeamLosses + ')');
+                var homeTeamNameRecord = $('<div>').addClass('team-name').text(game.HomeTeam + ' (' + game.HomeTeamWins + '-' + game.HomeTeamLosses + ')');
                 var homeLogoUrl = '/logos/' + game.HomeTeam.replace(/\s/g, '') + '.png';
                 var homeLogo = $('<img>').attr('src', homeLogoUrl).addClass('team-logo').on('error', function() {
                     $(this).attr('src', '/logos/default.png');
                 });
                 var homeScore = $('<div>').addClass('score actual-score').text(game.ActualHomeScore);
-                homeTeamInfo.append(homeTeamName);
+                homeTeamInfo.append(homeTeamNameRecord);
                 homeTeamInfo.append(homeLogo);
                 homeTeamInfo.append(homeScore);
 
                 var predictionResult = $('<div>').addClass('prediction-result');
-                if ((game.HomeWinProbability > 0.5 && game.ActualHomeScore > game.ActualAwayScore) ||
-                    (game.HomeWinProbability < 0.5 && game.ActualHomeScore < game.ActualAwayScore)) {
+                if (((game.HomeWinProbability > 0.5 && game.ActualHomeScore > game.ActualAwayScore) ||
+                    (game.HomeWinProbability < 0.5 && game.ActualHomeScore < game.ActualAwayScore)) &&
+                    (game.PredictedHomeScore > game.PredictedAwayScore && game.ActualHomeScore > game.ActualAwayScore) ||
+                    (game.PredictedHomeScore < game.PredictedAwayScore && game.ActualHomeScore < game.ActualAwayScore)) {
                     predictionResult.text('Prediction: Correct');
-                    gameElement.css('background-color', 'lime');
+                    gameElement.css('background-color', 'green');
+                }
+                else if ((game.HomeWinProbability > 0.5 && game.ActualHomeScore > game.ActualAwayScore) ||
+                    (game.HomeWinProbability < 0.5 && game.ActualHomeScore < game.ActualAwayScore)) {
+                    predictionResult.text('Probability Prediction: Correct');
+                    gameElement.css('background-color', 'yellow');
+                }
+                else if ((game.PredictedHomeScore > game.PredictedAwayScore && game.ActualHomeScore > game.ActualAwayScore) ||
+                    (game.PredictedHomeScore < game.PredictedAwayScore && game.ActualHomeScore < game.ActualAwayScore)) {
+                    predictionResult.text('Score Prediction: Correct');
+                    gameElement.css('background-color', 'yellow');
                 } else {
                     predictionResult.text('Prediction: Incorrect');
                     gameElement.css('background-color', 'red');

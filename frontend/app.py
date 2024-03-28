@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, render_template, send_from_directory
-from flask_cors import CORS
 import json
 import numpy as np
 import joblib
@@ -111,12 +110,12 @@ def preprocess_data(games, pre_2023_period=True):
     return X, y
 
 # Load the scaler
-scaler = joblib.load('scaler.save')
+scaler = joblib.load('../stat-retrieval-functions/scaler.save')
 
 app = Flask(__name__)
 
 # Load your trained model
-model = load_model('combined_model.h5')
+model = load_model('../stat-retrieval-functions/combined_model.h5')
 
 with open('../stat-retrieval-functions/full_game_stats_for_dnn.json') as file:
     game_data = json.load(file)
