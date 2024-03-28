@@ -436,12 +436,14 @@ def main(schedule_json_path='schedule.json', output_json_path='game_stats_for_dn
     with open(schedule_json_path, 'r') as f:
         schedule = json.load(f)
 
-    existing_data = load_existing_data(output_json_path)
+    existing_data = load_existing_data('full_game_stats_for_dnn.json')
+    recently_generated_data = load_existing_data('game_stats_for_dnn.json')
     existing_game_ids = {game['GameID'] for game in existing_data}
+    existing_game_ids_recent = {game['GameID'] for game in recently_generated_data}
 
     for game in schedule:
         gameID = game['GameID']
-        if gameID not in existing_game_ids:
+        if gameID not in existing_game_ids and gameID not in existing_game_ids_recent:
             print(f"Processing game {gameID}")
             try:
                 home_stats, away_stats = fetch_team_stats(gameID)
