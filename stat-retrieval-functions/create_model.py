@@ -46,12 +46,16 @@ def preprocess_data(games, pre_2023_period=True):
     games_passed_checks = 0
     # Process each game
     for game in games:
-        if (pre_2023_period and int(game['Season']) <= 2023) or (not pre_2023_period and int(game['Season']) >= 2023):
+        if (pre_2023_period) or (not pre_2023_period and int(game['Season']) >= 2023):
             game_feature = [
                 float(game['Season']) - 2014.0,
                 float(game['Week']),
                 float(game['HomeStats'][0]['division'] == "FBS"),
-                float(game['AwayStats'][0]['division'] == "FBS")
+                float(game['AwayStats'][0]['division'] == "FBS"),
+                float(game['HomeAPVotes']),
+                float(game['AwayAPVotes']),
+                float(game['HomeFCSVotes']),
+                float(game['AwayFCSVotes'])
             ]
 
             if any(len(period.get('QB', [])) == 0 for period in game['HomeStats'] + game['AwayStats']):
@@ -443,7 +447,7 @@ def save_feature_importances(coef, feature_names, filename):
 
 # Main function to run the pipeline
 def main():
-    filename = 'full_game_stats_for_dnn.json'
+    filename = 'full_game_stats_for_dnn_polls.json'
     data = load_data(filename)
 
     # Preprocess data
@@ -479,12 +483,12 @@ def main():
     feature_names = load_feature_names('feature_names.txt')
 
     # Perform Lasso feature selection and save importances
-    # home_scores_coef, away_scores_coef, win_chance_coef = lasso_feature_selection(X_train_scaled, y_train_scores, y_train_win_chance)
+    home_scores_coef, away_scores_coef, win_chance_coef = lasso_feature_selection(X_train_scaled, y_train_scores, y_train_win_chance)
 
     # Save feature importances to files
-    # save_feature_importances(home_scores_coef, feature_names, 'home_scores_feature_importances.txt')
-    # save_feature_importances(away_scores_coef, feature_names, 'away_scores_feature_importances.txt')
-    # save_feature_importances(win_chance_coef, feature_names, 'win_chance_feature_importances.txt')
+    save_feature_importances(home_scores_coef, feature_names, 'home_scores_feature_importances.txt')
+    save_feature_importances(away_scores_coef, feature_names, 'away_scores_feature_importances.txt')
+    save_feature_importances(win_chance_coef, feature_names, 'win_chance_feature_importances.txt')
 
     # Example usage with the new setup
     load_and_predict_all_games(X_val_scaled, y_val_scores, y_val_win_chance, combined_model, scaler)

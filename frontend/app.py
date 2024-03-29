@@ -37,7 +37,11 @@ def preprocess_data(games, pre_2023_period=True):
                 float(game['Season']) - 2014.0,
                 float(game['Week']),
                 float(game['HomeStats'][0]['division'] == "FBS"),
-                float(game['AwayStats'][0]['division'] == "FBS")
+                float(game['AwayStats'][0]['division'] == "FBS"),
+                float(game['HomeAPVotes']),
+                float(game['AwayAPVotes']),
+                float(game['HomeFCSVotes']),
+                float(game['AwayFCSVotes'])
             ]
 
             if any(len(period.get('QB', [])) == 0 for period in game['HomeStats'] + game['AwayStats']):
@@ -117,7 +121,7 @@ app = Flask(__name__)
 # Load your trained model
 model = load_model('../stat-retrieval-functions/combined_model.h5')
 
-with open('../stat-retrieval-functions/full_game_stats_for_dnn.json') as file:
+with open('../stat-retrieval-functions/full_game_stats_for_dnn_polls.json') as file:
     game_data = json.load(file)
 
 with open('SCHEDULE.json') as file:

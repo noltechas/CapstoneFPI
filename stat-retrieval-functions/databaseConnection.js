@@ -12,7 +12,8 @@ const config = {
     },
     options: {
         database: 'CollegeFootball',
-        encrypt: true
+        encrypt: true,
+        connectTimeout: 300000
     }
 };
 
@@ -37,5 +38,6 @@ connection.connect();
 
 module.exports = {
     connection,
-    connectPromise
+    connectPromise,
+    config
 };

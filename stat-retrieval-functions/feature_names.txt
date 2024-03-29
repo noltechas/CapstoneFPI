@@ -2,16 +2,10 @@ Season
 Week
 Home Team Division
 Away Team Division
-Home Team OL1 Recruiting Score
-Home Team OL2 Recruiting Score
-Home Team OL3 Recruiting Score
-Home Team OL4 Recruiting Score
-Home Team OL5 Recruiting Score
-Away Team OL1 Recruiting Score
-Away Team OL2 Recruiting Score
-Away Team OL3 Recruiting Score
-Away Team OL4 Recruiting Score
-Away Team OL5 Recruiting Score
+Home Team AP Votes
+Away Team AP Votes
+Home Team FCS Votes
+Away Team FCS Votes
 Home Team QB Recruiting Score
 Home Team RB1 Recruiting Score
 Home Team RB2 Recruiting Score
@@ -36,6 +30,11 @@ Home Team Defender 9 Recruiting Score
 Home Team Defender 10 Recruiting Score
 Home Team Defender 11 Recruiting Score
 Home Team Defender 12 Recruiting Score
+Home Team OL1 Recruiting Score
+Home Team OL2 Recruiting Score
+Home Team OL3 Recruiting Score
+Home Team OL4 Recruiting Score
+Home Team OL5 Recruiting Score
 Away Team QB Recruiting Score
 Away Team RB1 Recruiting Score
 Away Team RB2 Recruiting Score
@@ -60,6 +59,11 @@ Away Team Defender 9 Recruiting Score
 Away Team Defender 10 Recruiting Score
 Away Team Defender 11 Recruiting Score
 Away Team Defender 12 Recruiting Score
+Away Team OL1 Recruiting Score
+Away Team OL2 Recruiting Score
+Away Team OL3 Recruiting Score
+Away Team OL4 Recruiting Score
+Away Team OL5 Recruiting Score
 Home Team Win Percentage (Season)
 Home Team Strength of Record (Season)
 Home Team Points per Game (Season)

@@ -112,15 +112,10 @@
         }
 
         @font-face {
-            font-family: "PF Synch Pro Black";
-            src: url("fonts/PFSynchPro-Black.woff2");
+            font-family: 'PF Synch Pro Bold';
+            src: url('../fonts/PFSynchPro-Bold.ttf') format('ttf'),
+                 url('../fonts/PFSynchPro-Bold.woff2') format('woff2');
         }
-
-        @font-face {
-            font-family: 'PF Synch Pro Medium';
-            src: url('fonts/PFSynchPro-Medium.woff2');
-        }
-
 
         h1 {
             text-align: center; /* Centers the header text */
@@ -136,7 +131,7 @@
         }
 
         .week-nav {
-            font-family: 'PF Synch Pro Medium', sans-serif; /* Uses PF Synch Pro Bold if available */
+            font-family: 'PF Synch Pro Bold', sans-serif; /* Uses PF Synch Pro Bold if available */
             font-weight: bold; /* Makes button text bolder */
             background-color: #91948c; /* Sets the background color for the week buttons */
             color: #d9d4cb; /* Sets the text color for the week buttons */
