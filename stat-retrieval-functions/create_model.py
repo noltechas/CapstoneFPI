@@ -16,6 +16,8 @@ from sklearn.linear_model import LassoCV
 from keras.layers import BatchNormalization
 import tensorflow as tf
 from keras.losses import BinaryCrossentropy, mean_squared_error
+from keras.callbacks import ReduceLROnPlateau
+import statistics
 
 
 def preprocess_data(games, pre_2023_period=True):
@@ -72,6 +74,9 @@ def preprocess_data(games, pre_2023_period=True):
 
             games_passed_checks += 1
 
+            home_recruiting_scores = []
+            away_recruiting_scores = []
+
             # Function to extract recruiting scores from players, filling in zeros if needed
             def get_recruiting_scores(players, max_count):
                 scores = [float(player.get('recruiting_score', 0)) for player in players[:max_count]]
@@ -85,6 +90,28 @@ def preprocess_data(games, pre_2023_period=True):
                     players = game[team_key][0].get(position, [])
                     recruiting_scores = get_recruiting_scores(players, max_count)
                     game_feature.extend(recruiting_scores)
+                    if team_key == 'HomeStats':
+                        home_recruiting_scores.extend(recruiting_scores)
+                    elif team_key == 'AwayStats':
+                        away_recruiting_scores.extend(recruiting_scores)
+                    else:
+                        print('ERROR!!!! Team key is wrong')
+
+            # Calculate full-team recruiting stats
+            home_average_recruit_score = statistics.fmean(home_recruiting_scores)
+            home_bc_ratio = sum(i > 0.9 for i in home_recruiting_scores) / len(home_recruiting_scores)
+            home_3_star_ratio = sum(i > 0.8 for i in home_recruiting_scores) / len(home_recruiting_scores)
+
+            away_average_recruit_score = statistics.fmean(away_recruiting_scores)
+            away_bc_ratio = sum(i > 0.9 for i in away_recruiting_scores) / len(away_recruiting_scores)
+            away_3_star_ratio = sum(i > 0.8 for i in away_recruiting_scores) / len(away_recruiting_scores)
+
+            game_feature.append(home_average_recruit_score)
+            game_feature.append(home_bc_ratio)
+            game_feature.append(home_3_star_ratio)
+            game_feature.append(away_average_recruit_score)
+            game_feature.append(away_bc_ratio)
+            game_feature.append(away_3_star_ratio)
 
             # Aggregate stats from all periods
             for period_stats in game['HomeStats'] + game['AwayStats']:
@@ -135,18 +162,18 @@ def load_data(filename):
 
 
 def custom_loss(y_true, y_pred):
-    # Calculate the base loss, e.g., binary cross-entropy
-    base_loss = tf.keras.losses.binary_crossentropy(y_true, y_pred)
+    # Define the probability thresholds and corresponding weights
+    thresholds = [0.1, 0.2, 0.3, 0.4, 0.5]
+    weights = [5.0, 4.0, 3.0, 2.0, 1.0]
 
-    # Calculate a direction correctness factor (1 if correct, less if incorrect)
-    direction_factor = tf.where(
-        tf.equal(tf.round(y_true), tf.round(y_pred)),
-        1.00,  # No adjustment if direction is correct
-        0.65   # Reduce penalty if direction is incorrect
-    )
+    # Calculate the weighted binary cross-entropy loss
+    weighted_loss = tf.zeros_like(y_pred)
+    for i in range(len(thresholds)):
+        mask = tf.logical_and(y_pred >= thresholds[i], y_pred < thresholds[i+1] if i < len(thresholds)-1 else tf.ones_like(y_pred, dtype=bool))
+        weighted_loss += weights[i] * tf.keras.losses.binary_crossentropy(y_true, y_pred, from_logits=False) * tf.cast(mask, tf.float32)
 
-    # Apply the adjustment factor to the base loss
-    return base_loss * direction_factor
+    return tf.reduce_mean(weighted_loss)
+
 
 def bucket_loss(y_true, y_pred):
     # Calculate the base loss, e.g., binary cross-entropy
@@ -178,23 +205,32 @@ def weighted_binary_crossentropy(y_true, y_pred):
     return weighted_bce
 
 
-def create_combined_model(input_shape, reg_strength):
+def create_combined_model(input_shape):
     inputs = Input(shape=(input_shape,))
 
     # Shared layers
-    x = Dense(16, activation='relu', kernel_regularizer=l2(reg_strength))(inputs)
+    x = Dense(128, activation='relu', kernel_regularizer=l1_l2(l1=0.001, l2=0.001))(inputs)
+    x = BatchNormalization()(x)
+    x = Dropout(0.6)(x)
+    x = Dense(64, activation='relu', kernel_regularizer=l1_l2(l1=0.001, l2=0.001))(x)
+    x = BatchNormalization()(x)
+    x = Dropout(0.6)(x)
 
     # Separate paths
-    scores_path = Dropout(0.5)(x)
-    scores_path = Dense(32, activation='relu', kernel_regularizer=l2(reg_strength))(scores_path)
-    scores_path = Dropout(0.5)(scores_path)
-    scores_path = Dense(64, activation='relu', kernel_regularizer=l2(reg_strength))(scores_path)
-    scores_path = Dropout(0.5)(scores_path)
+    scores_path = Dense(64, activation='relu', kernel_regularizer=l1_l2(l1=0.001, l2=0.001))(x)
+    scores_path = BatchNormalization()(scores_path)
+    scores_path = Dropout(0.4)(scores_path)
+    scores_path = Dense(32, activation='relu', kernel_regularizer=l1_l2(l1=0.001, l2=0.001))(scores_path)
+    scores_path = BatchNormalization()(scores_path)
+    scores_path = Dropout(0.4)(scores_path)
     scores_output = Dense(2, activation='relu', name='scores_output')(scores_path)
 
-    win_chance_path = Dropout(0.75)(x)
-    win_chance_path = Dense(32, activation='relu', kernel_regularizer=l2(reg_strength))(win_chance_path)
-    win_chance_path = Dropout(0.8)(win_chance_path)
+    win_chance_path = Dense(64, activation='relu', kernel_regularizer=l1_l2(l1=0.001, l2=0.001))(x)
+    win_chance_path = BatchNormalization()(win_chance_path)
+    win_chance_path = Dropout(0.85)(win_chance_path)
+    win_chance_path = Dense(32, activation='relu', kernel_regularizer=l1_l2(l1=0.001, l2=0.001))(win_chance_path)
+    win_chance_path = BatchNormalization()(win_chance_path)
+    win_chance_path = Dropout(0.85)(win_chance_path)
     win_chance_output = Dense(1, activation='sigmoid', name='win_chance_output')(win_chance_path)
 
     # Create a model with inputs and two outputs
@@ -204,7 +240,7 @@ def create_combined_model(input_shape, reg_strength):
     model.compile(optimizer=Adam(),
                   loss={'scores_output': mean_squared_error, 'win_chance_output': 'binary_crossentropy'},
                   metrics={'scores_output': 'mae', 'win_chance_output': 'accuracy'},
-                  loss_weights={'scores_output': 0.5, 'win_chance_output': 1.0})
+                  loss_weights={'scores_output': 1.0, 'win_chance_output': 1.0})
 
     return model
 
@@ -272,13 +308,12 @@ def cross_validate_regularization(X_train, y_train_scores, y_train_win_chance, X
 
 
 def train_combined_model(X_train, y_train_scores, y_train_win_chance, X_val, y_val_scores, y_val_win_chance):
-    # reg_strengths = [0.01, 0.05, 0.1, 0.15, 0.25, 0.11, 0.075, 0.125, 0.375, 0.5, 1.0]  # Example regularization strengths to try
-    # best_reg_strength = cross_validate_regularization(X_train, y_train_scores, y_train_win_chance, X_val, y_val_scores, y_val_win_chance, reg_strengths)
+    model = create_combined_model(X_train.shape[1])
 
-    model = create_combined_model(X_train.shape[1], 0.11)
+    # Early stopping and learning rate schedule
+    early_stopping = EarlyStopping(monitor='val_loss', patience=50, restore_best_weights=True)
+    lr_schedule = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=10, min_lr=1e-6)
 
-    # Early stopping to prevent overfitting
-    early_stopping = EarlyStopping(monitor='val_loss', patience=100, restore_best_weights=True)
     average_metrics_callback = AverageMetrics(n_epochs=100)
 
     # Organizing the labels for training and validation
@@ -291,9 +326,9 @@ def train_combined_model(X_train, y_train_scores, y_train_win_chance, X_val, y_v
         'win_chance_output': y_val_win_chance
     }
 
-    # Training the model
+    # Training the model with larger batch size
     history = model.fit(X_train, labels, validation_data=(X_val, val_labels),
-                        epochs=250000, batch_size=64, callbacks=[early_stopping, average_metrics_callback])
+                        epochs=1000, batch_size=256, callbacks=[early_stopping, lr_schedule, average_metrics_callback])
 
     return model, history
 
@@ -483,12 +518,12 @@ def main():
     feature_names = load_feature_names('feature_names.txt')
 
     # Perform Lasso feature selection and save importances
-    home_scores_coef, away_scores_coef, win_chance_coef = lasso_feature_selection(X_train_scaled, y_train_scores, y_train_win_chance)
+    # home_scores_coef, away_scores_coef, win_chance_coef = lasso_feature_selection(X_train_scaled, y_train_scores, y_train_win_chance)
 
     # Save feature importances to files
-    save_feature_importances(home_scores_coef, feature_names, 'home_scores_feature_importances.txt')
-    save_feature_importances(away_scores_coef, feature_names, 'away_scores_feature_importances.txt')
-    save_feature_importances(win_chance_coef, feature_names, 'win_chance_feature_importances.txt')
+    # save_feature_importances(home_scores_coef, feature_names, 'home_scores_feature_importances.txt')
+    # save_feature_importances(away_scores_coef, feature_names, 'away_scores_feature_importances.txt')
+    # save_feature_importances(win_chance_coef, feature_names, 'win_chance_feature_importances.txt')
 
     # Example usage with the new setup
     load_and_predict_all_games(X_val_scaled, y_val_scores, y_val_win_chance, combined_model, scaler)
