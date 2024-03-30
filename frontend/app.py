@@ -2,6 +2,7 @@ from flask import Flask, jsonify, render_template, send_from_directory
 import json
 import numpy as np
 import joblib
+import statistics
 from keras.models import load_model
 
 def preprocess_data(games, pre_2023_period=True):
@@ -58,6 +59,9 @@ def preprocess_data(games, pre_2023_period=True):
 
             games_passed_checks += 1
 
+            home_recruiting_scores = []
+            away_recruiting_scores = []
+
             # Function to extract recruiting scores from players, filling in zeros if needed
             def get_recruiting_scores(players, max_count):
                 scores = [float(player.get('recruiting_score', 0)) for player in players[:max_count]]
@@ -71,6 +75,32 @@ def preprocess_data(games, pre_2023_period=True):
                     players = game[team_key][0].get(position, [])
                     recruiting_scores = get_recruiting_scores(players, max_count)
                     game_feature.extend(recruiting_scores)
+                    if team_key == 'HomeStats':
+                        home_recruiting_scores.extend(recruiting_scores)
+                    elif team_key == 'AwayStats':
+                        away_recruiting_scores.extend(recruiting_scores)
+                    else:
+                        print('ERROR!!!! Team key is wrong')
+
+            # Calculate full-team recruiting stats
+            home_average_recruit_score = statistics.fmean(home_recruiting_scores)
+            home_bc_ratio = sum(i > 0.9 for i in home_recruiting_scores) / len(home_recruiting_scores)
+            home_3_star_ratio = sum(i > 0.8 for i in home_recruiting_scores) / len(home_recruiting_scores)
+            home_any_star_ratio = sum(i > 0.0 for i in home_recruiting_scores) / len(home_recruiting_scores)
+
+            away_average_recruit_score = statistics.fmean(away_recruiting_scores)
+            away_bc_ratio = sum(i > 0.9 for i in away_recruiting_scores) / len(away_recruiting_scores)
+            away_3_star_ratio = sum(i > 0.8 for i in away_recruiting_scores) / len(away_recruiting_scores)
+            away_any_star_ratio = sum(i > 0.0 for i in away_recruiting_scores) / len(away_recruiting_scores)
+
+            game_feature.append(home_average_recruit_score)
+            game_feature.append(home_bc_ratio)
+            game_feature.append(home_3_star_ratio)
+            game_feature.append(home_any_star_ratio)
+            game_feature.append(away_average_recruit_score)
+            game_feature.append(away_bc_ratio)
+            game_feature.append(away_3_star_ratio)
+            game_feature.append(away_any_star_ratio)
 
             # Aggregate stats from all periods
             for period_stats in game['HomeStats'] + game['AwayStats']:

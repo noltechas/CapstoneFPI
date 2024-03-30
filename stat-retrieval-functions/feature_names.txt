@@ -64,6 +64,14 @@ Away Team OL2 Recruiting Score
 Away Team OL3 Recruiting Score
 Away Team OL4 Recruiting Score
 Away Team OL5 Recruiting Score
+Home Team Average Recruiting Score
+Home Team Blue Chip Ratio
+Home Team 3-Star Ratio
+Home Team Any-Star Ratio
+Away Team Average Recruiting Score
+Away Team Blue Chip Ratio
+Away Team 3-Star Ratio
+Away Team Any-Star Ratio
 Home Team Win Percentage (Season)
 Home Team Strength of Record (Season)
 Home Team Points per Game (Season)
