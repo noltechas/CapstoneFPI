@@ -1,9 +1,12 @@
-from flask import Flask, jsonify, render_template, send_from_directory
+from fastapi import FastAPI, Response
 import json
 import numpy as np
 import joblib
 import statistics
 from keras.models import load_model
+from fastapi.staticfiles import StaticFiles
+import uvicorn
+
 
 def preprocess_data(games, pre_2023_period=True):
     features = []
@@ -143,10 +146,11 @@ def preprocess_data(games, pre_2023_period=True):
 
     return X, y
 
+
 # Load the scaler
 scaler = joblib.load('../stat-retrieval-functions/scaler.save')
 
-app = Flask(__name__)
+app = FastAPI()
 
 # Load your trained model
 model = load_model('../stat-retrieval-functions/combined_model.h5')
@@ -160,8 +164,10 @@ with open('SCHEDULE.json') as file:
 # Create a dictionary to map GameID to team information
 game_info_dict = {game['GameID']: game for game in schedule_data}
 
-@app.route('/predictions/<week>')
-def get_predictions(week):
+app.mount("/logos", StaticFiles(directory="templates/logos"), name="logos")
+
+@app.get('/predictions/{week}')
+async def get_predictions(week: str):
     # Filter games for the specified week in the 2023 season
     week_games = [game for game in game_data if game['Week'] == week and int(game['Season']) >= 2023]
 
@@ -218,15 +224,13 @@ def get_predictions(week):
             # Skip the game if there's an issue with the predictions
             continue
 
-    return jsonify(predictions)
+    return predictions
 
-@app.route('/logos/<path:filename>')
-def serve_logo(filename):
-    return send_from_directory('templates/logos', filename)
-
-@app.route('/')
-def index():
-    return render_template('index.html')
+@app.get('/')
+async def index():
+    with open('templates/index.html', 'r') as file:
+        html_content = file.read()
+    return Response(content=html_content, media_type='text/html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
+    uvicorn.run(app)
