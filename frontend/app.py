@@ -163,7 +163,7 @@ game_info_dict = {game['GameID']: game for game in schedule_data}
 @app.route('/predictions/<week>')
 def get_predictions(week):
     # Filter games for the specified week in the 2023 season
-    week_games = [game for game in game_data if game['Week'] == week and game['Season'] == '2023']
+    week_games = [game for game in game_data if game['Week'] == week and int(game['Season']) >= 2023]
 
     # Preprocess the game data
     X, _ = preprocess_data(week_games, pre_2023_period=False)
