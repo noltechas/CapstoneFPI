@@ -71,4 +71,4 @@ jobs:
         with:
           app-name: 'cfb'
           slot-name: 'Production'
-          startup-command: 'cd frontend && python app.py'
+          startup-command: 'cd frontend && pip install -r requirements.txt && python app.py'
