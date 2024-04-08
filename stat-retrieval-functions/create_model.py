@@ -1,4 +1,7 @@
+import glob, os
 import json, random, joblib
+import time
+
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import numpy as np
@@ -18,6 +21,7 @@ import tensorflow as tf
 from keras.losses import BinaryCrossentropy, mean_squared_error
 from keras.callbacks import ReduceLROnPlateau
 import statistics
+import keras
 
 
 def preprocess_data(games, pre_2023_period=True):
@@ -48,7 +52,7 @@ def preprocess_data(games, pre_2023_period=True):
     games_passed_checks = 0
     # Process each game
     for game in games:
-        if (pre_2023_period) or (not pre_2023_period and int(game['Season']) >= 2023):
+        if (pre_2023_period and int(game['Season']) < 2023) or (not pre_2023_period and int(game['Season']) >= 2023):
             game_feature = [
                 float(game['Season']) - 2014.0,
                 float(game['Week']),
@@ -98,15 +102,21 @@ def preprocess_data(games, pre_2023_period=True):
                         print('ERROR!!!! Team key is wrong')
 
             # Calculate full-team recruiting stats
-            home_average_recruit_score = statistics.fmean(home_recruiting_scores)
+            home_average_recruit_score = 0
+            for score in home_recruiting_scores:
+                home_average_recruit_score += score
+            home_average_recruit_score = home_average_recruit_score / len(home_recruiting_scores)
             home_bc_ratio = sum(i > 0.9 for i in home_recruiting_scores) / len(home_recruiting_scores)
             home_3_star_ratio = sum(i > 0.8 for i in home_recruiting_scores) / len(home_recruiting_scores)
-            home_any_star_ratio = sum(i > 0.0 for i in home_recruiting_scores) / len(home_recruiting_scores)
+            home_any_star_ratio = sum(i > 0.1 for i in home_recruiting_scores) / len(home_recruiting_scores)
 
-            away_average_recruit_score = statistics.fmean(away_recruiting_scores)
+            away_average_recruit_score = 0
+            for score in away_recruiting_scores:
+                away_average_recruit_score += score
+            away_average_recruit_score = away_average_recruit_score / len(away_recruiting_scores)
             away_bc_ratio = sum(i > 0.9 for i in away_recruiting_scores) / len(away_recruiting_scores)
             away_3_star_ratio = sum(i > 0.8 for i in away_recruiting_scores) / len(away_recruiting_scores)
-            away_any_star_ratio = sum(i > 0.0 for i in away_recruiting_scores) / len(away_recruiting_scores)
+            away_any_star_ratio = sum(i > 0.1 for i in away_recruiting_scores) / len(away_recruiting_scores)
 
             game_feature.append(home_average_recruit_score)
             game_feature.append(home_bc_ratio)
@@ -332,7 +342,7 @@ def train_combined_model(X_train, y_train_scores, y_train_win_chance, X_val, y_v
 
     # Training the model with larger batch size
     history = model.fit(X_train, labels, validation_data=(X_val, val_labels),
-                        epochs=1000, batch_size=256, callbacks=[early_stopping, lr_schedule, average_metrics_callback])
+                        epochs=1000, batch_size=64, callbacks=[early_stopping, lr_schedule, average_metrics_callback])
 
     return model, history
 
@@ -484,7 +494,8 @@ def save_feature_importances(coef, feature_names, filename):
             f.write(f"{name}: {importance}\n")
 
 
-# Main function to run the pipeline
+import os
+
 def main():
     filename = 'full_game_stats_for_dnn_polls.json'
     data = load_data(filename)
@@ -496,41 +507,57 @@ def main():
     y_scores = y[:, :2]
     y_win_chance = y[:, 2]
 
-    # Split data into training and validation sets
-    X_train, X_val, y_train_scores, y_val_scores, y_train_win_chance, y_val_win_chance = train_test_split(
-        X, y_scores, y_win_chance, test_size=0.2, random_state=random.randint(1, 99))
+    # Create the "best_models" folder if it doesn't exist
+    os.makedirs('best_models', exist_ok=True)
 
-    # Scale features
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_val_scaled = scaler.transform(X_val)
+    # Create a list to store the top 5 models
+    top_models = []
 
-    # Print the size of the training and validation sets
-    print(f"Training set size: {X_train_scaled.shape[0]} games with {X_train_scaled.shape[1]} features each")
-    print(f"Validation set size: {X_val_scaled.shape[0]} games with {X_val_scaled.shape[1]} features each")
+    # Continuously train models
+    while True:
+        # Split data into training and validation sets
+        X_train, X_val, y_train_scores, y_val_scores, y_train_win_chance, y_val_win_chance = train_test_split(
+            X, y_scores, y_win_chance, test_size=0.2)
 
-    # Train Combined Model
-    combined_model, combined_history = train_combined_model(X_train_scaled, y_train_scores, y_train_win_chance,
-                                                            X_val_scaled, y_val_scores, y_val_win_chance)
-    plot_model_history(combined_history, title='Combined Model')
+        # Scale features
+        scaler = StandardScaler()
+        X_train_scaled = scaler.fit_transform(X_train)
+        X_val_scaled = scaler.transform(X_val)
 
-    # Save models and scaler
-    combined_model.save('combined_model.h5')
-    joblib.dump(scaler, 'scaler.save')
+        # Print the size of the training and validation sets
+        print(f"Training set size: {X_train_scaled.shape[0]} games with {X_train_scaled.shape[1]} features each")
+        print(f"Validation set size: {X_val_scaled.shape[0]} games with {X_val_scaled.shape[1]} features each")
+
+        # Train Combined Model
+        combined_model, combined_history = train_combined_model(X_train_scaled, y_train_scores, y_train_win_chance,
+                                                                X_val_scaled, y_val_scores, y_val_win_chance)
+        # plot_model_history(combined_history, title='Combined Model')
+
+        # Save the trained model
+        model_filename = f'best_models/combined_model_{int(time.time())}.h5'
+        combined_model.save(model_filename)
+        print(f"Trained model saved as {model_filename}")
+
+        # Load the top 5 models based on validation loss
+        model_files = sorted(glob.glob('best_models/best_model_*.h5'))[-5:]
+        top_models = [keras.models.load_model(file) for file in model_files]
+
+        # Save models and scaler
+        joblib.dump(scaler, 'scaler.save')
+
+        # Wait for a certain period before training the next model (e.g., 1 hour)
+        time.sleep(3600)
 
     # Load feature names
-    feature_names = load_feature_names('feature_names.txt')
+    # feature_names = load_feature_names('feature_names.txt')
 
     # Perform Lasso feature selection and save importances
-    home_scores_coef, away_scores_coef, win_chance_coef = lasso_feature_selection(X_train_scaled, y_train_scores, y_train_win_chance)
+    # home_scores_coef, away_scores_coef, win_chance_coef = lasso_feature_selection(X_train_scaled, y_train_scores, y_train_win_chance)
 
     # Save feature importances to files
-    save_feature_importances(home_scores_coef, feature_names, 'home_scores_feature_importances.txt')
-    save_feature_importances(away_scores_coef, feature_names, 'away_scores_feature_importances.txt')
-    save_feature_importances(win_chance_coef, feature_names, 'win_chance_feature_importances.txt')
-
-    # Example usage with the new setup
-    load_and_predict_all_games(X_val_scaled, y_val_scores, y_val_win_chance, combined_model, scaler)
+    # save_feature_importances(home_scores_coef, feature_names, 'home_scores_feature_importances.txt')
+    # save_feature_importances(away_scores_coef, feature_names, 'away_scores_feature_importances.txt')
+    # save_feature_importances(win_chance_coef, feature_names, 'win_chance_feature_importances.txt')
 
 
 if __name__ == '__main__':
